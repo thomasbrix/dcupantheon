@@ -1,0 +1,74 @@
+diff --git a/src/Authentication/Provider/OAuth2DrupalAuthProvider.php b/src/Authentication/Provider/OAuth2DrupalAuthProvider.php
+index 679eaf4..2fe33a9 100644
+--- a/src/Authentication/Provider/OAuth2DrupalAuthProvider.php
++++ b/src/Authentication/Provider/OAuth2DrupalAuthProvider.php
+@@ -140,6 +140,11 @@ class OAuth2DrupalAuthProvider implements AuthenticationProviderInterface {
+    */
+   public function authenticate(Request $request) {
+     try {
++      // NB tbx client id hack.
++      if (!empty($request->headers->get('php-auth-user'))) {
++        $auth_user = str_replace('-', '_', $request->headers('PHP_AUTH_USER'));
++        $request->headers->set('PHP_AUTH_USER', [$auth_user], true);
++      }
+       if (!empty($request->headers->get('authorization'))) {
+         $token = $this->getInfoToken($request->headers->get('authorization'), 'token');
+       }
+diff --git a/src/Controller/OAuth2Controller.php b/src/Controller/OAuth2Controller.php
+index b6371f5..6b7763a 100644
+--- a/src/Controller/OAuth2Controller.php
++++ b/src/Controller/OAuth2Controller.php
+@@ -167,9 +167,10 @@ class OAuth2Controller extends ControllerBase {
+     // Get the client and use it to load the server and initialize the server.
+     $client = FALSE;
+     if ($client_credentials) {
++      // NB tbx client id hack.
+       /** @var \Drupal\oauth2_server\ClientInterface[] $clients */
+       $clients = $this->entityTypeManager()->getStorage('oauth2_server_client')
+-        ->loadByProperties(['client_id' => $client_credentials['client_id']]);
++        ->loadByProperties(['client_id' => str_replace('-', '_', $client_credentials['client_id'])]);
+       if ($clients) {
+         $client = reset($clients);
+       }
+diff --git a/src/OAuth2Storage.php b/src/OAuth2Storage.php
+index bbbdb66..24ae12d 100644
+--- a/src/OAuth2Storage.php
++++ b/src/OAuth2Storage.php
+@@ -125,6 +125,7 @@ class OAuth2Storage implements OAuth2StorageInterface {
+    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+    */
+   public function getStorageClient($client_id) {
++    $client_id = str_replace('-', '_', $client_id);
+     /** @var \Drupal\oauth2_server\ClientInterface[] $clients */
+     $clients = $this->entityTypeManager->getStorage('oauth2_server_client')
+       ->loadByProperties(['client_id' => $client_id]);
+@@ -239,11 +240,13 @@ class OAuth2Storage implements OAuth2StorageInterface {
+    */
+   public function getClientDetails($client_id) {
+     /** @var \Drupal\oauth2_server\ClientInterface $client */
+-    $client = $this->getStorageClient($client_id);
++    // NB tbx client id hack.
++    $client = $this->getStorageClient(str_replace('-', '_', $client_id));
+     if ($client) {
+       // Return a client array in the format expected by the library.
++      // NB tbx client id hack.
+       $client = [
+-        'client_id' => $client->client_id,
++        'client_id' => str_replace('-', '_', $client->client_id),
+         'client_secret' => $client->client_secret,
+         'public_key' => $client->public_key,
+         // The library expects multiple redirect uris to be separated by
+diff --git a/src/Utility.php b/src/Utility.php
+index caf80af..d518c15 100644
+--- a/src/Utility.php
++++ b/src/Utility.php
+@@ -227,6 +227,9 @@ class Utility {
+   public static function getClientCredentials(RequestInterface $request) {
+     // Get the client credentials from the Authorization header.
+     if (!is_null($request->headers('PHP_AUTH_USER'))) {
++      // NB tbx client id hack.
++      $auth_user = str_replace('-', '_', $request->headers('PHP_AUTH_USER'));
++      $request->headers->set('PHP_AUTH_USER', [$auth_user], true);
+       return [
+         'client_id' => $request->headers('PHP_AUTH_USER'),
+         'client_secret' => $request->headers('PHP_AUTH_PW', ''),

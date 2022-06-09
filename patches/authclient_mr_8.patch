@@ -1,0 +1,190 @@
+diff --git a/src/Annotation/Oauth2Client.php b/src/Annotation/Oauth2Client.php
+index 80f0a95cfd9f1f9c7f0316de4011b19da3efbd79..cd8a984887c286a7c3d782b9d38a00db332bfa53 100644
+--- a/src/Annotation/Oauth2Client.php
++++ b/src/Annotation/Oauth2Client.php
+@@ -54,6 +54,9 @@ class Oauth2Client extends Plugin {
+    * The resource endpoint of the OAuth2 Server.
+    *
+    * @var string
++   *
++   * @deprecated in 3.0-beta1 and is removed from 3.0 release.  This annotation is currently unused in our base class.
++   * @see https://www.drupal.org/project/oauth2_client/issues/3256272
+    */
+   public $resource_uri;
+ 
+@@ -67,16 +70,29 @@ class Oauth2Client extends Plugin {
+   /**
+    * The set of scopes for the provider to use by default.
+    *
+-   * @var array|string|null
++   * @var array|null
+    */
+-  public $scopes;
++  public $scopes = NULL;
+ 
+   /**
+    * The separator used to join the scopes in the OAuth2 query string.
+    *
+-   * @var string|null
++   * @var string
++   */
++  public $scope_separator = ',';
++
++  /**
++   * An optional set of additional parameters on the token request.
++   *
++   * The array key will be used as the request parameter:
++   *
++   *   request_options = {
++   *     "parameter" = "value",
++   *   },
++   *
++   * @var array
+    */
+-  public $scope_separator;
++  public $request_options = [];
+ 
+   /**
+    * A flag that may be used by Oauth2ClientPluginInterface::storeAccessToken.
+diff --git a/src/Plugin/Oauth2Client/Oauth2ClientPluginBase.php b/src/Plugin/Oauth2Client/Oauth2ClientPluginBase.php
+index 080bef83b6c7bb3a17efe5290c59c93fdbace235..fcc0257484b25fa390a2dd8c675012499d5869a8 100644
+--- a/src/Plugin/Oauth2Client/Oauth2ClientPluginBase.php
++++ b/src/Plugin/Oauth2Client/Oauth2ClientPluginBase.php
+@@ -374,24 +374,40 @@ abstract class Oauth2ClientPluginBase extends PluginBase implements Oauth2Client
+    * {@inheritdoc}
+    */
+   public function getScopes() {
+-    if (!isset($this->pluginDefinition['scopes'])) {
+-      return [];
++    try {
++      // \League\OAuth2\Client\Provider\GenericProvider allows scopes to be
++      // an array, or null, so we need some more logic here as null fails
++      // isset by design.
++      $this->checkKeyDefined('scopes');
++      $scopes = $this->pluginDefinition['scopes'];
++    }
++    catch (Oauth2ClientPluginMissingKeyException $e) {
++      $scopes = NULL;
+     }
+ 
+-    return $this->pluginDefinition['scopes'] ?: [];
++    return $scopes;
+   }
+ 
+   /**
+    * {@inheritdoc}
+    */
+   public function getScopeSeparator() {
+-    if (!isset($this->pluginDefinition['scope_separator'])) {
+-      return ',';
+-    }
++    $this->checkKeyDefined('scope_separator');
+ 
+     return $this->pluginDefinition['scope_separator'];
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getRequestOptions()
++  {
++    $this->checkKeyDefined('request_options');
++
++    return $this->pluginDefinition['request_options'];
++  }
++
++
+   /**
+    * Check that a key is defined when requested. Throw an exception if not.
+    *
+diff --git a/src/Plugin/Oauth2Client/Oauth2ClientPluginInterface.php b/src/Plugin/Oauth2Client/Oauth2ClientPluginInterface.php
+index d4db81853b0243f9f999c803e21781b6633697bf..7ec423d362f63228d2eecaf89b49334a2678a042 100644
+--- a/src/Plugin/Oauth2Client/Oauth2ClientPluginInterface.php
++++ b/src/Plugin/Oauth2Client/Oauth2ClientPluginInterface.php
+@@ -82,13 +82,21 @@ interface Oauth2ClientPluginInterface extends PluginInspectionInterface, Contain
+   public function getTokenUri();
+ 
+   /**
+-   * Retrieves the resource_uri of the OAuth2 server.
++   * Retrieves the resource owner uri of the OAuth2 server.
+    *
+    * @return string
+    *   The resource_uri of the OAuth2 server.
+    */
+   public function getResourceUri();
+ 
++  /**
++   * Get an array of additional optional parameters on the token request.
++   *
++   * @return array
++   *   The associative array of parameters.
++   */
++  public function getRequestOptions();
++
+   /**
+    * Get the set of scopes for the provider to use by default.
+    *
+diff --git a/src/Service/Grant/AuthorizationCodeGrantService.php b/src/Service/Grant/AuthorizationCodeGrantService.php
+index 47c4e6f1c71baf48d9cba0a0fe6aae85c6aa9ca9..bee4c74227bb1d4bf75e6311848937482bb98d71 100644
+--- a/src/Service/Grant/AuthorizationCodeGrantService.php
++++ b/src/Service/Grant/AuthorizationCodeGrantService.php
+@@ -86,12 +86,12 @@ class AuthorizationCodeGrantService extends Oauth2ClientGrantServiceBase {
+    *   Exception thrown when trying to retrieve a non-existent OAuth2 Client.
+    */
+   public function requestAccessToken($pluginId, $code) {
++    $client = $this->getClient($pluginId);
+     $provider = $this->getProvider($pluginId);
++    $options = array_merge(['code' => $code], $client->getRequestOptions());
+     // Try to get an access token using the authorization code grant.
+     try {
+-      $accessToken = $provider->getAccessToken('authorization_code', [
+-        'code' => $code,
+-      ]);
++      $accessToken = $provider->getAccessToken('authorization_code', $options);
+       if ($accessToken instanceof AccessTokenInterface) {
+         $this->storeAccessToken($pluginId, $accessToken);
+         return TRUE;
+diff --git a/src/Service/Grant/ClientCredentialsGrantService.php b/src/Service/Grant/ClientCredentialsGrantService.php
+index ec5d2782fd34535618a807381355b76ceaf27369..325227b634b5821b1e2c912ccabe61c6a13abc1b 100644
+--- a/src/Service/Grant/ClientCredentialsGrantService.php
++++ b/src/Service/Grant/ClientCredentialsGrantService.php
+@@ -13,10 +13,11 @@ class ClientCredentialsGrantService extends Oauth2ClientGrantServiceBase {
+    * {@inheritdoc}
+    */
+   public function getAccessToken($pluginId) {
++    $client = $this->getClient($pluginId);
+     $provider = $this->getProvider($pluginId);
+ 
+     try {
+-      $accessToken = $provider->getAccessToken('client_credentials');
++      $accessToken = $provider->getAccessToken('client_credentials', $client->getRequestOptions());
+ 
+       $this->storeAccessToken($pluginId, $accessToken);
+     }
+diff --git a/src/Service/Grant/ResourceOwnersCredentialsGrantService.php b/src/Service/Grant/ResourceOwnersCredentialsGrantService.php
+index ea1c0c5a4cedb6b43595bac0de96b41a337ff1d4..65e99faa36d1fc8939e6ed8fc111bc40b492b5b2 100644
+--- a/src/Service/Grant/ResourceOwnersCredentialsGrantService.php
++++ b/src/Service/Grant/ResourceOwnersCredentialsGrantService.php
+@@ -18,16 +18,18 @@ class ResourceOwnersCredentialsGrantService extends Oauth2ClientGrantServiceBase
+    * {@inheritdoc}
+    */
+   public function getAccessToken($pluginId) {
++    $client = $this->getClient($pluginId);
+     $provider = $this->getProvider($pluginId);
+     $credentials = $this->getUsernamePassword($pluginId);
+     if (empty($credentials)) {
+       throw new \RuntimeException('Missing username and password for client plugin ' . $pluginId);
+     }
++    $options = array_merge([
++      'username' => $credentials['username'],
++      'password' => $credentials['password'],
++    ], $client->getRequestOptions());
+     try {
+-      $accessToken = $provider->getAccessToken('password', [
+-        'username' => $credentials['username'],
+-        'password' => $credentials['password'],
+-      ]);
++      $accessToken = $provider->getAccessToken('password', $options);
+ 
+       $this->storeAccessToken($pluginId, $accessToken);
+     }

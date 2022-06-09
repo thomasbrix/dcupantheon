@@ -1,108 +1,12 @@
 {
-    "name": "pantheon-upstreams\/drupal-composer-managed",
-    "description": "Install Drupal 9 with Composer on Pantheon.",
+    "name": "drupal/recommended-project",
+    "description": "Project template for Drupal 8 projects with a relocated document root",
     "type": "project",
-    "license": "MIT",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https:\/\/packages.drupal.org\/8"
-        },
-        {
-            "type": "path",
-            "url": "upstream-configuration"
-        }
-    ],
-    "require": {
-        "pantheon-upstreams\/upstream-configuration": "*",
-        "composer\/installers": "^1.9",
-        "drupal\/core-composer-scaffold": "^9.2",
-        "drupal\/core-recommended": "^9.2",
-        "pantheon-systems\/drupal-integrations": "^9",
-        "cweagans\/composer-patches": "^1.7",
-        "drush\/drush": "^11 || ^12",
-        "drush-ops/behat-drush-endpoint": "^9.4",
-        "pantheon-systems/quicksilver-pushback": "^2.0"
-    },
-    "require-dev": {
-        "drupal\/core-dev": "^9.2",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
-        "squizlabs/php_codesniffer": "^3.6",
-        "phpunit/phpunit": "^9.5",
-        "behat/behat": "^3.10",
-        "behat/mink": "^1.10",
-        "behat/mink-extension": "^2.3",
-        "dmore/behat-chrome-extension": "^1.4",
-        "genesis/behat-fail-aid": "^3.7",
-        "jcalderonzumba/mink-phantomjs-driver": "^0.3.3",
-        "mikey179/vfsstream": "^1.6",
-        "drupal/coder": "^8.3",
-        "drupal/drupal-extension": "^4.2",
-        "drupal/drupal-driver": "^2.2"
-    },
-    "conflict": {
-        "drupal\/drupal": "*"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "extra": {
-        "drupal-scaffold": {
-            "locations": {
-                "web-root": ".\/web"
-            },
-            "allowed-packages": [
-                "pantheon-systems\/drupal-integrations"
-            ],
-            "file-mapping": {
-                "[project-root]\/.editorconfig": false,
-                "[project-root]\/pantheon.upstream.yml": false,
-                "[project-root]\/.gitattributes": false
-            }
-        },
-        "installer-paths": {
-            "web\/core": [
-                "type:drupal-core"
-            ],
-            "web\/libraries\/{$name}": [
-                "type:drupal-library"
-            ],
-            "web\/modules\/contrib\/{$name}": [
-                "type:drupal-module"
-            ],
-            "web\/profiles\/contrib\/{$name}": [
-                "type:drupal-profile"
-            ],
-            "web\/themes\/contrib\/{$name}": [
-                "type:drupal-theme"
-            ],
-            "drush\/Commands\/contrib\/{$name}": [
-                "type:drupal-drush"
-            ],
-            "web\/modules\/custom\/{$name}": [
-                "type:drupal-custom-module"
-            ],
-            "web\/profiles\/custom\/{$name}": [
-                "type:drupal-custom-profile"
-            ],
-            "web\/themes\/custom\/{$name}": [
-                "type:drupal-custom-theme"
-            ],
-            "web\/private\/scripts\/quicksilver\/{$name}\/": [
-                "type:quicksilver-script"
-            ]
-        },
-        "composer-exit-on-patch-failure": true,
-        "patchLevel": {
-            "drupal\/core": "-p2"
-        },
-        "build-env": {
-            "export-configuration": "drush config-export --yes"
-        }
-    },
-    "autoload": {
-        "classmap": [
-            "upstream-configuration\/scripts\/ComposerScripts.php"
-        ]
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/drupal",
+    "support": {
+        "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
+        "chat": "https://www.drupal.org/node/314178"
     },
     "scripts": {
         "pre-update-cmd": [
@@ -113,27 +17,267 @@
         ],
         "unit-test": "echo 'No unit test step defined.'",
         "lint": "find web\/modules\/custom web\/themes\/custom -name '*.php' -exec php -l {} \\;",
-        "code-sniff": [
-            ".\/vendor\/bin\/phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md --ignore=node_modules,bower_components,vendor .\/web\/modules\/custom",
-            ".\/vendor\/bin\/phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md --ignore=node_modules,bower_components,vendor .\/web\/themes\/custom",
-            ".\/vendor\/bin\/phpcs --standard=DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md --ignore=node_modules,bower_components,vendor .\/web\/modules\/custom",
-            ".\/vendor\/bin\/phpcs --standard=DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md --ignore=node_modules,bower_components,vendor .\/web\/themes\/custom"
-        ]
+        "code-sniff": "echo 'No code sniff step defined.'"
     },
-    "scripts-descriptions": {
-        "upstream-require": "Add a dependency to an upstream. See https:\/\/pantheon.io\/docs\/create-custom-upstream for information on creating custom upstreams."
-    },
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": false,
-        "platform": {
-            "php": "7.4"
+    "repositories": {
+
+        "lenient": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/lenient"
         },
-        "allow-plugins": {
-            "composer\/installers": true,
-            "cweagans\/composer-patches": true,
-            "drupal\/core-composer-scaffold": true,
-            "dealerdirect\/phpcodesniffer-composer-installer": true
+        "0": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "1": {
+            "type": "package",
+            "package": {
+                "name": "dinbror/blazy",
+                "version": "1.8.2",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "blazy"
+                },
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/dinbror/blazy",
+                    "reference": "1.8.2"
+                }
+            }
+        },
+        "pantheon-upstreams": {
+            "type": "path",
+            "url": "upstream-configuration"
         }
+    },
+    "require": {
+        "composer/installers": "^1.2",
+        "cweagans/composer-patches": "^1.7",
+        "dinbror/blazy": "^1.8",
+        "drupal/abtestui": "^1.1",
+        "drupal/address": "^1.8",
+        "drupal/admin_toolbar": "^3",
+        "drupal/admin_user_language": "^1.0@beta",
+        "drupal/advancedqueue": "^1.0@RC",
+        "drupal/backup_migrate": "^5.0",
+        "drupal/better_exposed_filters": "^5.0@beta",
+        "drupal/blazy": "^2.2",
+        "drupal/block_class": "^1.3",
+        "drupal/bulk_update_fields": "^2.0@alpha",
+        "drupal/campaignmonitor": "^2.2",
+        "drupal/comment_notify": "^1.2",
+        "drupal/console": "~1.0",
+        "drupal/core-composer-scaffold": "^9",
+        "drupal/core-project-message": "^9",
+        "drupal/core-recommended": "^9",
+        "drupal/country": "^1.0@beta",
+        "drupal/crop": "^2.1",
+        "drupal/dblog_persistent": "^2.0",
+        "drupal/devel": "^4",
+        "drupal/devel_entity_updates": "^3.0",
+        "drupal/easy_breadcrumb": "^2.0",
+        "drupal/entity": "^1.2",
+        "drupal/entity_hierarchy": "^2.23",
+        "drupal/entity_reference_hierarchy": "^1.0@beta",
+        "drupal/entity_reference_tree": "^2.0",
+        "drupal/facets": "^2.0",
+        "drupal/faq": "^1.1",
+        "drupal/feeds": "^3.0@alpha",
+        "drupal/feeds_para_mapper": "1.x-dev",
+        "drupal/feeds_tamper": "^2.0@beta",
+        "drupal/field_group": "^3.1",
+        "drupal/field_permissions": "^1.1",
+        "drupal/filter_perms": "^1.0@alpha",
+        "drupal/fivestar": "1.x-dev",
+        "drupal/flag": "^4.0@beta",
+        "drupal/focal_point": "1.x-dev",
+        "drupal/form_placeholder": "^1.0",
+        "drupal/formdazzle": "^2.1",
+        "drupal/fpa": "^3.0@beta",
+        "drupal/geofield": "^1.20",
+        "drupal/geolocation": "^3.2",
+        "drupal/inline_entity_form": "^1.0@RC",
+        "drupal/jquery_ui": "^1.4",
+        "drupal/language_switcher_extended": "^1.0@beta",
+        "drupal/languageicons": "^1.0@beta",
+        "drupal/linkit": "^5.0",
+        "drupal/mail_login": "^2.4",
+        "drupal/mailchimp": "^2.0",
+        "drupal/mailchimp_transactional": "^1.0",
+        "drupal/mandrill": "^1.1",
+        "drupal/masquerade": "^2.0@beta",
+        "drupal/media_video_micromodal": "1.0.6",
+        "drupal/memcache": "^2.3",
+        "drupal/menu_item_role_access": "^2.0",
+        "drupal/menu_link": "^1.0@alpha",
+        "drupal/menu_link_attributes": "^1.2",
+        "drupal/menu_link_weight": "^1.0@beta",
+        "drupal/menu_multilingual": "^1.0@alpha",
+        "drupal/metatag": "^1.15",
+        "drupal/oauth2_client": "^3.0@beta",
+        "drupal/oauth2_server": "^2.0",
+        "drupal/paragraphs": "1.13",
+        "drupal/pathauto": "^1.8",
+        "drupal/prlp": "^1.6",
+        "drupal/queue_ui": "^2.2",
+        "drupal/quick_node_clone": "^1.14",
+        "drupal/ratio_crop": "^1.0@alpha",
+        "drupal/redirect": "^1.6",
+        "drupal/reroute_email": "^2.0",
+        "drupal/restui": "^1.18",
+        "drupal/scheduler": "^1.3",
+        "drupal/search_api": "^1.17",
+        "drupal/search_api_exactmatch_boost": "^1.0@beta",
+        "drupal/search_api_location": "^1.0@alpha",
+        "drupal/search_api_location_views": "^1.0@alpha",
+        "drupal/search_api_solr": "^4",
+        "drupal/search_api_sorts": "^1.0",
+        "drupal/shield": "^1.4",
+        "drupal/term_reference_tree": "^1.0",
+        "drupal/token_filter": "^1.3",
+        "drupal/twig_extender": "^5.0",
+        "drupal/twig_field_value": "^2.0",
+        "drupal/twig_tweak": "^2.9",
+        "drupal/ultimate_cron": "^2.0@alpha",
+        "drupal/upgrade_status": "^3.13",
+        "drupal/views_data_export": "^1.1",
+        "drupal/views_tree": "^2.0@alpha",
+        "drupal/webform": "^6.0",
+        "drupal/xmlsitemap": "^1.0",
+        "drupal/youtube": "^1.2",
+        "drush-ops/behat-drush-endpoint": "^9.4",
+        "drush/drush": "^8.0",
+        "laminas/laminas-servicemanager": "<3.8",
+        "laminas/laminas-zendframework-bridge": "<1.5.0",
+        "league/csv": "<9.8.0",
+        "maennchen/zipstream-php": "<2.2.0",
+        "mglaman/phpstan-drupal": "1.1.0",
+        "pantheon-systems/drupal-integrations": "^9",
+        "pantheon-upstreams/upstream-configuration": "*"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "web/"
+            }
+        },
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ]
+        },
+        "enable-patching": true,
+        "patches": {
+            "drupal/feeds": {
+                "Make role appear in feeds mapping": "https://www.drupal.org/files/issues/2019-10-24/feeds-config-entityreference-2933361-12.patch",
+                "Add error msg when fail": "https://www.drupal.org/files/issues/2020-01-31/feeds-item-validation-3063055-6.patch"
+            },
+            "drupal/address": {
+                "Integration with feeds": "https://www.drupal.org/files/issues/2019-04-19/address-feeds-address-target-2882589-23.patch"
+            },
+            "drupal/tamper": {
+                "Tamper skip if empty": "https://www.drupal.org/files/issues/2020-03-12/tamper-skip-on-empty-3119301-2.patch"
+            },
+            "drupal/paragraphs": {
+                "Allow other types of field types": "https://www.drupal.org/files/issues/2018-11-14/3001016-feeds-integration-fix-7.patch",
+                "Add/remove buttons on translated content": "https://www.drupal.org/files/issues/2020-09-04/paragraghs-buttons_do_not_appear_if_translated_node-3125638-9_0.patch"
+            },
+            "drupal/core": {
+                "Fix list content error": "https://www.drupal.org/files/issues/2020-09-03/3007424-108.patch",
+                "Login after upgrading from Drupal 7 to 8 due to stale cookies": "https://www.drupal.org/files/issues/2019-03-20/2868384-35.patch",
+                "Add unique id filter to twig": "https://www.drupal.org/files/issues/2021-05-14/3115445-10-reroll.patch",
+                "Better reroute error": "https://www.drupal.org/files/issues/2022-04-11/3013802-31.patch"
+            },
+            "drupal/masquerade": {
+                "Show unmasquerade link in block": "https://www.drupal.org/files/issues/2020-10-26/2900413-29.patch"
+            },
+            "drupal/oauth2_server": {
+                "DCU oauth client id hack": "patches/oauth2dcu_hyphen_underscore.patch"
+            },
+            "drupal/oauth2_client": {
+                "DCU oauth client scope fix": "patches/authclient_mr_8.patch"
+            },
+            "drupal/field_group": {
+                "Fix name in field groups": "https://www.drupal.org/files/issues/2020-10-01/field_group-undefined-index-name-3064890-18.patch",
+                "Fix more name": "https://www.drupal.org/files/issues/2020-08-10/field_group-undefined-index-name-3064890-16.patch"
+            },
+            "drupal/menu_item_role_access": {
+                "Call to a member function hasField() on null": "https://www.drupal.org/files/issues/2021-02-09/hasField-on-null-3197539-2.patch"
+            },
+            "drupal/bulk_update_fields": {
+                "Call to a member function hasField() on null": "https://www.drupal.org/files/issues/2021-05-11/arrayfilter-expects-parameter-3188712-6.patch"
+            },
+            "drupal/fivestar": {
+                "Theme functions are deprecated": "https://www.drupal.org/files/issues/2021-12-28/3256199_2.patch"
+            },
+            "drupal/media_video_micromodal": {
+                "Fix thumb reference": "https://www.drupal.org/files/issues/2021-12-16/fid-matches-media-id-error-2.patch"
+            }
+        },
+        "drupal-core-project-message": {
+            "include-keys": [
+                "homepage",
+                "support"
+            ],
+            "post-create-project-cmd-message": [
+                "<bg=blue;fg=white>                                                         </>",
+                "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
+                "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
+                "<bg=blue;fg=white>                                                         </>",
+                "",
+                "<bg=yellow;fg=black>Next steps</>:",
+                "  * Install the site: https://www.drupal.org/docs/8/install",
+                "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
+                "  * Get support: https://www.drupal.org/support",
+                "  * Get involved with the Drupal community:",
+                "      https://www.drupal.org/getting-involved",
+                "  * Remove the plugin that prints this message:",
+                "      composer remove drupal/core-project-message"
+            ]
+        }
+    },
+    "require-dev": {
+        "behat/behat": "^3.10",
+        "behat/mink": "^1.10",
+        "behat/mink-extension": "^2.3",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+        "dmore/behat-chrome-extension": "^1.4",
+        "drupal/coder": "^8.3",
+        "drupal/drupal-driver": "^2.2",
+        "drupal/drupal-extension": "^4.2",
+        "genesis/behat-fail-aid": "^3.7",
+        "jcalderonzumba/mink-phantomjs-driver": "^0.3.3",
+        "mikey179/vfsstream": "^1.6",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.6"
     }
 }

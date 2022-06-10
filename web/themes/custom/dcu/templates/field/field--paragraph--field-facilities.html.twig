@@ -1,0 +1,73 @@
+{#<div class="facilities d-none d-md-block p-5">#}
+{#  <div class="container">#}
+{#    <div class="row">#}
+{#      <div class="col">#}
+{#        <h2 class="card-band__heading">{{ label }}</h2>#}
+{#          <div class="row">#}
+{#            {% for item in items %}#}
+{#              <div class="col-6">#}
+{#                {{ item.content }}#}
+{#              </div>#}
+{#            {% endfor %}#}
+{#          </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+
+{#<div class="facilities d-block d-md-none">#}
+<div class="facilities dcu-spacing">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="card-band__heading">{{ label|trans }}</h2>
+        <div class="facilities__wrapper">
+          <div class="row">
+            {% set i = 0 %}
+            {% set j = 0 %}
+            {% for item in items %}
+              {% if i < 6 %}
+                <div class="col-12 col-md-6">
+                  {{ item.content }}
+                  {% set i = i + 1 %}
+                </div>
+              {% else %}
+                <div class="col-12 col-md-6 fac-hidden">
+                  {{ item.content }}
+                  {% set j = j + 1 %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="dcu-modal-link text-md-center mt-3" data-toggle="modal" data-target="#dcu-facilities">
+            {{ 'See the rest of the '|t }} {{ j }} {{ 'facilities'|t }} >
+          </div>
+          <div class="modal fade" id="dcu-facilities" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Faciliteter</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|t }}">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    {% for item in items %}
+                      <div class="col-12 col-md-6">
+                        {{ item.content }}
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'Close'|t }}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,151 @@
+/* Reset password page - one time login */
+#user-pass-reset {
+  .description {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.4;
+    padding-left: 0;
+  }
+}
+
+/* Membserservice user search table */
+.memberusersearch {
+  th {
+    padding: 10px;
+  }
+  td {
+    padding: 10px;
+  }
+}
+.bambora-receipt {
+  h2 {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+}
+
+/* Admin toolbar */
+#toolbar-bar {
+  z-index: 1026;
+}
+
+/*
+Imported profile styles d7 col-12 col-md-6 col-lg-3 mb-3 mb-md-4 mb-lg-0
+ */
+.user-pages {
+  .title h1 {
+    margin-top:50px;
+    padding-bottom: 20px;
+    @include media-breakpoint-down(md) {
+      margin-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+  .profiletab {
+    padding: 20px 0;
+  }
+  .profileproperty {
+    text-transform: uppercase;
+    color: get-border-color(dark);
+    width: 35%;
+  }
+  .profilevalue {
+    font-weight: bold;
+  }
+  .profiledata {
+    .table-sm {
+      margin-top: -0.3rem;
+    }
+  }
+  form .error {
+    border: 1px solid red;
+  }
+  legend {
+    position: initial;
+  }
+  .form-textarea,
+  .form-text,
+  .form-element {
+    max-width: unset;
+  }
+  .chosen-container {
+    width: 100% !important;
+  }
+  input:disabled {
+    background-color: #EEE;
+    color: #CDCDCD;
+  }
+  #my-profile-messages--wrapper {
+    margin: 0 0 50px 0;
+  }
+  .profile-message--wrapper {
+    min-height: 50px;
+    padding: 10px 0px;
+    text-align: center;
+    border: 2px solid #d3dbeb;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  .profile-message--wrapper.important {
+    border: 2px solid #CA0000;
+  }
+}
+
+#edit-field-customer-comments-wrapper, #field-country-agents-add-more-wrapper, #edit-field-district-wrapper {
+  display: none;
+}
+.modal-footer {
+  background-color: #F2F2F2;
+}
+
+/* Notification settings on edit profile */
+#edit-comment-notify-settings,
+#edit-newsletter-settings,
+#edit-consent-settings {
+  padding: 0;
+}
+#profile-notifications-form {
+  #edit-comment-notify--wrapper {
+    margin-top: 10px;
+    .fieldset-wrapper {
+      #edit-comment-notify {
+        .js-form-item-comment-notify {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.ajax-progress-fullscreen {
+  z-index: 2000;
+  //top: 48.5%;
+  //left: 49%;
+  width: 50px;
+  height: 50px;
+  ////padding: 4px;
+  opacity: 0.7;
+  //border-radius: 100px;
+  background-color: #F2F2F2;
+  //background-image: url('http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif');
+  //background-repeat: no-repeat;
+  //background-position: center center;
+  //padding: 20px;
+}
+
+
+/* google reviews */
+.stars {
+  --percent: calc(var(--rating) / 5 * 100%);
+  display: inline-block;
+  font-size: 26px;
+  font-family: Times;
+  line-height: 1;
+}
+.stars::before {
+  content: '★★★★★';
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, #F9B403 var(--percent), #fff var(--percent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

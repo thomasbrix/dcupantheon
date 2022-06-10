@@ -1,0 +1,12 @@
+.campsites-nearby {
+  //.views-field.views-field-field-image,
+  //.views-field.views-field-field-media-image {
+  //    margin-bottom: 10px;
+  //}
+  .views-field-title-1 {
+    margin-top: 10px;
+  }
+  @include media-breakpoint-down(md) {
+    margin-bottom: 30px;
+  }
+}

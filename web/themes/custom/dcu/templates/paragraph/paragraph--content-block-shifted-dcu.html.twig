@@ -1,0 +1,29 @@
+{% if content.field_content_reference[0]['#node'].bundle() == 'district' %}
+  {% set item_class = [
+    'content-block',
+    'col-12',
+    'col-xl-6',
+    '--shifted',
+    content.field_content_reference[0]['#node'].field_district.entity.field_color.value
+  ]
+  %}
+{% else %}
+  {% set item_class = [
+    'content-block',
+    'col-12',
+    'col-xl-6',
+    '--shifted',
+    'dcu-bg-white-straw'
+  ]
+  %}
+{% endif %}
+
+{% block paragraph %}
+  <section class="container">
+    <div class="row">
+      {% block content %}
+        {{ content }}
+      {% endblock %}
+    </div>
+  </section>
+{% endblock paragraph %}

@@ -1,0 +1,18 @@
+dcu_api.user_check:
+  path: '/user-check/{memberno}'
+  defaults:
+    _controller: '\Drupal\dcu_api\Controller\userCheck:content'
+    _title: 'Member status'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+dcu_api.memberstat:
+  path: '/statistics/members'
+  defaults:
+    _controller: '\Drupal\dcu_api\Controller\memberStat:content'
+    _title: 'Member status'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

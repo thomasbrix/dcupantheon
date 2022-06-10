@@ -1,0 +1,57 @@
+.cta {
+    flex-direction: column;
+    margin-bottom: $spacing;
+
+    @include media-breakpoint-up('lg') {
+        flex-direction: row-reverse;
+    }
+
+    &__image {
+        width: 100%;
+    }
+
+    &__content-wrapper {
+        background-color: get-default-color('surface');
+        height: 100%;
+        padding: $spacing $spacing * 0.5;
+
+        @include media-breakpoint-up('xl') {
+            padding: $spacing;
+        }
+
+        @media (min-width: 1300px) {
+            padding: $spacing $spacing * 2;
+        }
+
+        @media (min-width: 1400px) {
+            padding: $spacing * 1.5 $spacing * 3;
+        }
+
+        @media (min-width: 1500px) {
+            padding: $spacing * 2 $spacing * 4.5;
+        }
+    }
+
+    &__heading {
+        font-size: get-font-size('h2');
+        font-weight: get-font-weight('extrabold');
+        margin-bottom: $spacing;
+    }
+
+    &__text {
+        font-size: get-font-size('base');
+        font-weight: get-font-weight('base');
+    }
+
+    &__button {
+        background-color: get-default-color('quaternary');
+        border-radius: $spacing;
+        border: none;
+        color: get-font-color('on_primary');
+        cursor: pointer;
+        font-size: get-font-size('section');
+        height: 60px;
+        max-width: 338px;
+        width: 100%;
+    }
+}

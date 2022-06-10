@@ -1,0 +1,564 @@
+<?php
+/**
+ * @param array $suggestions
+ * @param array $variables
+ * @param $hook
+ */
+function dcu_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  if (in_array($hook, array(
+    'html',
+    'page'
+  ))) {
+    if ($node = \Drupal::routeMatch()->getParameter('node')) {
+      if ($node instanceof \Drupal\node\NodeInterface) {
+        $content_type = $node->bundle();
+        $suggestions[] = $hook . '__' . $content_type;
+      }
+    }
+  }
+  if (in_array($hook, array(
+    'pager'
+  ))) {
+    $suggestions[] = 'pager__dcu_default';
+  }
+}
+
+/**
+ * @param array $suggestions
+ * @param array $variables
+ */
+function dcu_theme_suggestions_views_view_alter(array &$suggestions, array $variables) {
+  //List of results.
+  if (($variables['view']->id() == 'dbsearch_campsites') && (!isset($variables["rows"]["#type"]))) {
+    $suggestions[] = 'views_view__dbsearch_campsites_result';
+  }
+  if (($variables['view']->id() == 'search_campsites') && (!isset($variables["rows"]["#type"]))) {
+    $suggestions[] = 'views_view__search_campsites_result';
+  }
+  if (($variables['view']->id() == 'solr_campsites') && (!isset($variables["rows"]["#type"]))) {
+    $suggestions[] = 'views_view__search_campsites_result';
+  }
+  if (($variables['view']->id() == 'solr_campsites_with_facets') && (!isset($variables["rows"]["#type"]))) {
+    $suggestions[] = 'views_view__solr_facets_search_result';
+  }
+  if ($variables['view']->id() == 'video_list') {
+    $suggestions[] = 'views_view__default_video';
+  }
+  if ($variables['view']->id() == 'campsite_list' ||
+    $variables['view']->id() == 'article_list' ||
+    $variables['view']->id() == 'dbsearch' ||
+    $variables['view']->id() == 'guide_list' ||
+    $variables['view']->id() == 'dbsearch_global' ||
+    $variables['view']->id() == 'favorites') {
+    $suggestions[] = 'views_view__default';
+  }
+  if ($variables['view']->id() == 'campsites_owner_sites_overview') {
+    $suggestions[] = 'views_view__campsites_owner_sites_overview';
+  }
+  if ($variables['view']->id() == 'agent_overviews') {
+    $suggestions[] = 'views_view__agent_overview';
+  }
+  if ($variables['view']->id() == 'forum_search') {
+    $suggestions[] = 'views_view__forum_search';
+  }
+  if (($variables['view']->id() == 'benefit_list') && (!isset($variables["rows"]["#type"]))) {
+    $suggestions[] = 'views_view__benefit';
+  }
+  if (($variables['view']->id() == 'car_list') && (!isset($variables["rows"]["#type"]))) {
+    $suggestions[] = 'views_view__car_list';
+  }
+  if (($variables['view']->id() == 'activity_list') && (!isset($variables["rows"]["#type"]))) {
+    $suggestions[] = 'views_view__activity';
+  }
+  if ($variables['view']->id() == 'dcu_campsites_with_map' && (!isset($variables["rows"]["#type"]))) {
+    $suggestions[] = 'views_view__dcu_campsites_map';
+  }
+}
+
+/**
+ * DOCS: https://drupal.stackexchange.com/questions/227709/adding-theme-suggestions-programmatically-for-views-rows-fields/277292
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * Add views unformatted template suggestions.
+ *
+ * @inheritdoc
+ */
+function dcu_theme_suggestions_views_view_unformatted_alter(array &$suggestions, array $variables) {
+  //More to come....
+  if ($variables['view']->id() == 'campsite_list' ||
+    $variables['view']->id() == 'article_list' ||
+    $variables['view']->id() == 'dbsearch' ||
+    $variables['view']->id() == 'guide_list' ||
+    $variables['view']->id() == 'dbsearch_global' ||
+    $variables['view']->id() == 'favorites') {
+    $suggestions[] = 'views_view_unformatted__default_list';
+  }
+  if ($variables['view']->id() == 'dbsearch_campsites') {
+    $suggestions[] = 'views_view_unformatted__dbsearch_campsites_search_list';
+  }
+  if ($variables['view']->id() == 'search_campsites') {
+    $suggestions[] = 'views_view_unformatted__campsites_search_list';
+  }
+  if ($variables['view']->id() == 'video_list') {
+    $suggestions[] = 'views_view_unformatted__video_list';
+  }
+  if ($variables['view']->id() == 'activities_district') {
+    $suggestions[] = 'views_view_unformatted__activities_district';
+  }
+  if ($variables['view']->id() == 'articles_district') {
+    $suggestions[] = 'views_view_unformatted__articles_district';
+  }
+  if ($variables['view']->id() == 'guide_campsites') {
+    $suggestions[] = 'views_view_unformatted__country_region_based_list';
+  }
+  if ($variables['view']->id() == 'benefit_list') {
+    $suggestions[] = 'views_view_unformatted__benefits_list';
+  }
+  if ($variables['view']->id() == 'car_list') {
+    $suggestions[] = 'views_view_unformatted__car_list';
+  }
+  if ($variables['view']->id() == 'activity_list') {
+    $suggestions[] = 'views_view_unformatted__activity_list';
+  }
+  if ($variables['view']->id() == 'campsites_nearby') {
+    $suggestions[] = 'views_view_unformatted__campsites_nearby_list';
+  }
+  if ($variables['view']->id() == 'forum_search') {
+    $suggestions[] = 'views_view_unformatted__forum_search';
+  }
+  if ($variables['view']->id() == 'dcu_campsites_with_map') {
+    $suggestions[] = 'views_view_unformatted__dcu_campsites_map';
+  }
+}
+
+/**
+ * @param array $suggestions
+ * @param array $variables
+ */
+function dcu_theme_suggestions_views_view_grid_alter(array &$suggestions, array $variables) {
+  if ($variables['view']->id() == 'campsites_owner_sites_overview') {
+    $suggestions[] = 'views_view_grid__campsites_owner_sites_overview';
+  }
+  if ($variables['view']->id() == 'agent_overviews') {
+    $suggestions[] = 'views_view_grid__agent_overview';
+  }
+}
+
+/**
+ * @param array $suggestions
+ * @param array $variables
+ * @param $hook
+ * @todo: Clean up
+ */
+function dcu_theme_suggestions_fieldset_alter(array &$suggestions, array $variables, $hook) {
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $current_path);
+
+  if (isset($variables['element']['#id'])) {
+    //Search page.
+    if (!empty($variables['element']['#name']) && $variables["element"]["#name"] == 'field_facilities' && isset($path_args[1]) && $path_args[1] == 'campingpladser-med-kort') {
+      $suggestions[] = 'fieldset__' . $variables["element"]["#type"] .'__'. $variables["element"]["#name"] . '__search';
+    }
+    if ($variables["element"]["#id"] == 'edit-field-search-icons') {
+      $suggestions[] = 'fieldset__' . $variables["element"]["#type"] .'__'. $variables["element"]["#name"];
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function dcu_theme_suggestions_form_element_alter(array &$suggestions, array $variables, $hook) {
+  if(isset($variables["element"]["#theme"])) {
+    if (preg_match ('/input__checkbox__views__solr_campsites__solr_campsites__field_facilities_/', $variables["element"]["#theme"])) {
+      $suggestions[] = $hook . '__checkboxes__solr_campsites__field_facilities';
+    }
+    if (preg_match ('/input__checkbox__views__solr_campsites__solr_campsites__field_search_icons_/', $variables["element"]["#theme"])) {
+      $suggestions[] = $hook . '__checkboxes__solr_campsites__field_search_icons';
+    }
+  }
+}
+
+/**
+ * @param array $suggestions
+ * @param array $variables
+ */
+function dcu_theme_suggestions_container_alter(array &$suggestions, array $variables) {
+  if (isset($variables["element"]["#view_id"])) {
+    $suggestions[] = 'container__' . $variables["element"]["#view_id"];
+  }
+}
+
+/**
+ * @param array $suggestions
+ * @param array $variables
+ */
+function dcu_theme_suggestions_views_view_table_alter(array &$suggestions, array $variables) {
+  if ($variables['view']->id()) {
+    $suggestions[] = 'views_view_table__' . $variables['view']->id();
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function dcu_theme_suggestions_menu_alter(array &$suggestions, &$variables) {
+  if (isset($variables['attributes']['block'])) {
+    if ($variables["attributes"]["block"] == 'block-dcucampsitesall') {
+      $suggestions[] = 'menu__dcu_campsites_all_top_level';
+    }
+    if ($variables["attributes"]["block"] == 'block-dcucampsitesall-2') {
+      $suggestions[] = 'menu__dcu_campsites_all_bottom_level';
+    }
+  }
+}
+
+/**
+ * @param array $suggestions
+ * @param array $variables
+ */
+function dcu_theme_suggestions_form_alter(array &$suggestions, array $variables) {
+  //Twig for login form on nodes...HACK OR NOT?
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $current_path);
+
+  if (isset($path_args[1]) && $path_args[1] == 'node' && $variables["element"]["#form_id"] == 'user_login_form') {
+    $suggestions[] = 'form__user_login_form_on_nodes';
+  }
+  if ($variables['element']['#id'] == 'views-exposed-form-car-list-list-cars') {
+    $suggestions[] = 'form__' . str_replace('-','_', $variables['element']['#id']);
+  }
+}
+
+/**
+ * @param array $suggestions
+ * @param array $variables
+ */
+function dcu_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $current_path);
+  if (isset($path_args[1]) && $path_args[1] == 'comment_notify' && $path_args[2] == 'disable' && isset($variables["elements"]["#base_plugin_id"]) && $variables["elements"]["#base_plugin_id"] == 'system_main_block') {
+    $suggestions[] = 'block__comment_notify';
+  }
+}
+
+
+/* Preprocess functions ------------------------- */
+
+/**
+ * @param $variables
+ */
+use Drupal\views\Plugin\views\field\FieldPluginBase;
+
+function dcu_preprocess_node(&$variables) {
+
+  if ($variables['node']->getType() == 'dcu_campsite') {
+    if (isset($variables["elements"]["field_description"][0])) {
+      $alter = [
+        'max_length' => 300,
+        'word_boundary' => TRUE,
+        'ellipsis' => TRUE,
+        'html' => TRUE
+      ];
+      $txt_mobile = FieldPluginBase::trimText($alter, $variables["elements"]["field_description"][0]["#text"]);
+      $variables['field_description_mobile'] = array('#markup' => $txt_mobile);
+    }
+  }
+
+  // You will most likely want to show and render the form for anonymous users.
+  $variables['login_form'] = FALSE;
+  if (!\Drupal::currentUser()->id()) {
+    $form = Drupal::formBuilder()->getForm(Drupal\user\Form\UserLoginForm::class) ;
+    $render = Drupal::service('renderer');
+    $variables['login_form'] = $render->renderPlain($form);
+  }
+
+  //Set real name on forum.
+  if ($variables['node']->getType() == 'forum') {
+    $uid = $variables["node"]->getOwnerId();
+    $user = \Drupal\user\Entity\User::load($uid);
+
+    if (isset($user->field_first_name->value) && isset($user->field_last_name->value)) {
+      $real_name = $user->field_first_name->value . ' ' . $user->field_last_name->value;
+    }
+    else {
+      $real_name = 'Administrator';
+    }
+    $date_created = \Drupal::service('date.formatter')->format($variables["node"]->getCreatedTime(), 'short');
+    $variables['submitted'] = t('Posted by @real_name, @post_date', array('@real_name' => $real_name, '@post_date' => $date_created));
+  }
+  //Default image.
+  //How to use: {{ default_image|render|raw }}
+  $variables['default_image'] = '<img src="/themes/custom/dcu/assets/images/DCU-default.jpeg" title="Velkommen til DCU" alt="Velkommen til DCU">';
+}
+
+/**
+ * DOCS: https://www.drupal.org/forum/support/theme-development/2017-07-13/extra-template-name-suggestions-for-main-menus-based-on
+ * Implements hook_preprocess_block().
+ */
+use Drupal\block\Entity\Block;
+function dcu_preprocess_block(&$variables) {
+  /* BLOCK ID IS FOUND IN $VARIABLES -> PLUGIN_ID */
+  if (isset($variables['attributes']['id'])) {
+    $variables['content']['#attributes']['block'] = $variables['attributes']['id'];
+
+    if ($variables["attributes"]["id"] == 'block-dcu-account-menu') {
+      if ($variables["logged_in"]) {
+        $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+
+        //Default name for users with this role.
+        if ($user->hasRole('other_campsite_owner')) {
+          $variables['real_name'] = t('Campsite Owner');
+        }
+        else {
+          $variables['real_name_mobile'] = substr($user->field_first_name->value,0,6).'...';
+          $variables['real_name'] = $user->field_first_name->value;
+        }
+        $variables['#cache']['contexts'][] = 'user';
+      }
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_image().
+ */
+function dcu_preprocess_image(&$variables) {
+  // Check the image style.
+  if ($variables['style_name'] == 'thumbnail') {
+    // Set class.
+    $variables['attributes']['class'][] = 'img-fluid';
+    $variables['attributes']['class'][] = 'rounded';
+  }
+}
+
+/**
+ * @param $variables
+ */
+function dcu_preprocess_forum_list(&$variables) {
+  foreach ($variables['forums'] as $id => $forum) {
+    $variables['forums'][$id]->last_reply = \Drupal::service('date.formatter')->format($forum->last_post->created, 'short');
+  }
+}
+
+/**
+ * @param $variables
+ */
+function dcu_preprocess_menu_local_action(&$variables) {
+  $variables["link"]["#options"]["attributes"]["class"] = array('btn', 'btn-primary', 'no-underline');
+}
+
+/**
+ * @param $variables
+ */
+function dcu_preprocess_comment(&$variables) {
+  $user = \Drupal\user\Entity\User::load($variables["author_id"]);
+  $real_name = $user->field_first_name->value . ' ' . $user->field_last_name->value;
+  $date_created = \Drupal::service('date.formatter')->format($variables['comment']->getCreatedTime(), 'short');
+  $variables['submitted'] = t('Posted by @real_name, @post_date', array('@real_name' => $real_name, '@post_date' => $date_created));
+}
+
+/**
+ * @param $variables
+ */
+function dcu_preprocess_forum_submitted(&$variables) {
+  if (isset($variables['topic']->created)) {
+    $variables['time'] = isset($variables['topic']->created) ? \Drupal::service('date.formatter')->format($variables['topic']->created, 'short') : '';
+  }
+}
+
+/**
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ */
+
+use Drupal\Component\Utility\Unicode;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\image\Entity\ImageStyle;
+function dcu_form_views_exposed_form_alter(&$form, $form_state, $form_id) {
+  if ($form["#id"] == 'views-exposed-form-benefit-list-page-1') {
+
+    $form["btype"]["#type"] = 'checkboxes';
+    $style = ImageStyle::load('marker_icons_benefit_type');
+    foreach ($form["btype"]["#options"] as $tid => $value) {
+      $term = Term::load($tid);
+      $fid = $term->get('field_type_icons')->getValue()[0]['target_id'];
+      $file = \Drupal\file\Entity\File::load($fid);
+      $image_url = $style->buildUrl($file->uri->value);
+      $form["btype"]["#options"][$tid] = '<img src="' . $image_url . '">' . $value;
+    }
+  }
+
+  if ($form["#id"] == 'views-exposed-form-activity-list-page-1') {
+    $form["district"]["#type"] = 'checkboxes';
+  }
+
+  if ($form["#id"] == 'views-exposed-form-search-campsites-page-1') {
+    $form["field_search_icons_target_id"]["#type"] = 'checkboxes';
+  }
+  if ($form["#id"] == 'views-exposed-form-solr-campsites-solr-campsites') {
+    $form["field_facilities"]["#type"] = 'checkboxes';
+    if (isset($form["field_search_icons"])) {
+      $style = ImageStyle::load('marker_icon');
+      $form["field_search_icons"]["#type"] = 'checkboxes';
+      foreach ($form["field_search_icons"]["#options"] as $tid => $value) {
+        $term = Term::load($tid);
+        $fid = $term->get('field_search_icon')->getValue()[0]['target_id'];
+        $file = \Drupal\file\Entity\File::load($fid);
+        $image_url = $style->buildUrl($file->uri->value);
+        $form["field_search_icons"]["#options"][$tid] = '<img src="' . $image_url . '">' . $value;
+      }
+    }
+  }
+}
+
+/**
+ * @param $variables
+ */
+function dcu_preprocess_page(&$variables){
+  if ($variables["page"]["#type"] == 'page') {
+    /*HACK - fix in a better way @todo URGENT - stub brix */
+    if ($variables["page"]["#title"] == 'Find campingplads' || $variables["page"]["#title"] == 'Solr campsites') {
+      $variables['#attached']['library'][] = 'dcu/dcu-search-library';
+    }
+  }
+}
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ * Needed to unset a label.
+ */
+function dcu_form_user_pass_reset_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'user_pass_reset') {
+    unset($form["pass"]["#title"]);
+  }
+}
+
+/**
+ * Implements template_preprocess_paragraph().
+ * * @param array $variables
+ *   An associative array containing:
+ *   - elements: An array of elements to display in view mode.
+ *   - paragraph: The paragraph object.
+ *   - view_mode: View mode; e.g., 'full', 'teaser'...
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_preprocess_paragraph(&$variables) {
+  $paragraph = $variables['paragraph'];
+
+  //Paragraph used on frontpage.
+  if ($parentBundle = $paragraph->bundle() == 'activity_block_4_side_by_side') {
+    $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    $paragraph_references = $paragraph->field_content->getValue();
+    $activities = [];
+    $used_nids = [];
+    if (!$paragraph_references) {
+      //No activities set - but paragraph is visible.
+      //Get 4 relevant activities.
+      $new_activities = dcu_get_activities(4);
+      foreach ($new_activities as $activity) {
+        $node = $storage->load($activity->nid);
+        $activities[] = $view_builder->view($node, 'list_4_in_row_infinite');
+      }
+    }
+    else {
+      foreach ($paragraph_references as $activity) {
+        $node = $storage->load($activity["target_id"]);
+        if ($node instanceof NodeInterface \Drupal\node\NodeInterface) {
+          //Check status on node.
+          if ($node->isPublished()) {
+            $activities[] = $view_builder->view($node, 'list_4_in_row_infinite');
+            $used_nids[] = $activity["target_id"];
+          }
+        }
+      }
+      //Check number of activities in array. 4 items is needed.
+      if ((4 - count($activities)) != 0) {
+        $new_activities = dcu_get_activities(4 - count($activities), implode(',', $used_nids));
+        foreach ($new_activities as $activity) {
+          $node = $storage->load($activity->nid);
+          $activities[] = $view_builder->view($node, 'list_4_in_row_infinite');
+        }
+      }
+    }
+    $variables['activity_nodes'] = $activities;
+  }
+}
+
+/**
+ * Get x number of activities.
+ * @param $items
+ * @param null $exclude_nids
+ *
+ * @return mixed
+ */
+function dcu_get_activities($activity_items_needed, $exclude_nids = NULL) {
+  $database = \Drupal::database();
+  if ($exclude_nids) {
+    $query = $database->query("
+      select
+      n.nid
+      from node n
+      left join node_field_data nd on nd.nid = n.nid
+      left join node__field_activity_dates ac on ac.entity_id = n.nid
+      where nd.status = 1 and n.type = 'activity' and n.nid not in (" . $exclude_nids . ") and now() < ac.field_activity_dates_value
+      order by ac.field_activity_dates_value asc limit " . $activity_items_needed
+    );
+    return $query->fetchAll();
+  }
+  else {
+    $query = $database->query("select
+      n.nid
+      from node n
+      left join node_field_data nd on nd.nid = n.nid
+      left join node__field_activity_dates ac on ac.entity_id = n.nid
+      where nd.status = 1 and n.type = 'activity' and now() < ac.field_activity_dates_value
+      order by ac.field_activity_dates_value asc limit " . $activity_items_needed
+    );
+    return $query->fetchAll();
+  }
+}
+
+
+/**
+ * @param $variables
+ */
+function dcu_preprocess_links__language_block(&$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if(!$node) {
+    //Page viewed is not a node - so it could be a system page(user) or
+    //a view page.
+    //User pages need all languages for login.
+    //All other pages only need DK/DE/EN
+
+    $current_path = \Drupal::service('path.current')->getPath();
+    $show_all = [
+      '/user/login',
+      '/user/password'
+    ];
+
+    if (in_array($current_path, $show_all)) {
+      return;
+    }
+    else {
+      //Unset some languages.
+      unset($variables["links"]["fr"]);
+      unset($variables["links"]["it"]);
+      unset($variables["links"]["pt-pt"]);
+      unset($variables["links"]["es"]);
+    }
+    return;
+  }
+  foreach(array_keys($variables['links']) as $lang) {
+    if(!$node->hasTranslation($lang)) {
+      unset($variables['links'][$lang]);
+    }
+  }
+}

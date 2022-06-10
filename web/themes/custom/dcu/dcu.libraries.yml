@@ -1,0 +1,25 @@
+global-styling:
+  version: VERSION
+  js:
+    js/bootstrap.min.js: {}
+    js/helpers/ready.js: {}
+    js/filter-buttons.js: {}
+    js/select-handler.js: {}
+    js/sticky-header.js: {}
+    js/toggle-filters.js: {}
+    js/type-ahead.js: {}
+    js/ekko-lightbox.js: {}
+    js/dcu-global.js: {}
+    js/dcu-forms.js: {}
+    js/navigation.js: {}
+  css:
+    component:
+      css/main.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.form
+
+dcu-search-library:
+  js:
+    js/geolocation-marker-scroll-to-id.js: {}

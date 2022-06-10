@@ -1,0 +1,27 @@
+Hi {{ mail_data.name }}<br /><br />
+<strong>Hier ist Ihre Quittung für den Kauf auf dcu.dk</strong><br />
+Bestellnummer: {{ mail_data.order_number }}<br />
+Rechnungsdatum: {{ mail_data.invoice_date }}<br />
+Gekauft: DCU Deal<br />
+Bezahlter Betrag Kr.: {{ mail_data.amount }},-<br /><br />
+{% if mail_data.membership_card_no %}
+  Ihre Kartennummer ist: {{ mail_data.membership_card_no }}<br /><br />
+{% endif %}
+<strong>App</strong><br />
+Die DCU App „DCU Fordele“ können Sie im App Store oder bei Google Play auf Ihr Smartphone herunterladen und
+haben so Ihre Mitgliedskarte und alle Ihre Vorteile immer griffbereit.<br />
+Android: https://play.google.com/store/apps/details?id=dk.dcu.fordelsapp<br />
+iPhone: https://apps.apple.com/dk/app/dcu-fordele/id1361521689<br /><br />
+<strong>Rabatt auf DCU-Campingplätzen</strong><br />
+Auf den {{ mail_data.number_of_campsites }} eigenen Campingplätzen der DCU erhalten Sie 30% Rabatt auf die
+Kosten für Erwachsene und Jugendliche, Ihre Haustiere sind kostenlos willkommen und das WI-FI ist kostenlos.<br /><br />
+{{ mail_data.qrcode|raw }}<br /><br />
+Midlertidigt medlemskort – Gyldig til {{ mail_data.qrcode_expire_date }} - Scan QR kode for at validere at medlemskab er aktivt<br />
+Temporary membership card – Valid until {{ mail_data.qrcode_expire_date }} - Scan QR code to validate that membership is active<br />
+Temporäre Mitgliedskarte – Gültig bis {{ mail_data.qrcode_expire_date }} - Scannen Sie den QR-Code, um zu bestätigen, dass die Mitgliedschaft aktiv ist<br /><br /><br />
+Mit freundlichen Grüßen<br />
+DCU - Dansk Camping Union<br />
+Korsdalsvej 132<br />
+2605 Brøndby<br />
+Email: info@dcu.dk<br />
+Telefonnummer: +45 33 21 06 00<br />

@@ -1,0 +1,321 @@
+.form {
+    margin: 20px auto;
+}
+
+//---- Text input
+
+.text-input,
+.search-input {
+    border-radius: 30px;
+    border: 1px solid get-border-color('tertiary');
+    color: get-font-color('base');
+    font-size: get-font-size('smaller');
+    height: 60px;
+    margin: $spacing / 2 $spacing / 2 $spacing / 2 0;
+    min-width: 400px;
+    padding: 0 20px;
+
+    &::placeholder {
+        color: get-font-color('base');
+        opacity: 1;
+    }
+}
+
+.text-input {
+
+  @include media-breakpoint-down('md') {
+    min-width: 300px;
+  }
+}
+
+.search-input {
+  background-image: url('/..' + $path + 'icons/search-small.svg');
+  background-position: top 15px right 20px;
+  background-repeat: no-repeat;
+  height: 50px;
+  min-width: 360px;
+
+  @include media-breakpoint-down('md') {
+    min-width: 260px;
+  }
+}
+
+.textarea {
+  border-radius: 30px;
+  border: 1px solid get-border-color('tertiary');
+  font-size: get-font-size('smaller');
+  max-width: 800px;
+  padding: 20px;
+  width: 100%;
+
+  &::placeholder {
+    color: get-font-color('base');
+    opacity: 1;
+  }
+}
+
+.amount-input {
+  align-items: center;
+  background-color: get-default-color('background');
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  max-width: 800px;
+  padding-left: $spacing * 0.5;
+  width: 100%;
+
+  &:nth-of-type(even) {
+    background-color: get-default-color('surface');
+  }
+
+  &__label {
+    font-size: get-font-size('lead');
+    font-weight: bold;
+  }
+
+  &__input-wrapper {
+    display: inline-block;
+    padding-right: $spacing * 0.5;
+  }
+
+  &__subtract-button,
+  &__add-button {
+    background-color: get-default-color('background');
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 100%;
+    border: 1px solid get-border-color('tertiary');
+    height: 32px;
+    width: 32px;
+  }
+
+  &__subtract-button {
+    background-image: url('/..' + $path + 'icons/minus.svg');
+  }
+
+  &__add-button {
+    background-image: url('/..' + $path + 'icons/plus.svg');
+  }
+
+  &__amount {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    height: 32px;
+    width: 32px;
+  }
+}
+
+//---- Radio input
+
+.radio-input-wrapper {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: get-font-size('smaller');
+    user-select: none;
+}
+
+.radio-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+
+    &:checked ~ .radio-label {
+
+        &:after {
+            display: block;
+        }
+    }
+}
+
+.radio-label {
+    border: 1px solid get-border-color('tertiary');
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: get-default-color('background');
+    border-radius: 50%;
+
+    &:after {
+        content: "";
+        position: absolute;
+        display: none;
+        top: 5px;
+        left: 5px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: get-default-color('primary');
+    }
+}
+
+//---- Checkbox input
+
+.checkbox-input-wrapper {
+  display: inline-block;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: get-font-size('smaller');
+  padding-top: 2px;
+  user-select: none;
+}
+
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+
+  &:checked ~ .checkbox-label {
+
+      &:after {
+          display: block;
+      }
+  }
+}
+
+.checkbox-label {
+  border: 1px solid get-border-color('tertiary');
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: get-default-color('background');
+  border-radius: 5px;
+
+  &:after {
+      background-image: url('/..' + $path + 'icons/checkbox-selected.svg');
+      background-repeat: no-repeat;
+      content: "";
+      display: none;
+      height: 13px;
+      left: 5px;
+      position: absolute;
+      top: 8px;
+      width: 13px;
+  }
+}
+
+//---- Select element
+
+//- Select wrapper styling
+// .custom-select {    
+//   margin: $spacing / 2 $spacing / 2$spacing / 2 0;
+//   position: relative;
+//   width: 260px;
+// }
+
+// //- Hide select element
+// .custom-select select {
+//   display: none;
+// }
+
+// //- Select replacement styling
+// .select-selected {
+//   appearance: none;
+//   background-image: url('/..' + $path + 'icons/chevron-down.svg');
+//   background-repeat: no-repeat;
+//   // background-position: top 17px right 15px;
+//   background-position: top 25px right 21px;
+//   border-radius: 30px;
+//   border: 1px solid get-border-color('tertiary');
+//   color: get-font-color('base');
+//   cursor: pointer;
+//   font-size: get-font-size('smaller');
+//   font-weight: bold;
+//   height: 60px;
+//   padding: 17px 20px 0;
+//   text-transform: uppercase;
+//   width: 100%;
+// }
+  
+// //- Toggle chevron when active
+// .select-selected.select-arrow-active {
+//   background-image: url('/..' + $path + 'icons/chevron-up.svg');
+//   background-position: top 25px right 21px;
+// }
+
+// //- Option items styling
+// .select-items {
+//   background-color: get-default-color('background');
+//   border-radius: 30px;
+//   border: 1px solid get-border-color('tertiary');
+//   cursor: pointer;
+//   left: 0;
+//   padding: 20px;
+//   position: absolute;
+//   right: 0;
+//   top: 120%;
+//   user-select: none;
+//   width: 100%;
+//   z-index: 99;
+// }
+
+// //- Option item hover
+// .select-items div:hover, .same-as-selected {
+//   background-color: rgba(0, 0, 0, 0.1);
+// }
+
+// //- Hide utility
+// .select-hide {
+//   display: none;
+// }
+
+//---- Buttons
+
+.button {
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 8px 16px 8px 0;
+
+  &.--center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &.--primary {
+    background-color: get-default-color('cta');
+    border: none;
+    color: get-font-color('on_primary');
+    font-size: get-font-size('section');
+    height: 60px;
+    transition: background-color ease-out 50ms;
+    width: 340px;
+
+    &:hover {
+      background-color: get-default-color('cta_hover');
+    }
+  }
+
+  &.--secondary,
+  &.--filter {
+    background-color: get-default-color('background');
+    border: 1px solid get-border-color('tertiary');
+    font-size: get-font-size('milli');
+    font-weight: bold;
+    height: 36px;
+    outline: none;
+    padding: 0 20px;
+    text-align: left;
+    transition: all ease-out 50ms;
+
+    &.--active {
+      color: get-font-color('on_primary');
+      background-color: get-default-color('cta');
+    }
+  }
+
+  &.--secondary {
+    background-image: url('/..' + $path + 'icons/plus.svg');
+    background-position: top 12px right 20px;
+    background-repeat: no-repeat;
+    min-width: 215px;
+  }
+}

@@ -1,0 +1,85 @@
+<div class="container bambora-receipt mb-5">
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="title">
+        <h1>{{ 'Receipt'|t }}</h1>
+        <h2>{{ 'Welcome to DCU'|t }}, {{ receipt.name }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-md-12">
+      <p class="subheader">{{ 'Thank you for choosing DCU. Now you can stay at all DCU camp sites in Denmark and get great discounts. We hope you\'ll enjoy your stay.' |t }} </p>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-4 reciept-data-info">
+      <p>{{ 'Purchase information'|t }}</p>
+    </div>
+    <div class="col-md-4 reciept-data-payment table-responsive">
+      <table class="table table-borderless table-hover">
+        <tr>
+          <td>{{ 'Payment date:'|t }}</td>
+          <td><strong>{{ receipt.invoice_date }} </strong></td>
+        </tr>
+        <tr>
+          <td>{{ 'Memberid:'|t }}</td><td><strong>{{ receipt.member_no }}</strong></td>
+        </tr>
+        <tr>
+          <td>{{ 'Transactionnumber:'|t }} </td><td><strong>{{ receipt.txnid }}</strong></td>
+        </tr>
+        <tr>
+          <td>{{ 'Paymentmethod:'|t }} </td><td><strong>{{ 'Creditcard'|t }}</strong></td>
+        </tr>
+        <tr>
+          <td>{{ 'Order number:'|t }}</td><td><strong>{{ receipt.order_number }}</strong></td>
+        </tr>
+        <tr class="total">
+          <td colspan="2" class="spacer"></td>
+        </tr>
+        <tr>
+          <td class="total">{{ 'Paid amount'|t }} </td>
+          <td><strong>{{ receipt.amount }},-</strong></td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-4 reciept-data-action">
+      <a href="{{ receipt.profile_link }}" class="btn btn-primary no-underline">{{ 'View member profile'|t }}</a><br/>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // Send transaction data with a pageview if available
+  // when the page loads. Otherwise, use an event when the transaction
+  // data becomes available.
+  dataLayer.push({
+    'event' : 'transaction',
+    'ecommerce': {
+      'purchase': {
+        'actionField': {
+          'id': '{{ receipt.txnid }}',                         // Transaction ID. Required for purchases and refunds.
+          'affiliation': 'Website',
+          'revenue': '{{ receipt.total }}',                     // Total transaction value (incl. tax and shipping)
+          'tax':'0',
+          'shipping': '0',
+          'coupon': ''
+        },
+        'products': [{                            // List of productFieldObjects.
+          'name': '{{ receipt.product }}',     // Name or ID is required.
+          'id': 'Medlemskab',
+          'price': '{{ receipt.total }}',
+          'brand': 'DCU',
+          'category': 'Medlemskab',
+          'variant': 'normal',
+          'quantity': 1,
+          'coupon': ''                            // Optional fields may be omitted or set to empty string.
+        }]
+      }
+    }
+  });
+</script>

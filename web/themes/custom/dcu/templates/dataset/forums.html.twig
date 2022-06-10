@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Theme override to display a forum.
+ *
+ * May contain forum containers as well as forum topics.
+ *
+ * Available variables:
+ * - forums: The forums to display (as processed by forum-list.html.twig).
+ * - topics: The topics to display.
+ * - topics_original: Original topics data before modification.
+ * - topics_pager: The topics pager.
+ * - forums_defined: A flag to indicate that the forums are configured.
+ *
+ * @see template_preprocess_forums()
+ */
+#}
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-8 offset-md-2">
+        {% if forums_defined %}
+          {{ forums }}
+          {{ topics }}
+          {{ topics_pager }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

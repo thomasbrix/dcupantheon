@@ -1,0 +1,77 @@
+// Outer container
+.card-band {
+    height: 100%;
+    text-decoration: none;
+
+    // Card band heading
+    &__heading {
+        font-size: get-font-size('h1');
+        font-weight: get-font-weight('extrabold');
+    }
+
+    // Item container
+    &__item {
+        height: 100%;
+    }
+
+    // Image and date wrapper
+    &__item-image-wrapper {
+        position: relative;
+    }
+
+    // Image
+    &__item-image {
+        width: 100%;
+    }
+
+    // Date
+    &__item-date {
+        background-color: get-default-color('quaternary');
+        border-radius: 0px 5px 0px 0px;
+        bottom: 0;
+        color: get-font-color('on_primary');
+        font-size: get-font-size('micro');
+        left: 0;
+        letter-spacing: 0.65px;
+        line-height: get-font-size('milli');
+        padding: $spacing * 1 / 3 $spacing * 2 / 3;
+        position: absolute;
+    }
+
+    // Marker icon
+    &__item-location-icon {
+        position: relative;
+        right: 3px;
+    }
+
+    // Location
+    &__item-location {
+        // color: get-font-color('heading_secondary');
+        display: inline-block;
+        font-size: get-font-size('micro');
+        letter-spacing: 0.65px;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+
+    // Item heading
+    &__item-heading {
+        font-size: get-font-size('h3');
+        font-weight: get-font-weight('extrabold');
+    }
+
+    // Item text
+    &__item-text {
+    }
+
+    // Card band read more link
+    &__read-more {
+        float: right;
+        margin-top: $spacing;
+        text-decoration: underline;
+    }
+
+    &__read-more-icon {
+        margin-left: 10px;
+    }
+}

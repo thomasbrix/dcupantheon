@@ -1,0 +1,29 @@
+{% set c_attribute = create_attribute() %}
+{% set item_class = [
+  'content-block',
+  'col-12',
+  'col-xl-6',
+  '--shifted',
+  node.bundle() == 'district' ? node.field_district.entity.field_color.value : 'dcu-bg-white-straw'
+]
+%}
+<div{{ c_attribute.addClass(item_class) }}>
+  <article{{ attributes }}>
+    {{ title_prefix }}
+    {{ title_suffix }}
+    <a href="{{ url }}" class="content-block__link">
+      <div class="content-block__media-wrapper">
+        <div class="content-block__media">
+          <div class="content-block__image">
+            {{ content.field_media_image }}
+          </div>
+        </div>
+      </div>
+      <div class="content-block__content">
+        <h3 class="content-block__super-heading">{{ content.field_trumpet }}</h3>
+        <h2 class="content-block__heading">{{ label }}</h2>
+        <span class="content-block__text">{{ content.field_manchet }}</span>
+      </div>
+    </a>
+  </article>
+</div>

@@ -1,0 +1,127 @@
+.footer {
+    background-color: get-default-color('surface');
+    padding: 0 $spacing * 5;
+
+    @include media-breakpoint-down('lg') {
+        padding: 0 $spacing * 3;
+    }
+
+    @include media-breakpoint-down('md') {
+        padding: 0 $spacing * 2;
+    }
+
+    @include media-breakpoint-down('sm') {
+        padding: $spacing;
+    }
+
+    &__top {
+        display: flex;
+    }
+
+    &__top-child-container {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        margin-top: $spacing * 3;
+
+        & a:hover,
+        & a:focus,
+        & a:active {
+            text-decoration: underline;
+        }
+
+        @include media-breakpoint-down('md') {
+            margin-top: $spacing * 2;
+        }
+
+        @include media-breakpoint-down('sm') {
+            margin-top: $spacing;
+        }
+    }
+
+    &__top-heading {
+        font-size: get-font-size('h2');
+        font-weight: get-font-weight('extrabold');
+        margin-bottom: $spacing * 2 / 3;
+    }
+
+    &__maps-wrapper {
+        height: 100%;
+        max-height: 260px;
+        max-width: 220px;
+        width: 100%;
+
+        & iframe {
+            position: relative;
+        }
+    }
+
+    &__image {
+        height: 100%;
+        max-height: 260px;
+        max-width: 185px;
+        width: 100%;
+    }
+
+    &__bottom {
+        padding-top: $spacing * 2;
+
+        .footer.--blue & {
+            padding-bottom: $spacing * 2;
+        }
+    }
+
+    &__bottom-list {
+        padding-left: 0;
+
+        .footer.--blue & {
+            margin: 0;
+        }
+    }
+
+    &__bottom-list-item {
+        color: get-font-color('on_tertiary');
+        display: inline-block;
+        font-size: get-font-size('smaller');
+        list-style: none;
+        margin-right: $spacing * 0.5;
+
+        @include media-breakpoint-down('sm') {
+            display: block;
+        }
+
+        &.--dash {
+
+            @include media-breakpoint-down('sm') {
+                display: none;
+            }
+        }
+
+        .footer.--blue & {
+            color: get-font-color('on_primary');
+        }
+    }
+
+    &__bottom-link {
+        text-decoration: underline;
+    }
+
+    &.camping {
+        padding-bottom: $spacing * 3;
+    }
+
+    &.--blue {
+        background-color: get-default-color('primary');
+    }
+
+    // from extra.scss
+    &.footer-top {
+        padding: 35px 0 0 0;
+        a {
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+    }
+}

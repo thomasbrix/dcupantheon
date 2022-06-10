@@ -1,0 +1,37 @@
+Hej {{ mail_data.name }}<br /><br />
+Velkommen. Vi er glade for at du valgte at blive medlem, og vi vil gøre alt hvad vi kan for at du får så meget ud af medlemskabet som muligt.<br /><br />
+<strong>Her er din kvittering for købet af medlemskabet.</strong><br />
+Ordrenummer: {{ mail_data.order_number }}<br />
+Fakturadato: {{ mail_data.invoice_date }}<br />
+Købt abonnementstype: {{ mail_data.product }}<br />
+Betalt beløb: {{ mail_data.amount }} kr<br />
+Dit kortnummer er: {{ mail_data.membership_card_no }}<br /><br />
+<strong>Fordele for medlemmer af DCU</strong><br /><br />
+Magasin<br />
+Du modtager magasinet Camping-fritid i din postkasse. Du kan også læse magasinet online her: https://www.dcu.dk/camping-fritid
+Vær opmærksom på, at adressefilen/distributionslisten altid trækkes omkring en måned, før bladet udkommer.
+Melder du dig ind midt imellem to blade, kan du derfor ikke regne med at få næstkommende blad.<br >
+Se udgivelsesdatoer her: https://www.dcu.dk/udgivelsesdatoer-for-camping-fritid<br /><br /><br />
+Medlemsfordele<br />
+Som betalende medlem kan du benytte alle de fordele, som DCU-medlemskabet giver dig. Se alle fordele her: https://www.dcu.dk/campingfordele<br /><br />
+App<br />
+Du kan hente DCU's app "DCU Fordele" ned på din mobil i enten App Store eller Google Play, så har du hele tiden dit
+medlemskort og alle dine fordele lige ved hånden.<br />
+Android: https://play.google.com/store/apps/details?id=dk.dcu.fordelsapp<br />
+Iphone: https://apps.apple.com/dk/app/dcu-fordele/id1361521689<br /><br />
+Forum<br />
+Du kan deltage i medlemsforummet og få hjælp og hjælpe andre medlemmer. Se mere på https://www.dcu.dk/forum<br /><br />
+Rabat på campingpladser<br />
+På DCU's egne campingpladser får du 30 % rabat. På DCU's fordelspladser får du også rabat. Læs mere om alle campingpladser,
+hvor du får rabat på https://www.dcu.dk/da/medlemsfordele/besoeg-dcus-mange-fordelspladser-i-danmark
+<br /><br />
+{{ mail_data.qrcode|raw }}<br /><br />
+Midlertidigt medlemskort – Gyldig til {{ mail_data.qrcode_expire_date }} - Scan QR kode for at validere at medlemskab er aktivt<br />
+Temporary membership card – Valid until {{ mail_data.qrcode_expire_date }} - Scan QR code to validate that membership is active<br />
+Temporäre Mitgliedskarte – Gültig bis {{ mail_data.qrcode_expire_date }} - Scannen Sie den QR-Code, um zu bestätigen, dass die Mitgliedschaft aktiv ist<br /><br /><br />
+Med venlig hilsen<br />
+DCU - Dansk Camping Union<br />
+Korsdalsvej 132<br />
+2605 Brøndby<br />
+Email: info@dcu.dk<br />
+Telefon: 33 21 06 00<br />

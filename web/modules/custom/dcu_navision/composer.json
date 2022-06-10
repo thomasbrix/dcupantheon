@@ -1,0 +1,13 @@
+{
+    "name": "dcu_navision",
+    "type": "drupal-module",
+    "description": "DCU Navision integration",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/dcu_navision",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/dcu_navision",
+        "source": "http://cgit.drupalcode.org/dcu_navision"
+    }
+}

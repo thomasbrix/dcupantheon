@@ -1,0 +1,5 @@
+services:
+  dcu_navision.client:
+    class: '\Drupal\dcu_navision\Client\NavisionRestClient'
+    arguments:
+      - '@http_client_factory'

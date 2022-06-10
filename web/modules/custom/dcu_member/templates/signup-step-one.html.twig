@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row steps mb-5">
+    <div class="inner">
+      <ul><li class="active first legend-element" data-filter="class">{{ 'Create membership'|t }}</li>
+        <li class="legend-element" data-filter="data">{{ 'Personal information'|t }}</li>
+        <li class="last legend-element" data-filter="data">{{ 'Payment'|t }}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="title">
+        <span>{{ 'Create membership'|t }}</span><h1>{{ form.header }}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="form-row ">
+    <div class="col-md-12">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      {{ form|without('header', 'summaryprice') }}
+    </div>
+    <div class="col-md-4  order-first order-md-2">
+      {{ form.summaryprice }}
+    </div>
+  </div>
+</div>

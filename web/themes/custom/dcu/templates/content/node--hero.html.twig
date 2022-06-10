@@ -1,0 +1,25 @@
+{%
+  set classes = [
+  'hero',
+  'hero--left',
+  'dcu-bg-white-grey'
+]
+%}
+<section class="container">
+  <div class="row">
+    <div class="col">
+      <a href="{{ url }}" class="no-underline">
+        <div{{ attributes.addClass(classes) }}>
+          <div class="p-0 pb-md-5">
+            {{ content.field_media_image }}
+          </div>
+          <div class="hero__content">
+            <h3 class="hero__super-heading">{{ content.field_trumpet }}</h3>
+            <h1 class="hero__heading">{{ label }}</h1>
+            <h2 class="hero__sub-heading">{{ content.field_manchet }}</h2>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

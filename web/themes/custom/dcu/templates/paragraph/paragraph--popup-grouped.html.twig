@@ -1,0 +1,22 @@
+
+
+{% block paragraph %}
+  {% block content %}
+    <div class="container py-0 py-md-5">
+      {% if content.field_header|render is not empty %}
+        <h2 class="card-band__heading">{{ content.field_header }}</h2>
+      {% endif %}
+      <div class="row">
+        {% if content.field_wide_or_narrow['#items'].getString() %}
+          {{ content.field_popup_element }}
+        {% else %}
+          <div class="col-12 col-md-6 offset-md-3">
+            <div class="row">
+              {{ content.field_popup_element }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endblock %}
+{% endblock paragraph %}

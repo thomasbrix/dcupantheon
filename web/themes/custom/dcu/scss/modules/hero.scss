@@ -1,0 +1,204 @@
+/*
+    Define the hero using modifier classes
+*/
+
+.hero {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: $spacing;
+    position: relative;
+
+    @include media-breakpoint-down(md) {
+        flex-direction: column;
+        margin-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    // Modifiers
+    &--left {
+        justify-content: flex-end;
+
+        & .hero__content {
+            left: 0;
+            right: auto;
+        }
+    }
+
+    &--right {
+        justify-content: flex-start;
+
+        & .hero__content {
+            left: auto;
+            right: 0;
+        }
+    }
+
+    // Primary hero - left alignment
+    &__image {
+        max-width: 1364px;
+        width: 90%;
+        height: calc(54vw*0.9);
+
+        @include media-breakpoint-down(sm) {
+
+            margin-left: -15px;
+            margin-right: -15px;
+            max-width: none;
+            width: auto;
+        }
+
+        @include media-breakpoint-only(md) {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        @include media-breakpoint-up(xl) {
+            height: auto;
+            max-height: 765px;
+            max-width: 1364px;
+            width: 90%;
+        }
+    }
+
+    &__map-wrapper {
+        height: 630px;
+        width: 1364px;
+
+        @include media-breakpoint-down(md) {
+            height: 250px;
+            width: 100%;
+        }
+
+        & iframe {
+            position: relative;
+        }
+    }
+
+    &__content {
+        bottom: 0;
+        display: inline-block;
+        left: 0;
+        max-width: 60%;
+        min-width: 40%;
+        padding: $spacing;
+        position: absolute;
+        max-height: 60%;
+        overflow:hidden;
+
+        @include media-breakpoint-down(sm) {
+            top: $spacing * -1;
+        }
+
+        @include media-breakpoint-down(md) {
+            display: block;
+            max-width: none;
+            min-width: none;
+            padding: $spacing $spacing * 0.5;
+            position: relative;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    }
+
+    &__super-heading {
+        // color: get-default-color('cta');
+        font-size: get-font-size('super-heading');
+        font-weight: get-font-weight('base');
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+    }
+
+    &__heading {
+        font-size: get-font-size('h1');
+        max-width: none;
+        margin-bottom: 0;
+        word-break: break-word;
+
+        @include media-breakpoint-down(md) {
+            font-size: get-font-size('h2');
+        }
+
+        // Modifiers
+        .hero--italic & {
+            // color: get-default-color('cta');
+            font-family: $font-family-secondary;
+            font-size: 120px;
+            margin-bottom: 30px;
+            max-width: none;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 40px;
+                font-weight: normal;
+                max-width: 100%;
+            }
+
+            @include media-breakpoint-only(md) {
+                font-size: 60px;
+            }
+
+            @include media-breakpoint-only(lg) {
+                font-size: 70px;
+            }
+
+            @include media-breakpoint-only(xl) {
+                font-size: 80px;
+            }
+
+            a {
+                text-decoration: none;
+            }
+        }
+    }
+
+    &__favourite-icon {
+        cursor: pointer;
+        position: absolute;
+        right: $spacing * 2 / 3;
+        top: $spacing * 2 / 3;
+    }
+
+    &__sub-heading {
+        font-size: get-font-size('h2');
+        font-weight: get-font-weight('base');
+
+        @include media-breakpoint-down(md) {
+            font-size: get-font-size('h3');
+        }
+    }
+
+    &__address {
+        font-size: get-font-size('smaller');
+        margin-bottom: $spacing / 2;
+    }
+
+    &__cta-button {
+        background-color: get-default-color('cta');
+        border-radius: 30px;
+        border: none;
+        color: get-font-color('on_primary');
+        font-size: get-font-size('section');
+        height: 60px;
+        padding: 0 89px;
+        cursor: pointer;
+
+        @include media-breakpoint-down(sm) {
+            padding: 0;
+            width: 100%;
+        }
+    }
+}
+
+.hero.image {
+    height: calc(54vw);
+    width: 100%;
+    height: auto;
+    max-height: 765px;
+    max-width: 1364px;;
+}

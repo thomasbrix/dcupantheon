@@ -1,0 +1,87 @@
+{#
+/**
+ * @file
+ * Theme override to display a menu.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link url, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ *   - is_expanded: TRUE if the link has visible children within the current
+ *     menu tree.
+ *   - is_collapsed: TRUE if the link has children within the current menu tree
+ *     that are not currently visible.
+ *   - in_active_trail: TRUE if the link is in the active trail.
+ */
+#}
+{% import _self as menus %}
+
+{#
+We call a macro which calls itself to render the full tree.
+@see https://twig.symfony.com/doc/1.x/tags/macro.html
+#}
+{{ menus.menu_links(items, attributes, 0) }}
+
+{% macro menu_links(items, attributes, menu_level) %}
+{% set menu_classes = [
+  'navigation__about-us'
+] %}
+
+  {% import _self as menus %}
+  {% if items %}
+    {% if menu_level == 0 %}
+<ul{{ attributes.addClass(menu_classes) }}>
+  {% else %}
+  <ul>
+    {% endif %}
+    {% for item in items %}
+      {% set item_classes = [
+        'navigation__item'
+      ] %}
+
+      <li{{ item.attributes.addClass(item_classes) }}>
+        {{ link(item.title, item.url) }}
+        {% if item.below %}
+          {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endmacro %}
+
+
+{#  <div class="header__about-us-navigation">#}
+{#    <nav role="navigation" aria-labelledby="block-aboutus-menu" id="block-aboutus" class="contextual-region">#}
+{#      <div class="about-us__label js-user-toggle is-nav-open is-toggled">#}
+{#        Om os<img class="about-us__chevron" src="/themes/custom/dcu/assets/icons/chevron-down.svg">#}
+
+{#        <ul block="block-aboutus" class="navigation__about-us">#}
+{#          <li class="navigation__item"><span>Om os</span></li>#}
+{#          <li class="navigation__item"><a href="/da/om-dansk-camping-union" data-drupal-link-system-path="node/38053">Om#}
+{#              Dansk Camping Union</a></li>#}
+{#          <li class="navigation__item"><a href="/da/forum" data-drupal-link-system-path="forum">Forum</a></li>#}
+{#          <li class="navigation__item"><a href="/da/kredse" data-drupal-link-system-path="node/40689">Kredse</a></li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    </nav>#}
+{#  </div>#}
+
+
+{#  <div class="header__about-us-navigation">#}
+{#    <nav class="about-us" id="block-aboutus" role="navigation" aria-labelledby="block-aboutus-menu">#}
+{#      <div class="about-us__label js-user-toggle">Om os<img class="about-us__chevron"#}
+{#                                                            src="/assets/icons/chevron-down.svg">#}
+{#        <ul class="navigation__about-us">#}
+{#          <li class="navigation__item"><a class="navigation__item-label" href="/da/om-dansk-camping-union">Om Dansk#}
+{#              Camping Union</a></li>#}
+{#          <li class="navigation__item"><a class="navigation__item-label" href="/da/forum">Forum</a></li>#}
+{#          <li class="navigation__item"><a class="navigation__item-label" href="/da/kredse">Kredse</a></li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    </nav>#}
+{#  </div>#}

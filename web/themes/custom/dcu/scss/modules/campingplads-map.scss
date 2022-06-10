@@ -1,0 +1,11 @@
+.campingplads-map {
+  & .iframe-wrapper {
+      padding-bottom: 95.7%;
+  }
+}
+
+.dcu-hero-map .geolocation-map-container {
+  @include media-breakpoint-up('lg') {
+    height: 600px !important;
+  }
+}

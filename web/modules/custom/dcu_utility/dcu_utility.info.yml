@@ -1,0 +1,6 @@
+name: 'Dcu utility'
+type: module
+description: 'Various utilitys specific for the dcu website'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'DCU'

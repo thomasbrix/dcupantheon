@@ -1,0 +1,29 @@
+{#
+/**
+* @file
+* Default theme implementation to display a block.
+*
+* @see template_preprocess_block()
+*
+* @ingroup themeable
+*/
+#}
+{% set classes = [
+  'clear-both',
+] %}
+{% if content.stars %}
+  <div{{ attributes.addClass(classes) }}>
+    <h2 class="card-band__heading">{{ 'Reviews'|t }}</h2>
+    <div class="row align-items-center">
+      <div class="col-12 col-md-4">
+        {{ content.stars.rating }}
+        <div class="stars" style="--rating: {{ content.stars.rating }};" aria-label="{{ 'Google review of this campsite is: ' |t  }} {{ content.stars.rating }} {{ 'ud af 5 på i alt' |t  }} {{ content.stars.user_ratings_total }} reviews"></div>
+      </div>
+      <div class="col-12 col-md-4">
+        {{ content.stars.user_ratings_total }} {{ 'reviews on Google'|t }}
+      </div>
+      <div class="col-12 col-md-4 text-md-right"><a href="https://search.google.com/local/reviews?placeid={{ content.googleplaceid }}" target="_blank">{{ 'See all reviews'|t }}</a></div>
+    </div>
+  </div>
+{% endif %}
+

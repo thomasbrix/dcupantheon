@@ -1,0 +1,5 @@
+services:
+  dcu_api.route_subscriber:
+    class: Drupal\dcu_api\EventSubscriber\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

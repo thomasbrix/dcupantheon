@@ -1,0 +1,126 @@
+dcu_admin.admin:
+  path: '/admin/dcu'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'DCU Administration'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+dcu_admin.navision:
+  path: '/admin/dcu/navision'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'DCU Navision'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+dcu_admin.navision.membersearch:
+  path: '/admin/dcu/navision/getmember'
+  defaults:
+    _form: '\Drupal\dcu_navision\Form\getMemberDataRest'
+    _title: 'Get memberdata from DCU NAV'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+dcu_admin.export:
+  path: '/admin/dcu/export'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Export'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+dcu_admin.export.book:
+  path: '/admin/dcu/export/book'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'DCU book'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+dcu_admin.export.book.export:
+  path: '/admin/dcu/export/book/export'
+  defaults:
+    _form: '\Drupal\dcu_admin\Form\bookExport'
+    _title: 'DCU export to book'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: TRUE
+dcu_admin.export.book.reset:
+  path: '/admin/dcu_admin/export/book/reset'
+  defaults:
+    _form: '\Drupal\dcu_admin\Form\resetBook'
+    _title: 'DCU reset book'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: TRUE
+dcu_admin.export.members_magazine.export:
+  path: '/admin/dcu/export/magazine/member_export'
+  defaults:
+    _form: '\Drupal\dcu_admin\Form\MemberMagazineExport'
+    _title: 'DCU export Magazine Members'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+dcu_admin.export.campaign_monitor_csv:
+  path: '/admin/dcu/export/campaignmonitorcsv'
+  defaults:
+    _form: '\Drupal\dcu_admin\Form\campaignMonitorCSV'
+    _title: 'Generate Campaign Monitor csv file'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: TRUE
+dcu_admin.site_settings:
+  path: 'admin/dcu/sitesettings'
+  defaults:
+    _form: '\Drupal\dcu_admin\Form\SiteSettings'
+    _title: 'SiteSettings'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: TRUE
+dcu_admin.recurring_payment:
+  path: 'admin/dcu/recurring'
+  defaults:
+    _controller: '\Drupal\dcu_admin\Controller\RecurringPaymentsController::content'
+    _title: 'Recurring payments'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: TRUE
+dcu_admin.member_mail:
+  path: '/admin/dcu/member_mail'
+  defaults:
+    _form: '\Drupal\dcu_admin\Form\MemberMail'
+    _title: 'Send member emails'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: TRUE
+dcu_admin.persistent_log_search:
+  path: '/admin/dcu/persistentlog'
+  defaults:
+    _form: '\Drupal\dcu_admin\Form\PersistentLogSearch'
+    _title: 'PersistentLogSearch'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: TRUE
+dcu_admin.persistent_log_proximity:
+  path: '/admin/dcu/persistentlog/{wid}'
+  defaults:
+    _controller: '\Drupal\dcu_admin\Controller\PersistentLog::viewDbLogProximity'
+    _title: 'PersistentLogView'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: TRUE

@@ -1,0 +1,112 @@
+{#If image is set#}
+{% if content.field_media_image|render is not empty or content.field_image|render is not empty %}
+  <section class="container">
+    <div class="row">
+      <div class="col">
+        <div class="hero hero--left dcu-bg-white-blue">
+          {% if node.bundle() == 'campsites' %}
+            <div class="p-0 pb-md-5">
+              {{ content.field_image }}
+            </div>
+          {% else %}
+            <div class="p-0 pb-md-5">
+              {{ content.field_media_image }}
+            </div>
+          {% endif %}
+          <div class="hero__content">
+            {% if node.bundle() == 'activity' %}
+              <h3 class="hero__super-heading">{{ content.field_trumpet }}</h3>
+              <h1 class="hero__heading">{{ label }}</h1>
+              <h2 class="hero__sub-heading">{{ content.field_manchet }}</h2>
+              <div class="hero__info-text">
+                {{ content.field_district }}
+                {{ content.field_activity_dates }}
+                {{ content.field_activity_price }}
+              </div>
+            {% elseif node.bundle() == 'campsites' %}
+              {% if content.field_advantage_campsite['#items'].getString() %}
+                <h3 class="hero__super-heading">Fordelsplads</h3>
+              {% else %}
+                <h3 class="hero__super-heading">Campingplads</h3>
+              {% endif %}
+
+              <h1 class="hero__heading">{{ label }}</h1>
+              <div class="hero__ratings-wrapper">
+                {% for i in 1..content.field_number_of_stars[0]['#markup'] %}
+                  <img style="fill: red !important" class="hero__rating-star" src="/themes/custom/dcu/assets/icons/rating-star-white.svg">
+                {% endfor %}
+              </div>
+              <div class="hero__info-text">
+                {{ content.field_address }}
+                {{ content.field_phone }}
+                {{ content.field_email }}
+                {{ content.field_www }}
+                {{ content.field_season_period }}
+                <div class="heart-red">{{ content.flag_favorite }}</div>
+              </div>
+            {% elseif node.bundle() == 'member_benefit' %}
+              <h3 class="hero__super-heading">{{ content.field_trumpet }}</h3>
+              <h1 class="hero__heading">{{ label }}</h1>
+              <h2 class="hero__sub-heading">{{ content.field_manchet }}</h2>
+              <div class="heart-red">{{ content.flag_favorite }}</div>
+            {% else %}
+              <h3 class="hero__super-heading">{{ content.field_trumpet }}</h3>
+              <h1 class="hero__heading">{{ label }}</h1>
+              <h2 class="hero__sub-heading">{{ content.field_manchet }}</h2>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% else %}
+  <section class="container">
+    <div class="row">
+      {% if content.field_trumpet|render is empty and content.field_manchet|render is empty %}
+        <div class="col-12">
+      {% else %}
+        <div class="col-md-6 offset-md-3 col-12">
+      {% endif %}
+
+        {% if node.bundle() == 'activity' %}
+          <h3>{{ content.field_trumpet }}</h3>
+          <h1>{{ label }}</h1>
+          <h2>{{ content.field_manchet }}</h2>
+          <div class="hero__info-text">
+            {{ content.field_district }}
+            {{ content.field_activity_dates }}
+            {{ content.field_activity_price }}
+          </div>
+        {% elseif node.bundle() == 'campsites' %}
+          {% if content.field_advantage_campsite['#items'].getString() %}
+            <h3>Fordelsplads</h3>
+          {% else %}
+            <h3>Campingplads</h3>
+          {% endif %}
+          <h1>{{ label }}</h1>
+          <div class="hero__ratings-wrapper">
+            {% for i in 1..content.field_number_of_stars[0]['#markup'] %}
+              <img style="fill: red !important" class="hero__rating-star" src="/themes/custom/dcu/assets/icons/rating-star-white.svg">
+            {% endfor %}
+          </div>
+          <div class="hero__info-text">
+            {{ content.field_address }}
+            {{ content.field_phone }}
+            {{ content.field_email }}
+            {{ content.field_www }}
+            {{ content.field_season_period }}
+            <div class="heart-red position-left">{{ content.flag_favorite }}</div>
+          </div>
+        {% else %}
+          {% if content.field_trumpet|render is not empty %}
+            <h3>{{ content.field_trumpet }}</h3>
+          {% endif %}
+          <h1>{{ label }}</h1>
+          {% if content.field_manchet|render is not empty %}
+            <h2>{{ content.field_manchet }}</h2>
+          {% endif %}
+        {% endif %}
+      </div>  {# end col #}
+    </div> {# end row #}
+  </section>
+{% endif %}

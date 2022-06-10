@@ -1,0 +1,165 @@
+div.highcol {
+  //width: 26%;
+  //background-color: lightblue;
+}
+
+div.lowcol {
+  //width: 26%;
+  //background-color: lightgreen;
+}
+
+
+.col-header {
+  font-size: 15px;
+  @include media-breakpoint-up(md) {
+    font-size: 18px;
+  }
+}
+
+
+
+
+
+
+div.pricerow {
+  //display: flex;
+  //min-width: 400px;
+  //border-bottom: 1px solid #999999;
+}
+div.pricerow.bg-even:nth-child(even) {
+  background-color: #f2f2f2;
+}
+//div.pricerow.bente2 {
+//  //background-color: #f2f2f2;
+//}
+
+div.pricerow.bg-odd {
+  background-color: #f2f2f2;
+}
+
+//div.pricerow:nth-child(even) {
+//  background-color: #f2f2f2;
+//}
+
+
+div.item {
+  //width: 55%;
+  //margin-top: 10px;
+  //margin-bottom: 10px;
+  //margin-left: 10px
+}
+
+div.highseason, div.lowseason {
+  //width: 26%;
+  //text-align: center
+}
+
+div.highnormal, div.highmember, div.lownormal, div.lowmember {
+  //width: 23%;
+  //text-align: right;
+  //padding-right: 10px;
+  //padding-top: 10px;
+  //padding-bottom: 10px
+}
+
+div.footnote {
+  //width: 100%;
+  //min-width: 400px;
+  //margin-bottom: 10px
+}
+
+//#ddlresult {
+//  margin-top: 20px
+//}
+
+//#ddlresult div.pricerow:nth-child(even) {
+//  background-color: #f2f2f2
+//}
+
+//#ddlresult div.pricerow:nth-child(odd) {
+//  background-color: inherit
+//}
+
+//#ddlresult div.pricerow:last-child {
+//  border-bottom: 1px solid #999;
+//  margin-bottom: 20px
+//}
+
+
+
+
+//body.node-type-landingpage .content-main .inner > .field-body {
+//  width: 100%;
+//  font-size: 16px;
+//  color: #333
+//}
+
+//body.node-type-landingpage .content-main .inner > .field-field-top-image {
+//  display: none
+//}
+
+
+
+//div.pricelist {
+//  width: 100%;
+//  height: 100%;
+//  min-height: 500px;
+//  background-color: #fff
+//}
+
+//div.pricelist-dropdowns {
+//  display: flex;
+//  width: 100%;
+//  justify-content: space-around;
+//  flex-flow: row wrap;
+//  align-items: stretch
+//}
+
+//div.pricelist div.select {
+//  flex-grow: 1;
+//  padding: 10px 5px;
+//  min-width: 150px
+//}
+
+//div.pricelist div.select label {
+//  font-size: 14px;
+//  color: #666
+//}
+
+//div.pricelist select {
+//  font-size: 16px;
+//  color: #4c4c4c;
+//  padding: 10px 32px 10px 10px;
+//  border: 1px solid #ccc;
+//  background: url(https://www.euromaster.dk/wcsstore/SharedB2CAssetStore/images/select_arrow.png) no-repeat right 10px top 50%;
+//  -webkit-appearance: none;
+//  -moz-appearance: none;
+//  appearance: none;
+//  background-color: #fff;
+//  height: 65px;
+//  width: 100%
+//}
+
+//.knap-pil {
+//  padding: 20px;
+//  width: 100%;
+//  cursor: pointer;
+//  background-image: linear-gradient(to bottom, #c1291e 0%, #ad0c10 100%);
+//  text-transform: uppercase;
+//  color: #fff;
+//  border: none;
+//  display: block;
+//  font-size: 16px;
+//  height: 65px
+//}
+
+//div.pricelist-result {
+//  margin-left: 10px;
+//  margin-right: 10px
+//}
+
+//div.search {
+//  margin-left: 10px;
+//  margin-right: 10px;
+//  margin-top: 30px
+//}

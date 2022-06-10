@@ -1,0 +1,5 @@
+services:
+  dcu_utility.event_subscriber:
+    class: Drupal\dcu_utility\EventSubscriber\DCUUtilitySubscriber
+    tags:
+      - {name: event_subscriber}

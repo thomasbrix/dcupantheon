@@ -1,0 +1,275 @@
+{%
+  set classes = [
+  'dcu-campsite',
+
+]
+%}
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {# Hero #}
+  <section class="hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+          <h3 class="hero__super-heading">DCU-CAMPING</h3>
+          <h1>{{ label }}</h1>
+          <div class="hero__ratings-wrapper">
+            {% for i in 1..content.field_number_of_stars[0]['#markup'] %}
+              <img style="fill: red !important" class="hero__rating-star" src="/themes/custom/dcu/assets/icons/rating-star-black.svg">
+            {% endfor %}
+          </div>
+          <div class="manchet">
+            <div class="txt">
+              {{ content.field_manchet }}
+            </div>
+          </div>
+          <div class="heart-red">{{ content.flag_favorite }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# Gallery - mobile #}
+  <section class="gallery d-md-none">
+    {% if content.field_gallery|render is not empty %}
+      {% if content.field_gallery|field_value|length > 1 %}
+          {% set i = 0 %}
+          {% set j = 0 %}
+          {% for image in node.field_gallery  %}
+            {% if i == 0 %}
+              {% if image.entity.bundle.value.0['target_id'] == 'image' %}
+                {% set image_uri = image|file_uri %}
+                {% if image_uri is not null %}
+                  <a href="{{ image_uri|image_style('4_3_large') }}" data-toggle="lightbox" data-gallery="hidden-images" class="XXXcol-md-12">
+                    <img src="{{ image_uri|image_style('4_3_large') }}" class="img-fluid">
+                  </a>
+                {% endif %}
+                {% set i = i + 1 %}
+              {% endif %}
+            {% else %}
+              {% set j = j + 1 %}
+              {% if image.entity.bundle.value.0['target_id'] == 'image' %}
+                {% set image_uri = image|file_uri %}
+                {% if image_uri is not null %}
+                  <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="{{ image_uri|image_style('4_3_large') }}"></div>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% set total = i + j %}
+          <div class="counter d-block d-md-none mobile2"><div class="desktop2">1/{{ total }}</div></div>
+      {% endif %}
+    {% endif %}
+  </section>
+
+  {# Gallery - desktop #}
+  <section class="gallery d-none d-md-block">
+    <div class="container">
+      {% if content.field_gallery|render is not empty %}
+        {% if content.field_gallery|field_value|length > 1 %}
+          <div class="row hero-gallery">
+            {% set i = 0 %}
+            {% set j = 0 %}
+            {% for image in node.field_gallery  %}
+              {% if i == 0 %}
+                <div class="col-md-6">
+                  <div class="row">
+                    {% if image.entity.bundle.value.0['target_id'] == 'image' %}
+                      {% set image_uri = image|file_uri %}
+                      {% if image_uri is not null %}
+                        <a href="{{ image_uri|image_style('4_3_large') }}" data-toggle="lightbox" data-gallery="hidden-images" class="col-md-12">
+                          <img src="{{ image_uri|image_style('4_3_large') }}" class="img-fluid">
+                        </a>
+                      {% endif %}
+                      {% set i = i + 1 %}
+                    {% endif %}
+                  </div>
+                </div>
+              {% elseif i < 5 %}
+                {% if i == 1 %}
+                  <div class="d-none d-md-block col-md-6 gallery-right">
+                  <div class="row">
+                {% endif %}
+                {% if image.entity.bundle.value.0['target_id'] == 'image' %}
+                  {% set image_uri = image|file_uri %}
+                  {% if image_uri is not null %}
+                    <a href="{{ image_uri|image_style('4_3_large') }}" data-toggle="lightbox" data-gallery="hidden-images" class="col-md-6">
+                      <img src="{{ image_uri|image_style('4_3_large') }}" class="img-fluid">
+                    </a>
+                  {% endif %}
+                  {% set i = i + 1 %}
+                {% endif %}
+                {% if i == 5 %}
+                  </div></div>
+                {% endif %}
+              {% else %}
+                {% set j = j + 1 %}
+                {% if image.entity.bundle.value.0['target_id'] == 'image' %}
+                  {% set image_uri = image|file_uri %}
+                  {% if image_uri is not null %}
+                    <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="{{ image_uri|image_style('4_3_large') }}"></div>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {% set total = i + j %}
+            <div class="counter d-none d-md-block"><div class="desktop2">{{ i }}/{{ total }}</div></div>
+            <div class="counter d-block d-md-none mobile2"><div class="desktop2">1/{{ total }}</div></div>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </section>
+
+
+
+
+
+
+
+  {# Description + narrow content + sticky booking banner #}
+  <section class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 offset-md-3 dcu-read-more">
+          <div class="d-none d-md-block">
+          {#{{ field_description_desktop }}#}
+          {{ content.field_description }}
+{#          <div class="dcu-modal-link" data-toggle="modal" data-target="#dcu-desc-readmore2">#}
+{#            {{ 'Show more >'|t }}#}
+{#          </div>#}
+{#          <div class="modal fade" id="dcu-desc-readmore2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+{#            <div class="modal-dialog modal-lg" role="document">#}
+{#              <div class="modal-content">#}
+{#                <div class="modal-header">#}
+{#                  <h5 class="modal-title" id="exampleModalLabel">Beskrivelse</h5>#}
+{#                  <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|t }}">#}
+{#                    <span aria-hidden="true">&times;</span>#}
+{#                  </button>#}
+{#                </div>#}
+{#                <div class="modal-body">#}
+{#                  {{ content.field_description }}#}
+{#                </div>#}
+{#                <div class="modal-footer">#}
+{#                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
+{#                </div>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+        </div>
+        <div class="d-block d-md-none dcu-read-more mt-3">
+          {{ field_description_mobile }}
+          <div class="dcu-modal-link" data-toggle="modal" data-target="#dcu-desc-readmore">
+            {{ 'Show more >'|t }}
+          </div>
+          <div class="modal fade" id="dcu-desc-readmore" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Beskrivelse</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|t }}">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  {{ content.field_description }}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'Close'|t }}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dcu-spacing">
+          {{ drupal_block('google_place_review') }}
+          {{ drupal_block('google_place_latest_reviews') }}
+        </div>
+
+        {# Content narrow #}
+        <div class="dcu-spacing dcu-narrow">
+          {{ content.field_content_narrow }}
+        </div>
+
+        <div class="dcu-spacing">
+          <h2>{{ 'You must live here'|t }}</h2>
+
+          <div class="row dcu-location">
+            <div class="col-12">
+              {{ content.field_geo_location }}
+            </div>
+          </div>
+
+          <div class="row mt-4 mb-3">
+            <div class="col-6">
+              <h2>{{ 'Address'|t }}</h2>
+              {{ content.field_address.0.address_line1['#value'] }}<br />
+              {{ content.field_address.0.postal_code['#value'] }}
+              {{ content.field_address.0.locality['#value'] }}<br />
+              {{ content.field_phone|field_value }}<br />
+              {{ content.field_email|field_value }}
+            </div>
+            <div class="col-6">
+              <h2>{{ 'Opening hours'|t }}</h2>
+              {{ content.field_period_opening }}
+              <div class="dcu-modal-link mt-3" data-toggle="modal" data-target="#dcu-opening-hours">
+                {{ 'Reception opening hours >'|t }}
+              </div>
+              <div class="modal fade" id="dcu-opening-hours" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Beskrivelse</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|t }}">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      {{ content.field_office_hours }}
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'Close'|t }}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% if content.field_booking_header|render is not empty %}
+        <div class="d-none d-md-block col-md-3 sticky-booking-top mb-2 mb-md-0">
+          <div class="sticky-top">
+            <div class="sticky-booking-wrapper">
+              <h2>{{ content.field_booking_header }}</h2>
+              {{ content.field_booking_text }}
+              {{ content.field_booking_link }}
+              <a href="{{ content.field_booking_cta[0]['#url'] }}" target="_blank" class="btn btn-primary no-underline">{{ content.field_booking_cta[0]['#title']|render }}</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-block d-md-none fixed-booking fixed-bottom">
+          <div class="booking-wrapper-fixed">
+            <div class="row py-2 px-2">
+              <div class="col-8">{{ content.field_booking_text_mobile }}</div>
+              <div class="col-4 align-self-center"><a href="{{ content.field_booking_cta[0]['#url'] }}" target="_blank" class="btn btn-primary no-underline">{{ content.field_booking_cta[0]['#title']|render }}</a></div>
+            </div>
+          </div>
+        </div>
+
+      {% endif %}
+    </div>
+  </section>
+
+
+
+
+
+  {# Paragraph content #}
+  {{ content.field_content }}
+
+</article>

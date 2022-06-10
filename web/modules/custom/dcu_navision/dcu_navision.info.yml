@@ -1,0 +1,6 @@
+name: 'DCU Navision'
+type: module
+description: 'DCU Navision integration'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'DCU'

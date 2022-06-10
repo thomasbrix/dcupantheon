@@ -1,0 +1,161 @@
+dcu_member.member:
+  path: '/signup/member/{member_type}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Signup\StepOneForm'
+    _title: 'Create Membership'
+    member_type: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+dcu_member.info:
+  path: '/signup/info/{member_type}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Signup\StepTwoForm'
+    _title: 'Personal information'
+    member_type: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+dcu_member.payment:
+  path: '/signup/payment'
+  defaults:
+    _controller: '\Drupal\dcu_member\Controller\BamboraPaymentController::content'
+    _title: 'Membership payment'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+dcu_member.receipt:
+  path: '/signup/receipt/{user}'
+  defaults:
+    _controller: '\Drupal\dcu_member\Controller\BamboraReceiptController::content'
+    _title: 'Member payment receipt'
+  requirements:
+    _permission: 'access content'
+    _user_is_logged_in: 'TRUE'
+  options:
+    no_cache: 'TRUE'
+dcu_member.user_profile:
+  path: '/user/profile/{userId}'
+  defaults:
+    _controller: '\Drupal\dcu_member\Controller\UserProfileController::content'
+    _title: 'View user profile'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+  options:
+    no_cache: 'TRUE'
+dcu_member.profile_logindata_form:
+  path: 'user/profile/logindata/{userId}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Profile\LoginDataForm'
+    _title: 'Edit login'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+  options:
+    no_cache: 'TRUE'
+dcu_member.profile_create_form:
+  path: '/user/profile/create'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Profile\CreateForm'
+    _title: 'Create profile'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+  options:
+    no_cache: 'TRUE'
+dcu_member.profile_form:
+  path: '/user/profile/base/{userId}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Profile\BaseForm'
+    _title: 'Edit profile'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+dcu_member.profile_membership_form:
+  path: '/user/profile/membership/{userId}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Profile\MembershipForm'
+    _title: 'Edit membership'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+  options:
+    no_cache: 'TRUE'
+dcu_member.profile_relatives_form:
+  path: '/user/profile/relatives/{userId}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Profile\RelativesForm'
+    _title: 'Edit family'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+dcu_member.profile_cancel_membership_form:
+  path: '/user/profile/cancelmembership/{userId}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Profile\CancelMembershipForm'
+    _title: 'Cancel membership'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+  options:
+    no_cache: 'TRUE'
+dcu_member.profile_reactivate_membership:
+  path: '/user/profile/reactivatemembership/{userId}'
+  defaults:
+    _controller: '\Drupal\dcu_member\Controller\UserProfileController::reactivateMembership'
+    _title: 'Reactivate membership'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+  options:
+    no_cache: 'TRUE'
+dcu_member.profile_notifications_form:
+  path: '/user/profile/notifications/{userId}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Profile\NotificationsForm'
+    _title: 'NotificationsForm'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfile'
+  options:
+    no_cache: 'TRUE'
+dcu_member.profile_memberservice_fields_form:
+  path: '/user/profile/memberservice/{userId}'
+  defaults:
+    _form: '\Drupal\dcu_member\Form\Profile\MemberServiceFieldsForm'
+    _title: 'MemberServiceFieldsForm'
+  requirements:
+    _custom_access: '\Drupal\dcu_member\Controller\UserProfileController::accessProfileMemberservice'
+  options:
+    no_cache: 'TRUE'
+dcu_member.global_consent_form:
+  path: '/userconsent'
+  defaults:
+    _controller: '\Drupal\dcu_member\Controller\ConsentController::modalContent'
+    _title: 'userconsentmodal'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+dcu_member.confirmconsent:
+  path: '/confirmconsent'
+  defaults:
+    _controller: '\Drupal\dcu_member\Controller\ConsentController::confirmConsent'
+    _title: 'userconsentmodal'
+  requirements:
+    _role: 'authenticated'
+  options:
+    no_cache: 'TRUE'
+dcu_member.siteownersite:
+  path: '/user/siteownersite'
+  defaults:
+    _controller: '\Drupal\dcu_member\Controller\UserProfileController::siteownerSite'
+    _title: 'View site/sites'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+dcu_member.agentsite:
+  path: '/user/agentsite'
+  defaults:
+    _controller: '\Drupal\dcu_member\Controller\UserProfileController::agentSite'
+    _title: 'View site/sites'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

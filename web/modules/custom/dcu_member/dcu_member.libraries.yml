@@ -1,0 +1,17 @@
+bambora.checkout:
+  header: true
+  js:
+    https://ssl.ditonlinebetalingssystem.dk/integration/ewindow/paymentwindow.js: { type: external, minified: true }
+dcu_member.profile:
+  js:
+    js/dcu_member_profile.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+dcu_member.consent:
+  js:
+    js/dcu_member_consent.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/js-cookie

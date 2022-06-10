@@ -1,0 +1,38 @@
+.breadcrumbs {
+    margin: 0 0 0 0;
+    padding: 0;
+
+    &__item {
+        color: get-font-color('breadcrumbs');
+        display: inline-block;
+        font-size: get-font-size('nano');
+        font-weight: get-font-weight('base');
+        list-style: none;
+        padding-right: 6px;
+        text-transform: uppercase;
+
+        &::after {
+            content: "/";
+            margin-left: 6px;
+        }
+
+        &:last-of-type {
+            font-weight: bold;
+
+            &::after {
+                content: "";
+            }
+        }
+    }
+
+    &__link {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+.breadcrumbs.edits {
+    margin: 0 0 22.5px;
+}

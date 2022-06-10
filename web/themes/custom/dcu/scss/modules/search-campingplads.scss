@@ -1,0 +1,77 @@
+/* Search page with map form filters */
+#views-exposed-form-solr-campsites-solr-campsites {
+  display: flex;
+  flex-wrap: wrap;
+
+  [data-drupal-selector="edit-field-geo-location-boundary-wrapper"] {
+    display: none;
+  }
+  .js-form-item {
+    position: relative;
+    margin-bottom: 1rem;
+    width: 300px;
+    margin-right: 20px;
+  }
+  .form-item-search-api-fulltext {
+    width: 50%;
+    min-width: 300px;
+    max-width: 400px;
+    margin-top: 20px;
+    margin-right: 20px;
+  }
+  button.btn {
+    margin-top: 8px;
+    margin-right: 20px;
+  }
+  .js-form-type-checkbox {
+    margin-bottom: 0;
+  }
+  .modal-body .js-form-type-checkbox input:not(:placeholder-shown) ~ label {
+    padding-left: 2.5em;
+  }
+  .modal .js-form-item {
+    width: 100%;
+    min-width: 0;
+    margin-right: 0;
+  }
+  input[data-drupal-selector=edit-reset] {
+    background-color: var(--gray);
+  }
+  input[data-drupal-selector=edit-reset]:hover {
+    background-color: var(--gray-dark)  ;
+  }
+}
+
+/* Search page with map - results page */
+.solr-search-result {
+  p {
+    margin-bottom: 0;
+  }
+  .campingplads-card__address {
+    margin-bottom: 0;
+  }
+  .campingplads-card__name {
+    font-size: 19px;
+  }
+  .geolocation-marker-hover {
+    .campingplads-card__type-icon {
+      position: absolute;
+      right: 10px;
+      top: 38px;
+      @include media-breakpoint-down('md') {
+        right: 15px;
+        top: 40px;
+      }
+    }
+  }
+  .control_loading_indicator {
+    .geolocation-context-popup {
+      padding: 20px;
+      font-size: 16px;
+    }
+  }
+  /* Google map */
+  .sticky-top {
+    top: 200px
+  }
+}

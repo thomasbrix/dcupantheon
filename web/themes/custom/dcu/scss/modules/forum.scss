@@ -1,0 +1,140 @@
+#comment-form,
+#node-forum-form {
+  width: 100%;
+  input[type=text], select, input[type=file] {
+    border-radius: 5px;
+    border: 1px solid #333;
+  }
+
+  /* Notify settings */
+  .js-form-item-notify {
+    margin-bottom: 0;
+  }
+  #edit-notify-type {
+    .js-form-item-notify-type {
+      display: block;
+      margin-bottom: 0;
+    }
+  }
+  #edit-comment-body-wrapper,
+  #edit-body-wrapper {
+    label {
+      display: none;
+    }
+    #cke_1_top {
+      border: none;
+      border-radius: 5px;
+    }
+    #cke_1_contents {
+      border: none;
+    }
+    #cke_1_bottom {
+      border: none;
+      border-radius: 5px;
+    }
+    .cke_inner {
+      border: 1px solid #333;
+      border-radius: 5px;
+    }
+    .cke_chrome {
+      border: none;
+    }
+    #edit-body-0-format {
+      display: none;
+    }
+    .filter-wrapper {
+      display: none;
+    }
+  }
+  .tabledrag-toggle-weight-wrapper {
+    display: none;
+  }
+  table {
+    width: 100%;
+  }
+  body.page-type-forum {
+    p {
+      max-width: 100%;
+      margin-bottom: 15px;
+    }
+    .real-small {
+      font-size: 14px;
+    }
+  }
+}
+
+/* Forum blocks */
+.forum-block-wrapper {
+  .forum-block {
+    background-color: #F2F2F2;
+    a {
+      text-decoration: none;
+    }
+    .forum-block-header {
+      background-color: #B11116;
+      color: #FFF;
+      padding: 20px;
+      margin-bottom: 10px;
+    }
+    h3 {
+      color: #B11116;
+      margin: 0;
+    }
+    .forum-block-content {
+      border-radius: 5px;
+      background-color: #fff;
+      padding: 20px;
+      margin: 0 10px 10px 10px;
+
+      .forum-block-footer {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+/* Forum search */
+.view-forum-search {
+  padding: 20px;
+  background-color: #F2F2F2;
+  .forum-item {
+    padding: 20px;
+    @include media-breakpoint-up('md') {
+      padding: 50px;
+    }
+  }
+  .forum-item:nth-child(odd) {
+    background-color: #fff;
+    //background-color: #f2f2f2;
+  }
+
+  .views-exposed-form {
+
+    .js-form-type-textfield {
+      //@include media-breakpoint-up('md') {
+      //  float: left;
+      //  input[type=text] {
+      //    width: 948px;
+      //    margin-right: 20px;
+      //  }
+      //}
+    }
+    .form-actions {
+      //@include media-breakpoint-up('md') {
+      //  input[type=submit] {
+      //    float: left;
+      //  }
+      //  .button {
+      //    margin: 8px 0 8px 0;
+      //  }
+      //}
+    }
+  }
+  .end-forum-search {
+    border-top: 2px solid #000;
+    //display: block;
+    //border-bottom: 3px solid #f2f2f2;
+    //margin-bottom: 15px;
+    //padding-bottom: 15px;
+  }
+}

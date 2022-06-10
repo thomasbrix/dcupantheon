@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Theme override to display a media item.
+ *
+ * Available variables:
+ * - name: Name of the media.
+ * - content: Media content.
+ *
+ * @see template_preprocess_media()
+ */
+#}
+{% set classes = [
+  'mb-5',
+  'pb-4',
+] %}
+<article{{ attributes.addClass(classes) }}>
+  {{ title_suffix.contextual_links }}
+  {% if content %}
+    <div class="video__player iframe-wrapper">
+      {{ content.thumbnail }}
+    </div>
+    <h3 class="pt-3">{{ content.name }}</h3>
+  {% endif %}
+</article>
+

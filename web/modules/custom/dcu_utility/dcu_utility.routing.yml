@@ -1,0 +1,9 @@
+dcu_utility.dcu-campsite2:
+  path: 'dcu-campsites/dcu-campsite2'
+  defaults:
+    _controller: '\Drupal\dcu_utility\Controller\DCUCampsites2Controller::content'
+    _title: 'DCU campsite ver 2'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

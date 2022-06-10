@@ -1,0 +1,6 @@
+name: 'Dcu feed import'
+type: module
+description: 'Logic implemented for feed import to dcu'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'DCU'

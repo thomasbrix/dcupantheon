@@ -1,0 +1,4 @@
+dcu_admin_css:
+  css:
+    theme:
+      css/dcu_admin.css: {}

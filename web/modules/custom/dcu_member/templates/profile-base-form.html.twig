@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="title">
+      <h1>{{ form.header }}</h1>
+    </div>
+  </div>
+</div>
+<div class="form-row ">
+  <div class="col-md-12">
+    {{ page.highlighted }}
+  </div>
+</div>
+<div class="row mb-5">
+  <div class="col-md-8">
+    <div class="form-row">
+      <div class="col-md-12">
+        {{ form|without('header') }}
+      </div>
+    </div>
+  </div>
+</div>

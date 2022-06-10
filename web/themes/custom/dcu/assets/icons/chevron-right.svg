@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="20" height="20px" viewBox="0 0 17.241 20" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>.a{fill:none;}.b{fill:#16254c;}</style>
+  </defs>
+  <g transform="translate(20) rotate(90)">
+    <path class="a" d="M0,0H20V20H0Z"/>
+    <path class="b" d="M 8.185 6.632 L 7.069 7.748 L 10.693 11.38 L 7.069 15.011 L 8.185 16.127 L 12.932 11.38 Z" transform="matrix(0, -1, 1, 0, -1.379, 21.380001)"/>
+  </g>
+</svg>

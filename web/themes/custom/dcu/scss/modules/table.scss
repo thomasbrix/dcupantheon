@@ -1,0 +1,99 @@
+.table {
+
+    &__caption {
+        caption-side: top;
+        color: get-font-color('caption');
+        font-size: get-font-size('milli');
+        margin-bottom: $spacing * 0.5;
+        padding-left: 2px;
+        text-align: left;
+        text-transform: uppercase;
+        word-spacing: 0.7px;
+
+        @include media-breakpoint-down('md') {
+            font-size: 13px;
+        }
+    }
+
+    &__header-row {
+        height: 80px;
+
+        @include media-breakpoint-down('md') {
+            height: 72px;
+        }
+    }
+
+    &__header {
+        background-color: get-default-color('quinary');
+        color: get-font-color('on_primary');
+        font-size: get-font-size('h2');
+        font-weight: 800;
+        padding-left: $spacing;
+        padding-right: $spacing;
+        text-align: left;
+
+        @include media-breakpoint-down('md') {
+            font-size: 24px;
+            font-weight: 700;
+            padding-left: $spacing * 2 / 3;
+            padding-right: $spacing * 2 / 3;
+        }
+
+        @include media-breakpoint-down('sm') {
+            font-size: 18px;
+            padding-left: $spacing / 3;
+            padding-right: $spacing / 3;
+        }
+
+        &:nth-child(2) {
+            
+            @include media-breakpoint-down('sm') {
+                max-width: 70px;
+                word-wrap: break-word;
+            }
+        }
+
+        &:nth-child(3) {
+            
+            @include media-breakpoint-down('sm') {
+                max-width: 80px;
+                word-wrap: break-word;
+            }
+        }
+    }
+
+    &__data-row {
+        height: 60px;
+
+        &:nth-of-type(even) {
+            background-color: get-default-color('surface');
+        }
+
+        @include media-breakpoint-down('md') {
+            height: 52px;
+        }
+
+        @include media-breakpoint-down('sm') {
+            height: 56px;
+        }
+    }
+
+    &__data {
+        border: none;
+        font-size: get-font-size('base');
+        padding-left: $spacing;
+        padding-right: $spacing;
+
+        @include media-breakpoint-down('md') {
+            font-size: 16px;
+            padding-left: $spacing * 2 / 3;
+            padding-right: $spacing * 2 / 3;
+        }
+
+        @include media-breakpoint-down('sm') {
+            font-size: 14px;
+            padding-left: $spacing / 3;
+            padding-right: $spacing / 3;
+        }
+    }
+}

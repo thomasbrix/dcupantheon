@@ -1,0 +1,64 @@
+dcu_admin.admin:
+  title: 'DCU Administration'
+  parent: system.admin
+  route_name: 'dcu_admin.admin'
+dcu_admin.export:
+  title: 'Export'
+  parent: dcu_admin.admin
+  route_name: 'dcu_admin.export'
+  description: 'Various DCU export data administration'
+  weight: 10
+dcu_admin.book:
+  title: 'Book'
+  parent: dcu_admin.export
+  route_name: 'dcu_admin.export.book'
+dcu_admin.book.export:
+  title: 'Book export'
+  parent: dcu_admin.book
+  route_name: 'dcu_admin.export.book.export'
+dcu_admin.book.reset:
+  title: 'Book reset'
+  parent: dcu_admin.book
+  route_name: 'dcu_admin.export.book.reset'
+dcu_admin.magazine.export:
+  title: 'Magazine member export'
+  parent: dcu_admin.export
+  route_name: 'dcu_admin.export.members_magazine.export'
+dcu_admin.campaignmonitorcsv:
+  title: 'Campaign Monitor CSV'
+  parent: dcu_admin.export
+  route_name: 'dcu_admin.export.campaign_monitor_csv'
+dcu_admin.navision:
+  title: 'Navision'
+  parent: dcu_admin.admin
+  route_name: 'dcu_admin.navision'
+  description: 'Member lookup in Navision'
+  weight: 20
+dcu_admin.navision.membersearch:
+  title: 'Navision membersearch'
+  parent: dcu_admin.navision
+  route_name: 'dcu_admin.navision.membersearch'
+dcu_admin.recurring_payment:
+  title: 'Recurring payments'
+  route_name: dcu_admin.recurring_payment
+  description: 'Processing of members with recurring payment'
+  parent: dcu_admin.admin
+  weight: 30
+dcu_admin.member_mail:
+  title: 'Member mail'
+  route_name: dcu_admin.member_mail
+  description: 'Send mail to member group'
+  parent: dcu_admin.admin
+  weight: 80
+dcu_admin.site_settings:
+  title: 'DCU settings'
+  route_name: dcu_admin.site_settings
+  description: 'DCU settings'
+  parent: dcu_admin.admin
+  weight: 99
+dcu_admin.persistent_log_search:
+  title: 'Persistent log search'
+  route_name: dcu_admin.persistent_log_search
+  description: 'Persistent log search'
+  parent: dcu_admin.admin
+  weight: 99

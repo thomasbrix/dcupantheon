@@ -1,0 +1,115 @@
+.campingplads-card {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: $spacing * 2 / 3;
+
+    @include media-breakpoint-down('sm') {
+        flex-direction: column;
+    }
+
+    &__image-wrapper {
+        flex: 0 0 225px;
+        position: relative;
+    }
+
+    &__image {
+        width: 100%;
+    }
+
+    &__discount {
+        background-color: get-default-color('quaternary');
+        border-radius: 0 5px 0 0;
+        bottom: 0;
+        color: get-font-color('on_primary');
+        font-size: get-font-size('micro');
+        left: 0;
+        padding: $spacing / 3 $spacing * 0.5;
+        position: absolute;
+        text-transform: uppercase;
+    }
+
+    &__content-wrapper {
+        background-color: get-default-color('surface');
+        flex: 1 1 100%;
+        font-size: get-font-size('nano');
+        padding: $spacing * 0.5 $spacing * 1.5 $spacing * 0.5 $spacing * 0.5;
+        position: relative;
+    }
+
+    &__type {
+        color: get-font-color('heading_secondary');
+        font-size: get-font-size('micro');
+        font-weight: get-font-weight('base');
+        letter-spacing: 0.65px;
+        margin-bottom: $spacing / 3;
+        text-transform: uppercase;
+    }
+
+    &__name {
+        font-size: get-font-size('lead');
+        font-weight: get-font-weight('extrabold');
+        margin-bottom: 0;
+    }
+
+    &__ratings-wrapper {
+        display: block;
+        margin-bottom: $spacing * 0.5;
+    }
+
+    &__rating-star {
+        height: 10px;
+        margin-right: 5px;
+        width: 10px;
+    }
+
+    &__address {
+        margin-bottom: $spacing / 3;
+    }
+
+    &__phonenumber {
+        display: inline-block;
+    }
+
+    &__email {
+        display: inline-block;
+        margin-left: 5px;
+
+        & a {
+            text-decoration: underline;
+        }
+    }
+
+    &__homepage {
+        margin-bottom: $spacing;
+
+        & a {
+            text-decoration: underline;
+        }
+    }
+
+    &__popular {
+        color: get-font-color('on_tertiary');
+        font-size: get-font-size('nano');
+        letter-spacing: 0.65px;
+        text-transform: uppercase;
+    }
+
+    &__like-icon {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+
+    &__type-icon {
+        position: absolute;
+        right: 15px;
+        top: 45px;
+    }
+
+    &__map {
+        background-color: lightblue;
+        height: 100%;
+        max-height: 900px;
+        width: 100%;
+    }
+}

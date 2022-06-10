@@ -1,0 +1,22 @@
+{#
+/**
+* @file
+* Default theme implementation to display a block.
+*
+* @see template_preprocess_block()
+*
+* @ingroup themeable
+*/
+#}
+{% if content.related %}
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>{{ 'Related articles'|trans }}</h2>
+      </div>
+    </div>
+    <div class="row">
+      {{ content.related }}
+    </div>
+  </div>
+{% endif %}

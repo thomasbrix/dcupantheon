@@ -1,0 +1,130 @@
+<article{{ attributes }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {% if content.field_media_image|render is not empty or content.field_image|render is not empty %}
+    {% include '@dcu/content/incl-hero/default-bg-white-blue.html.twig' %}
+  {% else %}
+    {% include '@dcu/content/incl-hero/google-map-hero.html.twig' %}
+  {% endif %}
+
+  <section class="container">
+    {% if content.field_advantage_campsite['#items'].getString() %}
+      <div class="row mb-5">
+        {% if content.field_media_image|render is not empty or content.field_image|render is not empty %}
+          <div class="col-12 col-md-5 offset-md-2">
+            {% if content.field_discount_description|render is not empty %}
+              <div class="branding__pure_txt mb-5">
+                <h3 class="branding--red">{{ "Member benefits"|t }}</h3>
+                <div class="branding--red">{{ content.field_discount_description }}</div>
+              </div>
+            {% endif %}
+            <div>
+              {{ content.field_description }}
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            {{ content.field_geo_location }}
+          </div>
+        {% else %}
+          {# No hero image #}
+          <div class="col-12 col-md-8 offset-md-2">
+            {% if content.field_discount_description|render is not empty %}
+              <div class="branding__pure_txt mb-3 mb-md-5">
+                <h3 class="branding--red">{{ "Member benefits"|t }}</h3>
+                <div class="branding--red">{{ content.field_discount_description }}</div>
+              </div>
+            {% endif %}
+            <div>
+              {{ content.field_description }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="row">
+        {% if content.field_media_image|render is not empty or content.field_image|render is not empty %}
+          <div class="col-12 col-md-5 offset-md-2">
+            {{ content.field_description }}
+          </div>
+          <div class="col-12 col-md-3 mt-5 mt-md-0">
+            {{ content.field_geo_location }}
+          </div>
+        {% else %}
+          <div class="col-12 col-md-8 offset-md-2">
+            {{ content.field_description }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="container">
+    <div class="row">
+      <div class="col-6 offset-3">
+        {{ drupal_block('google_place_review') }}
+        {{ drupal_block('google_place_latest_reviews') }}
+      </div>
+    </div>
+  </section>
+
+  {% if content.field_marketing_products|render is not empty %}
+    {% if content.field_youtube_video|render is not empty %}
+      <section class="container pb-5">
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+            {{ content.field_youtube_video }}
+          </div>
+        </div>
+      </section>
+    {% endif %}
+  {% endif %}
+
+  {#http://ashleydw.github.io/lightbox/#single-image#}
+  {% if content.field_gallery_images|render is not empty %}
+    {% if content.field_gallery_images|field_value|length > 1 %}
+      <section class="container gallery py-md-5">
+        <div class="row justify-content-center">
+          {% set i = 0 %}
+          {% for image in node.field_gallery_images  %}
+            {% if i < 12 %}
+              {% set image_uri = image|file_uri %}
+              {% if image_uri is not null %}
+                <a href="{{ image_uri|image_style('16_9_large') }}" data-toggle="lightbox" data-gallery="hidden-images" class="col-md-2">
+                  <img src="{{ image_uri|image_style('16_9_medium') }}" class="img-fluid rounded">
+                </a>
+              {% endif %}
+              {% set i = i + 1 %}
+            {% else %}
+              {% set image_uri = image|file_uri %}
+              {% if image_uri is not null %}
+                <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="{{ image_uri|image_style('16_9_large') }}"></div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  {% endif %}
+
+  {% include '@dcu/content/include/default-prices.html.twig' %}
+
+  {% if content.field_advantage_campsite['#items'].getString() %}
+    {% if content.field_discount_description|render is not empty %}
+      <section class="container pb-5">
+          <div class="row mb-3">
+            <div class="col-md-4 offset-md-4">
+              <div class="branding__pure_txt">
+                <h3 class="branding--red">{{ "Member benefits"|t }}</h3>
+                <div class="branding--red">{{ content.field_discount_description }}</div>
+              </div>
+            </div>
+          </div>
+      </section>
+      {% endif %}
+  {% endif %}
+  {{ content.field_facilities }}
+{#  {{ content.field_content }}#}
+</article>
+
+
+

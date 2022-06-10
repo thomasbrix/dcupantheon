@@ -1,0 +1,28 @@
+{#
+author_name = "Jan Pless"
+time = {int} 1638211827
+text = "Stor plads. Tæt på København mange muligheder for en tur i hovedstaden.\nPladsen har pæne toiletbygninger de er pæne og rene. Varmt vand til et bad er gratis.\nPæne køkkener hvor der er det man har brug for. Eneste minus er en del støj fra motorvejen"
+relative_time_description = "for én uge siden"
+rating = {int} 4
+profile_photo_url = "https://lh3.googleusercontent.com/a-/AOh14GiWteihWs55sKig9KAZZMmVbXCiyAuoTCggPg-4nQ=s128-c0x00000000-cc-rp-mo-ba5"
+language = "da"
+author_url = "https://www.google.com/maps/contrib/104756587157063760772/reviews"
+#}
+{% if content.googledata %}
+  <div class="dcu-spacing">
+    <div  class="row">
+      {% set i = 0 %}
+      {% for review in content.googledata.reviews  %}
+        {% if i == 0 %}
+          <div class="col">
+            <div class="google-review">
+              <div class="google-review-txt">{{ review.text }}</div>
+              <div class="google-review-name-date">{{ review.author_name }}, {{ review.time|format_date('teaser_date') }}, {{ review.rating }}/5</div>
+            </div>
+          </div>
+          {% set i = i + 1 %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

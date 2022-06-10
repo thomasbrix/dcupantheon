@@ -1,0 +1,117 @@
+
+// Base Spacing Unit
+$spacing: 				30px;
+
+
+// Widths
+$max-page-width: 		1640px;
+$max-paragraph-width: 	45rem;
+
+// Heights
+$sizes: (
+	header-height-desktop: 	152px,
+	header-height-device: 	100px,
+	header-top-desktop: 	52px,
+	header-top-device: 		40px,
+
+	logo-size-desktop:		80px,
+	logo-size-device:		60px,
+	logo-size-mobile:		25px
+
+);
+
+// Radius
+$radius-base: 4px;
+
+$radii: (
+	base: $radius-base,
+);
+
+
+// Aspects
+$aspects: (	
+	'21/9':		42.8%,
+	'39/18':	46.1%,
+	'16/9': 	56.2%,
+	'4/3':		75%,
+	'3/2':		66%,
+	'1/1':		100%
+);
+
+
+// Layers
+$layers: (
+	above-top:			1100,
+	top:				1000,
+	below-top: 			900,
+	
+	above-middle:		600,
+	middle:				500,
+	below-middle:		400,
+	
+	above-bottom:		200,
+	bottom:				100
+);
+
+
+// Placeholder selectors
+%container-styling {
+	max-width: $max-page-width;
+	margin: 0 auto;
+	padding: 0 $spacing;
+}
+
+
+
+
+
+// ---- Functions
+
+
+/**
+* Will return the given layer from map or display warning
+*/
+@function get-layer($layer) {
+	@if not map-has-key($layers, $layer) {
+		@warn "no layer by the name: `#{$layer}` in map $layers";
+	}
+
+	@return map-get($layers, $layer);
+}
+
+
+/**
+* Will return the given size from map or display warning
+*/
+@function get-size($size) {
+	@if not map-has-key($sizes, $size) {
+		@warn "no size by the name: `#{$size}` in map $sizes";
+	}
+
+	@return map-get($sizes, $size);
+}
+
+
+/**
+* Will return the given radius from map or display warning
+*/
+@function get-radius($radius) {
+	@if not map-has-key($radii, $radius) {
+		@warn "no radius by the name: `#{$radius}` in map $radii";
+	}
+
+	@return map-get($radii, $radius);
+}
+
+
+/**
+* Will return the given aspect from map or display warning
+*/
+@function get-aspect($aspect) {
+	@if not map-has-key($aspects, $aspect) {
+		@warn "no radius by the name: `#{$aspect}` in map $aspects";
+	}
+
+	@return map-get($aspects, $aspect);
+}
+

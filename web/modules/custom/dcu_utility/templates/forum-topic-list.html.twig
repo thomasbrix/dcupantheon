@@ -1,0 +1,39 @@
+{#
+/**
+* @file
+* Default theme implementation to display a block.
+*
+* @see template_preprocess_block()
+*
+* @ingroup themeable
+*/
+#}
+
+<div class="card card-band border-0 forum-block">
+  <div class="forum-block-header d-flex justify-content-between w-100">
+    <div class="text-left">{{ content.forum_topic_name }}</div>
+    <div class="text-right">{{ content.topic_count }} indlæg i alt</div>
+  </div>
+  {% for topic in content.topics %}
+    <a href="{{ topic.link }}">
+      <div class="forum-block-content">
+        <h3>{{ topic.title }}</h3>
+        <div class="forum-block-footer pb-3">
+          {% if topic.comment_count == 0 %}
+            <div>Af {{ topic.name }} | {{ topic.created }} - {{ 'Comments'|trans }}: {{ topic.comment_count }}</div>
+          {% else %}
+            <div>Af {{ topic.name }} | {{ topic.created }} - {{ 'Comments'|trans }}: {{ topic.comment_count }} | {{ topic.lcd }}</div>
+          {% endif %}
+        </div>
+        {% set build = {
+          '#type':   'processed_text',
+          '#text':    topic.body,
+          '#format': 'full_html',
+        } %}
+        <div class="forum-block-body">
+          {{ build|render|striptags|trim }}
+        </div>
+      </div>
+    </a>
+  {% endfor %}
+</div>

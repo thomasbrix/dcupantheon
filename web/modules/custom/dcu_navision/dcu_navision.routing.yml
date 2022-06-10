@@ -1,0 +1,18 @@
+dcu_navision.nav_request:
+  path: '/admin/dcunav/request'
+  defaults:
+    _controller: 'Drupal\dcu_navision\Controller\NavisionController::request'
+    _title: 'Request Navision data'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer blocks'
+dcu_navision.get_member_data:
+  path: '/admin/dcu/navision/get_member_data'
+  defaults:
+    _form: '\Drupal\dcu_navision\Form\getMemberDataRest'
+    _title: 'Get memberdata from DCU NAV'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer blocks'

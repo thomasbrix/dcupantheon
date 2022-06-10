@@ -1,0 +1,117 @@
+// ---- Functions ---- \\
+
+/**
+* Will return the given color from map or display warning
+*/
+@function get-default-color($color-name) {
+	@if not map-has-key($default-colors, $color-name) {
+		@warn "no color by the name: `#{$color-name}` in map $default-colors";
+	}
+
+	@return map-get($default-colors, $color-name);
+}
+
+/**
+* Will return the given color from map or display warning
+*/
+@function get-font-color($color-name) {
+	@if not map-has-key($font-colors, $color-name) {
+		@warn "no color by the name: `#{$color-name}` in map $font-colors";
+	}
+
+	@return map-get($font-colors, $color-name);
+}
+
+/**
+* Will return the given color from map or display warning
+*/
+@function get-border-color($color-name) {
+	@if not map-has-key($border-colors, $color-name) {
+		@warn "no color by the name: `#{$color-name}` in map $border-colors";
+	}
+
+	@return map-get($border-colors, $color-name);
+}
+
+
+
+// ---- Defaults -----
+
+$default-colors: (
+	background: 	hsla(0, 0%, 100%, 1),
+	surface: 		#F2F2F2,
+	surface-alternate: hsla(0, 0%, 90%, 1), // Used for stacked surfaces, to make alternation 
+	surface-dark:	#000,
+	primary: 		#16254C,
+	secondary: 		#A4A84E,
+	tertiary:		#B8771D,
+	quaternary:		#B11116,
+	quinary:		#3D4C3F,
+	senary:			#F8E0CD,
+	septenary:		#EBC047,
+	octonary:		#D0D0D0,
+	nonary:			#2D312E,
+
+	overlay:		#fff,
+	disabled: 		hsla(198, 20%, 24%, 0.3),
+
+	cta:			#B11116,
+	cta_hover:		darken(#c11731, 10%),
+	cta_active:		darken(#c11731, 20%),
+	cta_focus:		darken(#c11731, 10%)
+);
+
+
+
+// ---- Fonts -----
+$font-colors: (
+	base: 			#18233D,
+	disabled:		get-default-color('disabled'),
+
+	on_background: 	#000,
+	on_surface:		#000,
+
+	on_primary: 	#fff,
+	on_secondary: 	#fff,
+	on_tertiary: 	#B11116,
+	
+	heading_base:		#18233D,
+	heading_light:		#FFFFFF,
+	heading_highlight:	get-default-color('primary'),
+	heading_secondary:  #BD242A,
+	subheading:			#707070,
+	branding_primary: 	#3D4C3F,
+	branding_secondary:	#B11116,
+	caption:			#2B2B2B,
+	breadcrumbs:		#BD242A,
+	
+	link:			get-default-color('primary'),
+	link_hover:		darken(#16254C, 10%),
+	link_active:	darken(#16254C, 20%),
+	link_focus:		darken(#16254C, 10%),
+
+	nav:			#000,
+	nav_hover:		#16254C,
+	nav_active:		darken(#16254C, 5%),
+	nav_focus:		#16254C
+);
+
+
+
+// ---- Borders
+$border-colors: (
+	light: #eee,
+	dark: #707070,
+
+	secondary: get-default-color('secondary'),
+	tertiary: get-default-color('cta')
+);
+
+
+// override default bootstrap colors
+
+$dcu-red: #B11116;
+$dcu-blue: #16254C;
+$dcu-green: #3D4C3F;
+$primary:       $dcu-red;
+

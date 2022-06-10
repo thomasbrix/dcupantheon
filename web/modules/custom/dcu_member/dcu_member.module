@@ -1,0 +1,729 @@
+<?php
+
+/**
+ * @file
+ * Contains dcu_member.module.
+ */
+// Max allowed children on profile
+const DCU_MEMBER_MAX_CHILDREN = 7;
+
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\dcu_member\Controller\ConsentController;
+use \Drupal\user\Entity\User;
+
+/**
+ * Implements hook_help().
+ */
+function dcu_member_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the dcu_member module.
+    case 'help.page.dcu_member':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Controls DCU membership') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dcu_member_theme() {
+  return [
+    'dcu_member' => [
+      'render element' => 'children',
+    ],
+    'dcu_member_bambora_payment' => [
+      'render element' => 'children',
+      'variables' => ['payment' => []],
+    ],
+    'dcu_member_bambora_receipt' => [
+      'render element' => 'children',
+      'variables' => ['receipt' => []],
+    ],
+    'signup_step_one' => [
+      'render element' => 'form',
+    ],
+    'signup_step_two' => [
+      'render element' => 'form',
+    ],
+    'dcu_member_welcome_mail_da' => [
+      'template' => 'welcome-mail-da',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_welcome_mail_en' => [
+      'template' => 'welcome-mail-en',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_welcome_mail_de' => [
+      'template' => 'welcome-mail-de',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_welcome_from_nav_mail_da' => [
+      'template' => 'welcome-from-nav-mail-da',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_service_mail' => [
+      'template' => 'service-mail',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_alert_mail' => [
+      'template' => 'alert-mail',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_receipt_mail_da' => [
+      'template' => 'receipt-mail-da',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_receipt_mail_en' => [
+      'template' => 'receipt-mail-en',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_receipt_mail_de' => [
+      'template' => 'receipt-mail-de',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_recurring_info_mail_da' => [
+      'template' => 'recurring-info-mail-da',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_recurring_receipt_mail_da' => [
+      'template' => 'recurring-info-mail-da',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_recurring_reject_mail_da' => [
+      'template' => 'recurring-reject-mail-da',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_admin_member_mail_da' => [
+      'template' => 'dcu-admin-member-mail-da',
+      'variables' => ['mail_data' => []],
+    ],
+    'dcu_member_view_profile' => [
+      'template' => 'view-profile',
+      'variables' => ['profile' => []],
+    ],
+    'profile_logindata_form' => [
+      'render element' => 'form',
+    ],
+    'profile_base_form' => [
+      'render element' => 'form',
+    ],
+    'profile_membership_form' => [
+      'render element' => 'form',
+    ],
+    'profile_relatives_form' => [
+      'render element' => 'form',
+    ],
+    'profile_notifications_form' => [
+      'render element' => 'form',
+    ],
+    'profile_create_form' => [
+      'render element' => 'form',
+    ],
+    'profile_memberservice_fields_form' => [
+      'render element' => 'form',
+    ],
+  ];
+}
+
+function dcu_member_page_attachments(array &$attachments) {
+  $consent = new ConsentController();
+  $attachments['#attached']['drupalSettings']['dcu_member']['presentconsent'] = $consent->userConsentInquire();
+  $attachments['#attached']['library'][] = 'dcu_member/dcu_member.consent';
+}
+
+/**
+ * Implements hook_mail().
+ */
+function dcu_member_mail($key, &$message, $params) {
+  if ($params['language']) {
+    $mail_language = $params['language'];
+  }
+  else {
+    $mail_language = 'da';
+  }
+  $body_data = [];
+  switch ($key) {
+    case 'recurring_info':
+      $mail_theme = 'dcu_member_recurring_info_mail_' . $mail_language;
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+      break;
+    case 'member_mail':
+      $mail_theme = 'dcu_admin_member_mail_' . $mail_language;
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+      break;
+    case 'recurring_receipt':
+      $mail_theme = 'dcu_member_recurring_receipt_mail_' . $mail_language;
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+      break;
+    case 'recurring_reject':
+      $mail_theme = 'dcu_member_recurring_reject_mail_' . $mail_language;
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+      break;
+    case 'receipt_mail':
+      $mail_theme = 'dcu_member_receipt_mail_' . $mail_language;
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+      break;
+    case 'welcome':
+      $mail_theme = 'dcu_member_welcome_mail_' . $mail_language;
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+      break;
+    case 'welcome_from_nav':
+      $mail_theme = 'dcu_member_welcome_from_nav_mail_da';
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+      break;
+    case 'service_mail':
+      $mail_theme = 'dcu_service_mail';
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+    case 'alert_mail':
+      $mail_theme = 'dcu_alert_mail';
+      $body_data = [
+        '#theme' => $mail_theme,
+        '#mail_data' => $params,
+      ];
+      break;
+  }
+  $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+  $message['from'] = \Drupal::config('system.site')->get('mail');
+  $message['subject'] = $params['subject'];
+  $message['body'][] = \Drupal::service('renderer')->render($body_data);
+}
+
+function dcu_member_send_mail($key, $params) {
+  $mailManager = \Drupal::service('plugin.manager.mail');
+  $module = 'dcu_member';
+  $to = $params['to'];
+  $langcode = $params['language'];
+  $send = TRUE;
+  return $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+}
+
+function dcu_member_create_dcu_member($user_data) {
+  if (empty($user_data)) {
+    return FALSE;
+  }
+  $user_name = !empty($user_data['memberno']) ? $user_data['memberno'] : $user_data['email'];
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $consent_date = !empty($user_data['contact_consent']) ? date("Y-m-d", time()) : NULL;
+
+  $member_type_term = dcu_member_get_membership_term_from_navname($user_data['member_type']);
+  if (empty($member_type_term)) {
+    return FALSE;
+  }
+  // Create user object.
+  $member = User::create();
+  //Mandatory settings
+  $member->setPassword($user_data['password']);
+  $member->enforceIsNew();
+  $member->setEmail($user_data['email']);
+  $member->setUsername($user_name);
+  $member->set('init', $user_data['email']);
+  $member->set('langcode', $language);
+  $member->set('preferred_langcode', !empty($user_data['preferred_langcode']) ? $user_data['preferred_langcode'] : $language);
+  $member->set('preferred_admin_langcode', $language);
+  $member->set('field_membership_type', $member_type_term->id());
+  $member->set('field_first_name', $user_data['firstname']);
+  $member->set('field_last_name', $user_data['lastname']);
+  $member->set('field_address', $user_data['street']);
+  $member->set('field_zip', $user_data['zipcode']);
+  $member->set('field_city', $user_data['city']);
+  $member->set('field_country', $user_data['country']);
+  $member->set('field_mobile_phone', $user_data['mobile']);
+  $member->set('field_birthday', isset($user_data['birthdate']) ? date('Y-m-d', strtotime($user_data['birthdate'])) : '');
+  $member->set('field_contact_consent', $consent_date);
+  $member->set('field_newsletter', !empty($user_data['newsletter']));
+  $member->set('field_customer_comments', isset($user_data['comment']) ? $user_data['comment'] : '');
+  $member->set('field_confirmed_dk_citizenship', !empty($user_data['confirmed_dk_citizenship']));
+
+  if (isset($user_data['receive_magazine'])) {
+    $magazine_letter = !empty($user_data['receive_magazine']);
+  }
+  else {
+    $magazine_letter = (dcu_member_is_magazine_membertype($member_type_term->getName()) && $user_data['country'] == 'DK');
+  }
+  $member->set('field_magazine', $magazine_letter);
+
+  if (!empty($user_data['memberno'])) {
+    $member->set('field_memberid', $user_data['memberno']);
+  }
+
+  $member->addRole('icamp');
+  if (!empty($user_data['member_status']) && $user_data['member_status'] === 'AKTIV') {
+    $member->addRole('dcu_membership');
+    $member->activate();
+  }
+  try {
+    $member->save();
+  }
+  catch (Exception $e) {
+    \Drupal::logger('dcu_member')->error('Failed to create new drupal user. Failed with the following message: @error', ['@error' => $e->getMessage()]);
+    return FALSE;
+  }
+  return $member;
+}
+
+/**
+ * Helper function. Checks user role if user is nav member
+ *
+ * @param $account
+ * @return array
+ */
+function dcu_member_user_is_not_nav_member($account) {
+  $roles = ['agent', 'advertiser'];
+  return array_intersect($account->getRoles(), $roles);
+}
+
+/**
+ * Fetch user data from navision. Saves data to Drupal user account.
+ * Returns member data from Navision.
+ *
+ * @param int $uid
+ * @return bool
+ */
+function dcu_member_fetch_and_sync_drupal_user_from_nav($account) {
+  $nav_member_data = dcu_member_get_user_navdata($account);
+  if (empty($nav_member_data)) {
+    //TODO: error handling
+    return FALSE;
+  }
+  if (dcu_member_sync_drupal_user_from_nav($nav_member_data)) {
+    return $nav_member_data;
+  }
+  \Drupal::logger('dcu_member')->error('Error while syncing memberdata from Navision to Drupal account. userid: @uid', ['@uid' => $account->id()]);
+  return FALSE;
+}
+
+/**
+ * Returns memberdata from Navision. Either based on userid or if not set from global user.
+ *
+ * @param \Drupal\user\Entity\User $account
+ *
+ * @return array
+ */
+function dcu_member_get_user_navdata(User $account = NULL) {
+  if (empty($account)) {
+    $account = User::load(\Drupal::currentUser()->id());
+  }
+  if(empty($account) || $account->id() == 0) {
+    return FALSE;
+  }
+  if (!$memberid = dcu_member_get_account_memberid($account)) {
+    return FALSE;
+  }
+  if (!$nav_get_member = \Drupal::service('dcu_navision.client')->getMemberData($memberid)) {
+      \Drupal::logger('dcu_member')->error(
+        'Error fetching memberdata from Navision. Membernumber: @memberid',
+        ['@memberid' => $memberid]
+      );
+      return FALSE;
+  }
+  $relatives = \Drupal::service('dcu_navision.client')->getRelatives($memberid);
+  $nav_get_member->relatives = !empty($relatives) ? $relatives : [];
+  return $nav_get_member;
+}
+
+/**
+ * Get Navision memberid from drupal user
+ *
+ * @param \Drupal\user\Entity\User $account
+ *
+ * @return false|int|string
+ */
+function dcu_member_get_account_memberid(User $account) {
+  $memberid = $account->getAccountName();
+  if (empty($memberid) || !is_numeric($memberid)) {
+    $memberid = $account->get('field_memberid')->getString();
+    if (empty($memberid) || !is_numeric($memberid)) {
+      // No valid memberid. This is a member type with no nav data.
+      return FALSE;
+    }
+  }
+  return $memberid;
+}
+
+function dcu_member_profile_reactivate_membership($memberid) {
+  if (empty($memberid) || !is_numeric($memberid)) {
+    \Drupal::messenger()->addMessage(t('Could not reactivate your membership. Please contact memberservice.'), 'error');
+    return FALSE;
+  }
+  $response = \Drupal::service('dcu_navision.client')->resubscribe($memberid);
+  if (!$response) {
+    \Drupal::messenger()->addMessage(t('Could not reactivate your membership. Please contact memberservice.'), 'error');
+    return FALSE;
+  }
+  \Drupal::messenger()->addMessage(t('Your membership has been reactivated. Thank you. We are happy to see you back.'), 'status');
+  return TRUE;
+}
+
+function dcu_member_send_userdata_to_nav($uid) {
+  $account = User::load($uid);
+  if (\Drupal::service('dcu_navision.client')->updateMember($account)) {
+    return TRUE;
+  }
+  \Drupal::logger('dcu_member')->error(
+    'Error updating memberdata to Navision. Membernumber: @memberid',
+    ['@memberid' => $account->get('field_memberid')->getString()]
+  );
+  return FALSE;
+}
+
+/**
+ * @param $nav_member_data
+ *
+ * @return bool
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_member_sync_drupal_user_from_nav($nav_member_data) {
+  $member = dcu_member_load_drupal_user_from_memberid($nav_member_data->memberno);
+  if (empty($member)) {
+    //Try with email.
+    $member = user_load_by_mail($nav_member_data->email);
+    if (empty($member)) {
+      return FALSE;
+    }
+  }
+  $consent_date = !empty($nav_member_data->consent) ?  DateTime::createFromFormat("dmY", $nav_member_data->consent)->format('Y-m-d') : NULL;
+  $member_type_term = dcu_member_get_membership_term_from_navname($nav_member_data->membertype);
+  if (empty($member_type_term)) {
+    return FALSE;
+  }
+  $member->setEmail(strtolower(str_replace(' ', '', $nav_member_data->email)));
+  $member->setUsername($nav_member_data->memberno);
+  $member->set('field_memberid', $nav_member_data->memberno);
+  $member->set('field_first_name', $nav_member_data->firstname);
+  $member->set('field_last_name', $nav_member_data->lastname);
+  $member->set('field_address', $nav_member_data->address);
+  $member->set('field_zip', $nav_member_data->postalcode);
+  $member->set('field_city', $nav_member_data->city);
+  $member->set('field_country', $nav_member_data->country);
+  $member->set('field_mobile_phone', isset($nav_member_data->phoneno) ? $nav_member_data->phoneno : '');
+  $member->set('field_birthday', isset($nav_member_data->birthday) ? date('Y-m-d', strtotime($nav_member_data->birthday)) : '');
+  $member->set('field_contact_consent', $consent_date);
+  $member->set('field_membership_type', $member_type_term->id());
+  $member->set('field_magazine_first_name', isset($nav_member_data->magazinefirstname) ? $nav_member_data->magazinefirstname : '');
+  $member->set('field_magazine_last_name', isset($nav_member_data->magazinelastname) ? $nav_member_data->magazinelastname : '');
+  $member->set('field_magazine_address', isset($nav_member_data->magazineaddress) ? $nav_member_data->magazineaddress : '');
+  $member->set('field_magazine_zip', isset($nav_member_data->magazinepostalcode) ? $nav_member_data->magazinepostalcode : '');
+  $member->set('field_magazine_city', isset($nav_member_data->magazinecity) ? $nav_member_data->magazinecity : '');
+  $member->set('field_magazine_country', isset($nav_member_data->magazinecountry) ? $nav_member_data->magazinecountry : '');
+  $member->set('field_customer_comments', isset($nav_member_data->comment) ? $nav_member_data->comment : '');
+  if (empty($nav_member_data->magazineaddress)) {
+    $member->set('field_use_other_magazine_address', 0);
+  }
+  $receive_magazine = $nav_member_data->magazineletter == true ? 1 : 0;
+  $member->set('field_magazine', $receive_magazine);
+
+  $mailchimp_status = dcu_member_mailchimp_status($nav_member_data->email) ? 1 : 0;
+  $member->set('field_newsletter', !empty($mailchimp_status));
+
+  $field_unsubscribed_date = !empty($member->get('field_unsubscribed_date')) ? $member->get('field_unsubscribed_date')->getString() : '';
+  $field_unsubscribed_date = date('Y-m-d', strtotime($field_unsubscribed_date));
+
+  if (!empty($nav_member_data->subsenddate)) {
+    $nav_subsenddate = date('Y-m-d', strtotime($nav_member_data->subsenddate));
+    if ($nav_subsenddate != $field_unsubscribed_date) {
+      $member->set('field_unsubscribed_date', $nav_member_data->subsenddate);
+    }
+  }
+  if ($nav_member_data->chargetype == 'Gratist') {
+    $member->set('field_free_member', 1);
+  }
+  else {
+    $member->set('field_free_member', 0);
+  }
+  // Remove user membership rights if member is not active in NAV.
+  if ($nav_member_data->memberstatus == "AKTIV") {
+    if (!$member->hasRole('dcu_membership')) {
+        $member->addRole('dcu_membership');
+    }
+  } else {
+    if ($member->hasRole('dcu_membership')) {
+        $member->removeRole('dcu_membership');
+    }
+  }
+  try {
+    $member->save();
+  } catch (\Drupal\Core\Entity\EntityStorageException $e) {
+    \Drupal::logger('dcu_member')->error('Error syncing user from Navision. Membernumber: @memberid', ['@memberid' => $nav_member_data->memberno]);
+    \Drupal::messenger()->addMessage(t('There was an error updating your information'), 'error');
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Mailchimp - check if subscribed or not.
+ * Return: true/false.
+ */
+function dcu_member_mailchimp_status($email, $cache = TRUE) {
+  $list = mailchimp_get_list(DCU_UTILITY_MAILCHIMP_LIST);
+  if ($list) {
+    return mailchimp_is_subscribed($list->id, $email, $cache);
+  }
+  else {
+    return 0;
+  }
+}
+
+/**
+ * Mailchimp - unsubscribe
+ * Return: true/false
+ */
+function dcu_member_mailchimp_unsubsribe($email) {
+  $list = mailchimp_get_list(DCU_UTILITY_MAILCHIMP_LIST);
+  return mailchimp_unsubscribe($list->id, $email);
+}
+
+/**
+ * Mailchimp - subscribe user
+ * Return: true/false
+ */
+function dcu_member_mailchimp_subscribe($user) {
+  $list = mailchimp_get_list(DCU_UTILITY_MAILCHIMP_LIST);
+  $nav_member_data = dcu_member_get_user_navdata($user);
+  if (empty($nav_member_data)) {
+   //TODO: handle no nav data here
+    return FALSE;
+  }
+  $merge_vars = [
+    'EMAIL' => $user->getEmail(),
+    'FNAME' => $nav_member_data->firstname,
+    'LNAME' => $nav_member_data->lastname,
+    'STAMKORT' => $nav_member_data->memberno,
+    'MTYPE' => $nav_member_data->membertype,
+    'MEMBER' => $nav_member_data->memberstatus == 'AKTIV' ? 1 : 0,
+    'MEMBERID' => $nav_member_data->memberno,
+    'MEMSTATUS' => $nav_member_data->memberstatus,
+    'TOUCHED' => 2
+  ];
+  $result = mailchimp_subscribe($list->id, $user->getEmail(), $merge_vars);
+  return $result;
+}
+
+/**
+ * @param $memberid
+ * @return \Drupal\Core\Entity\EntityBase|\Drupal\Core\Entity\EntityInterface|\Drupal\user\UserInterface|false
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_member_load_drupal_user_from_memberid($memberid) {
+  $user = user_load_by_name($memberid);
+  if (empty($user)) {
+    // Try loading by field memberid.
+    $query = \Drupal::entityTypeManager()->getStorage('user')->getQuery();
+    $query->condition('field_memberid', $memberid);
+    $results = $query->execute();
+    if (!empty($results)) {
+      $result = reset($results);
+      $user = User::load($result);
+    }
+  }
+  if (empty($user)) {
+    \Drupal::logger('dcu_member')->notice('Could not load user from membernumber: @memberid', ['@memberid' => $memberid]);
+    return FALSE;
+  }
+  return $user;
+}
+
+//TODO: TBX - NEEDS to be implemented - code from old get_user_creation_role()
+/**
+ *
+ * @return string
+ */
+function dcu_member_get_member_update_role() {
+  return 'Member';
+
+  /*global $user;
+  if (in_array('Site administrator', $user->roles)) {
+    return 'Admin' ;
+  }
+  elseif (in_array('Member service', $user->roles)) {
+    return 'MemberServ';
+  }
+  //elseif (in_array('icamp', $user->roles)) { return 'Member'; }
+  else {
+    if (isset($_GET['createdby'])) {
+      //Its used to track when users are created on external campsites and other places.
+      $allowed = variable_get('dcu_allowed_createdby_allowed_names', "");
+      $allowed = str_replace(' ', '', $allowed);
+      $allowed = strtolower($allowed);
+      $allowed = explode(",", $allowed);
+
+      $get_param = strtolower($_GET['createdby']);
+
+      if (in_array($get_param, $allowed)) {
+        return $get_param;
+      }
+      else {
+        return 'Member';
+      }
+    }
+    else {
+      return 'Member';
+    }
+  }*/
+}
+
+/**
+ * @param $membership_navname
+ *
+ * @return false|mixed
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_member_get_membership_term_from_navname($membership_navname) {
+  $membership_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+    ->loadByProperties(['field_navision_membertype' => $membership_navname, 'vid' => 'membershiptypes']);
+  if (empty($membership_term)) {
+    return FALSE;
+  }
+  return reset($membership_term);
+}
+
+/**
+ * Converts between nav membership name and drupal membership name via Vocabulary.
+ * @param $member_type
+ * @param string $return_type
+ *
+ * @return false|mixed
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_member_parse_drupal_nav_membertype($member_type, $return_type = 'nav') {
+  $vid = 'membershiptypes';
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid,  0, NULL, TRUE);
+  foreach ($terms as $term) {
+    if ($return_type == 'nav') {
+      if (strcasecmp($term->getName(), $member_type) == 0) {
+        return  $term->get('field_navision_membertype')->getValue()[0]['value'];
+      }
+    }
+    elseif (strcasecmp($term->get('field_navision_membertype')->getValue()[0]['value'], $member_type) == 0) {
+      return $term->getName();
+    }
+  }
+  return FALSE;
+}
+
+function dcu_member_is_magazine_membertype($member_type) {
+  return !in_array(strtolower($member_type), ['gratis', 'ungdom', 'deal']);
+}
+
+
+/**
+ * @param $account
+ *
+ * @return string
+ */
+function dcu_member_get_card_id($account) {
+  $member_term = $account->get('field_membership_type')->referencedEntities();
+  $member_term = reset($member_term);
+  return '4502 04' . $account->get('field_memberid')->getString() . $member_term->get('field_membership_card_type')->value;
+}
+
+/**
+ * Ajax callback - Fetches cityname from dawa address service and fills city
+ * name if present (only for danish zipcodes)
+ *
+ * @param array $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *
+ * @return mixed
+ */
+function dcu_member_zip_to_city_ajax_callback(array &$form, FormStateInterface $form_state) {
+  $zip = $form_state->getValue('zipcode');
+  if (!empty($zip)) {
+    try {
+      $uri = 'https://dawa.aws.dk/postnumre/' . $zip;
+      $response = \Drupal::httpClient()->get($uri, ['http_errors' => FALSE, 'headers' => ['Accept' => 'text/plain']]);
+      if ($response->getStatusCode() == 200) {
+        $citydata = json_decode((string) $response->getBody());
+        if (!empty($citydata)) {
+          $form['city']['#value'] = $citydata->navn;
+        }
+      }
+    } catch (RequestException $e) {
+      watchdog_exception('dcu_member', $e);
+    }
+  }
+  return $form['city'];
+}
+
+
+
+  /**
+ * TODO: tbx remove if not used after all
+ * Helper function to Search multidimensional array.
+ * Returns row with match or FALSE if not found
+ * @param $needle
+ * @param $haystack
+ *
+ * @return false|mixed
+ */
+function rem_dcu_member_recursive_array_search($needle, $haystack) {
+  foreach($haystack as $key=>$value) {
+    if (($needle === $value) OR (is_array($value) && dcu_member_recursive_array_search($needle, $value))) {
+      return $haystack[$key];
+    }
+  }
+  return false;
+}
+
+/**
+ * Return array of languages allowed for members.
+ * @return array
+ */
+function dcu_member_language_options() {
+  //$preferred_languages = \Drupal::languageManager()->getLanguages();
+  //$preferred_langcode_options = [];
+  //foreach ($preferred_languages as $preferred_language) {
+  //$preferred_langcode_options[$preferred_language->getId()] = $preferred_language->getName();
+  //}
+  $preferred_langcode_options['da'] = t('Danish');
+  $preferred_langcode_options['en'] = t('English');
+  $preferred_langcode_options['de'] = t('German');
+  return $preferred_langcode_options;
+}
+
+
+/**
+ * TODO: Lets add validation for the following: Only work if fields are with same name.
+ *
+ * Email - both Drupal and Navision
+ * Campaigncode
+ * Membertype -> Age validation
+ * Firstname and lastname
+ * Phone number
+ * And others - if it makes sense....TALK TO BRIX
+ *
+ */

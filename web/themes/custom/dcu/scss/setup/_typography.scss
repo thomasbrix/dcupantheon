@@ -1,0 +1,227 @@
+// ---- Typography
+
+// Codec Pro
+@font-face {
+	font-family: 'Codec Pro';
+	src: url($path + 'fonts/codec-pro-bold-ttf-webfont.woff2') format('woff2'),
+		url($path + 'fonts/codec-pro-bold-ttf-webfont.woff') format('woff');
+	font-weight: get-font-weight('bold');
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Codec Pro';
+	src: url($path + 'fonts/codec-pro-extrabold-italic-ttf-webfont.woff2') format('woff2'),
+		url($path + 'fonts/codec-pro-extrabold-italic-ttf-webfont.woff') format('woff');
+	font-weight: get-font-weight('extrabold');
+	font-style: italic;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Codec Pro';
+	src: url($path + 'fonts/codec-pro-extrabold-ttf-webfont.woff2') format('woff2'),
+		url($path + 'fonts/codec-pro-extrabold-ttf-webfont.woff') format('woff');
+	font-weight: get-font-weight('extrabold');
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Codec Pro';
+	src: url($path + 'fonts/codec-pro-italic-ttf-webfont.woff2') format('woff2'),
+		url($path + 'fonts/codec-pro-italic-ttf-webfont.woff') format('woff');
+	font-weight: get-font-weight('base');
+	font-style: italic;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Codec Pro';
+	src: url($path + 'fonts/codec-pro-regular-ttf-webfont.woff2') format('woff2'),
+		url($path + 'fonts/codec-pro-regular-ttf-webfont.woff') format('woff');
+	font-weight: get-font-weight('base');;
+	font-style: normal;
+	font-display: swap;
+}
+
+
+// Ernest and Emily
+@font-face {
+	font-family: 'Ernest and Emily';
+	src: url($path + 'fonts/ernestemily_solid-webfont.woff2') format('woff2'),
+		url($path + 'fonts/ernestemily_solid-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+// CampLogo icon font
+@font-face {
+	font-family: 'CampLogo';
+	src: url($path + 'fonts/camplogo.woff2') format('woff2'),
+		url($path + 'fonts/camplogo.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+
+// ---- Headings ---- \\
+
+// Defaults
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	@extend %limit-width;
+	margin-top: 0;
+	font-family: $font-family-base;
+	line-height: map-get($line-heights, 'heading');
+	font-weight: map-get($font-weights, 'extrabold');
+}
+
+h4,
+h5,
+h6 {
+	margin-bottom: $spacing/4;
+}
+
+
+// Individual styling
+h1 {
+	font-family: $font-family-base;
+	@include scalable-font(get-font-size('h2'), get-font-size('h1'));
+
+	&.mod--primary {
+		color: get-default-color('primary');
+	}
+}
+
+h2 {
+	font-family: $font-family-base;
+	@include scalable-font(get-font-size('h3'), get-font-size('h2'));
+
+	&.mod--primary {
+		color: get-default-color('primary');
+	}
+}
+
+h3 {
+	font-family: $font-family-base;
+	@include scalable-font(get-font-size('h4'), get-font-size('h3'));
+	&.mod--primary {
+		color: get-default-color('primary');
+	}
+}
+
+h4 {
+	@include scalable-font(get-font-size('h5'), get-font-size('h4'));
+}
+
+h5 {
+	@include scalable-font(get-font-size('h6'), get-font-size('h5'));
+}
+
+h6 {
+	font-size: get-font-size('h6');
+}
+
+
+
+
+// ---- Standard text elements ---- \\
+
+small {
+	font-size: get-font-size('small');
+}
+
+
+blockquote {
+	font-size: get-font-size('blockquote');
+
+	footer {
+		font-size: get-font-size('small')
+	}
+}
+
+
+figcaption {
+	font-size: get-font-size('small');
+}
+
+
+
+
+
+// ---- Custom text elements ---- \\
+
+
+/**
+* Heading naming overview:
+*
+* 					super-heading
+*	pre-heading		main-heading 	post-heading
+*					sub-heading
+*
+* In other words: `super`, `sub`, `pre`, and `post` go above, below, before, and after the heading respectively.
+* `eyebrow` and `beard` can be used as synonyms for `super` and `sub`, mostly because it's more fun that way.
+*/
+
+.super-heading,
+.eyebrow {
+	margin-bottom: 0.3em;
+
+	text-transform: uppercase;
+	font-size: get-font-size('super-heading');
+
+
+	&.--small {
+		font-size: get-font-size('micro');
+	}
+}
+
+
+.sub-heading,
+.beard {
+	margin-top: - #{ get-line-height(heading) + 'em'};
+	margin-bottom: $spacing;
+
+	text-transform: uppercase;
+	font-size: get-font-size('sub-heading');
+
+	&.--small {
+		font-size: get-font-size('micro');
+	}
+}
+
+
+.pre-heading {
+	display: inline;
+	font-size: get-font-size('pre-heading');
+}
+
+
+.post-heading {
+	display: inline;
+	font-size: get-font-size('post-heading');
+}
+
+
+.lead,
+.paragraph--large {
+	@extend %limit-width;
+	font-size: map-get($font-sizes, 'lead');
+	line-height: map-get($line-heights, 'lead');
+}
+
+
+.paragraph--small {
+	font-size: map-get($font-sizes, 'milli');
+}
+
+
+

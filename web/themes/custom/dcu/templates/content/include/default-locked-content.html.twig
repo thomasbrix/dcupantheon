@@ -1,0 +1,19 @@
+{% if content.field_locked['#items'].getString() %}
+  {% if logged_in %}
+    {{ content.field_body_locked_content }}
+  {% else %}
+    {{ content.field_locked_content_teaser }}
+    <div class="mt-5">
+      {{ drupal_block('block_content:bd7065d2-66c2-47d0-a698-e0c041bf2a4d') }}
+      <h2 class="mb-3">Log ind</h2>
+      {{ login_form }}
+    </div>
+  {% endif %}
+{% else %}
+  <div class="overflow-hidden">
+    {{ content.field_body }}
+  </div>
+{% endif %}
+
+
+

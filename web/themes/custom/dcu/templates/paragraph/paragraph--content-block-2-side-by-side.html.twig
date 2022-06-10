@@ -1,0 +1,23 @@
+{% block paragraph %}
+  {% block content %}
+    <section class="container">
+      {% if content.field_header|render is not empty %}
+        <div class="row">
+            <div class="col-12">
+              <h2 class="card-band__heading">{{ content.field_header }}</h2>
+            </div>
+        </div>
+      {% endif %}
+      <div class="row">
+        {{ content.field_content }}
+      </div>
+      {% if content.field_see_all_link|render is not empty %}
+        <div class="row">
+            <div class="col-12">
+              <a href="{{ content.field_see_all_link[0]['#url'] }}" class="content-block__news-link --vertical no-underline">{{ content.field_see_all_link[0]['#title']|render }}<img class="content-block__news-link-icon" src="/themes/custom/dcu/assets/icons/arrow-right-blue.svg"></a>
+            </div>
+        </div>
+      {% endif %}
+    </section>
+  {% endblock %}
+{% endblock paragraph %}

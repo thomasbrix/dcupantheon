@@ -1,0 +1,24 @@
+{%
+  set classes = [
+  'card-band',
+  paragraph.field_cta_type.value == 2 ? 'dcu-bg-grey-white' : '',
+]
+%}
+{% block paragraph %}
+  {% block content %}
+    <section {{ attributes.addClass(classes) }}>
+      <div class="container">
+        {% if content.field_header|render is not empty %}
+          <div class="row pt-3 pt-md-0">
+            <div class="col-12">
+              <h2 class="card-band__heading">{{ content.field_header }}</h2>
+            </div>
+          </div>
+        {% endif %}
+        <div class="row">
+          {{ content.field_cta }}
+        </div>
+      </div>
+    </section>
+  {% endblock %}
+{% endblock paragraph %}

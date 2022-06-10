@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+<section>
+  <div class="container">
+    <div class="col-12 col-md-4 offset-md-4">
+      <h1>{{ 'Nulstil din adgangskode'|trans }}</h1>
+      <form{{ attributes }}>
+        {{ children }}
+      </form>
+    </div>
+  </div>
+</section>

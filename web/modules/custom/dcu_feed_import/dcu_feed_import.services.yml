@@ -1,0 +1,5 @@
+services:
+  dcu_feed_import.subscriber:
+    class: Drupal\dcu_feed_import\EventSubscriber\DcuFeedImportSubscriber
+    tags:
+      - {name: event_subscriber}

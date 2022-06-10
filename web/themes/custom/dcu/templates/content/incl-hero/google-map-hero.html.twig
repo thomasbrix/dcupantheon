@@ -1,0 +1,34 @@
+<section class="container">
+  <div class="row">
+    <div class="col">
+      <div class="hero hero--left dcu-bg-white-blue">
+        <div class="col-12 col-md-9 pl-0 pr-0 py-0 py-md-5 dcu-hero-map">
+          {{ content.field_geo_location }}
+        </div>
+        <div class="hero__content">
+          {% if content.field_advantage_campsite['#items'].getString() %}
+            <h3 class="hero__super-heading">Fordelsplads</h3>
+          {% else %}
+            <h3 class="hero__super-heading">Campingplads</h3>
+          {% endif %}
+
+          <h1 class="hero__heading">{{ label }}</h1>
+          <div class="hero__ratings-wrapper">
+            {% for i in 1..content.field_number_of_stars[0]['#markup'] %}
+              <img style="fill: red !important" class="hero__rating-star" src="/themes/custom/dcu/assets/icons/rating-star-white.svg">
+            {% endfor %}
+          </div>
+          <div class="hero__info-text">
+            {{ content.field_address }}
+            {{ content.field_phone }}
+            {{ content.field_email }}
+            {{ content.field_www }}
+            {{ content.field_season_period }}
+            <div class="heart-red">{{ content.flag_favorite }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

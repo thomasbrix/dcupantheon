@@ -1,0 +1,26 @@
+<article{{ attributes }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if content.field_content_reference|render is not empty %}
+    {{ content.field_content_reference }}
+  {% else %}
+    <section class="container">
+      <div class="row">
+        <div class="col">
+          <div class="hero hero--left dcu-bg-white-grey">
+            <div class="p-0 pb-md-5">
+              {{ content.field_media_image }}
+            </div>
+            <div class="hero__content">
+              <h3 class="hero__super-heading">{{ content.field_trumpet }}</h3>
+              <h1 class="hero__heading">{{ label }}</h1>
+              <h2 class="hero__sub-heading">{{ content.field_manchet }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+  {{ content.field_content }}
+</article>

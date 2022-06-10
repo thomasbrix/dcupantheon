@@ -1,0 +1,26 @@
+name: DCU
+type: theme
+description: 'Theme for DCU.dk - build on bootstrap'
+# version: VERSION
+core: 8.x
+core_version_requirement: ^8 || ^9
+base theme: stable
+
+libraries:
+  - dcu/global-styling
+
+regions:
+  bannerscript: 'Header scripts'
+  topbanner: 'Top banner'
+  userinfo: 'Info to users'
+  headeraboutus: 'Navigation about us section'
+  headerusernav: 'Navigation user section'
+  headernav: 'Navigation main section'
+  breadcrumb: 'Breadcrumb'
+  highlighted: 'Highlighted'
+  sidebar: 'Sidebar left'
+  content: 'Content section'
+  footertop: 'Footer top'
+  footerbottom: 'Footer bottom'
+  disabled: 'Disabled'
+

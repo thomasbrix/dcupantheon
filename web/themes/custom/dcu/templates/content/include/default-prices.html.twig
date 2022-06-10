@@ -1,0 +1,71 @@
+{% if content.field_price_list_year|render is not empty %}
+  <section class="container pt-md-5">
+    <div class="row">
+      <div class="col-md-4 offset-md-4">
+        <div class="row">
+          <div class="col-6 dcu-bg-blue text-white py-2">{{ content.field_price_list_year }}</div>
+          <div class="col-6 dcu-bg-blue text-white py-2">{{ content.field_price_currency }}</div>
+        </div>
+      </div>
+    </div>
+    {% if content.field_price_adult|render is not empty %}
+      {{ content.field_price_adult }}
+    {% endif %}
+    {% if content.field_price_young|render is not empty %}
+      {{ content.field_price_young }}
+    {% endif %}
+    {% if content.field_price_child|render is not empty %}
+      {{ content.field_price_child }}
+    {% endif %}
+    {% if content.field_price_car|render is not empty %}
+      {{ content.field_price_car }}
+    {% endif %}
+    {% if content.field_price_caravan|render is not empty %}
+      {{ content.field_price_caravan }}
+    {% endif %}
+    {% if content.field_price_motorcaravan|render is not empty %}
+      {{ content.field_price_motorcaravan }}
+    {% endif %}
+    {% if content.field_price_motorcycle|render is not empty %}
+      {{ content.field_price_motorcycle }}
+    {% endif %}
+    {% if content.field_price_tent|render is not empty %}
+      {{ content.field_price_tent }}
+    {% endif %}
+    {% if content.field_price_pitch_fee|render is not empty %}
+      {{ content.field_price_pitch_fee }}
+    {% endif %}
+    {% if content.field_price_power_outlet|render is not empty %}
+      {{ content.field_price_power_outlet }}
+    {% endif %}
+    {% if content.field_price_environmental_fee|render is not empty %}
+      {{ content.field_price_environmental_fee }}
+    {% endif %}
+    {% if content.field_price_dog|render is not empty %}
+      {{ content.field_price_dog }}
+    {% endif %}
+    {% if content.field_price_horse|render is not empty %}
+      {{ content.field_price_horse }}
+    {% endif %}
+  </section>
+{% else %}
+    <section class="container mt-5 mb-5">
+      <div class="row">
+        <div class="col-md-4 offset-md-4">
+          <div class="row">
+            <div class="col-12 dcu-bg-blue text-white py-3 text-center">{{ 'No prices are available'|trans }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endif %}
+
+{% if content.field_price_comments|render is not empty %}
+  <div class="container">
+    <div class="row py-2">
+      <div class="col-md-4 offset-md-4 mb-5">
+        {{ content.field_price_comments }}
+      </div>
+    </div>
+  </div>
+{% endif %}

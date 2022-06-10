@@ -1,0 +1,324 @@
+.node-campsites-edit-form {
+  fieldset {
+    padding: 0;
+  }
+  .fieldset-legend {
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .vertical-tabs__panes {
+    padding-top: 20px;
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+  .js-form-wrapper {
+    margin-bottom: 50px;
+  }
+
+  //Info about benefit campsites.
+  .advantage-info-wrapper {
+    background-color: beige;
+    padding: 20px 20px 1px 20px;
+    margin-bottom: 50px;
+    .advantage-info {
+      margin-bottom: 20px;
+    }
+    #edit-field-advantage-campsite-wrapper {
+      margin-bottom: 0;
+    }
+  }
+
+  /* Select */
+  .dcu-custom-select {
+    label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-weight: bold;
+    }
+    select {
+      position: relative;
+      top: 30px;
+      left: 0;
+    }
+    .form-select {
+      display: block;
+      padding: .6em;
+      max-width: 100%;
+      box-sizing:inherit;
+      margin: 0;
+      border: 1px solid #333;
+      box-shadow: none;
+      border-radius: 5px;
+      background-image: none;
+      appearance: auto;
+    }
+  }
+
+  .js-form-item {
+    input:not(:placeholder-shown) {
+      padding-top: .6em;
+      padding-bottom: .6em;
+      border-radius: 5px;
+      border: 1px solid #333;
+    }
+    input:not(:placeholder-shown) ~ label {
+      position: relative;
+      font-size: 18px;
+      padding: 0;
+    }
+  }
+
+  .js-form-type-textfield > label,
+  .js-form-type-url > label,
+  .js-form-type-email > label {
+    font-weight: bold;
+    position: relative;
+    top: -80px;
+    padding-top: 0;
+    padding-bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    margin-bottom: 0;
+    line-height: 1.5;
+    color: #333;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    -webkit-transition: all .1s ease-in-out;
+    -o-transition: all .1s ease-in-out;
+    transition: all .1s ease-in-out;
+    padding-left: 0;
+  }
+
+  .js-form-type-textfield > input,
+  .js-form-type-url > input,
+  .js-form-type-email > input {
+    padding: .6em;
+    border-radius: 5px;
+    border: 1px solid #333;
+    width: 100%;
+    position: relative;
+    left: 0;
+    margin-bottom: 0;
+  }
+
+  .js-form-type-number {
+    margin-bottom: .4em;
+    label {
+      padding: 0;
+      border: 0;
+      width: 200px;
+    }
+    input {
+      padding: .6em;
+      border-radius: 5px;
+      border: 1px solid #333;
+      width: 200px;
+      position: relative;
+      left: 200px;
+    }
+  }
+
+  /* Text area */
+  .field--name-field-description {
+    .form-textarea:not(:placeholder-shown) ~ label {
+      padding-left: 0;
+      font-size: 18px;
+      color: #333;
+      top: -35px;
+      font-weight: bold;
+    }
+    .form-textarea:not(:placeholder-shown) {
+      padding-top: .6em;
+      padding-bottom: .6em;
+      border-radius: 5px;
+      border: 1px solid #333;
+    }
+    #cke_1_top {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-top: 1px solid #333;
+      border-left: 1px solid #333;
+      border-right: 1px solid #333;
+    }
+    div#cke_1_contents {
+      border-left: 1px solid #333;
+      border-right: 1px solid #333;
+    }
+    .cke_bottom {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      min-height: 25px;
+      border-left: 1px solid #333;
+      border-bottom: 1px solid #333;
+      border-right: 1px solid #333;
+    }
+    .filter-wrapper {
+      display: none;
+    }
+  }
+
+  /* Season dates */
+  .js-form-type-date {
+    margin-top: 0;
+    input.form-date {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  /* Address */
+  #edit-field-address-wrapper {
+    summary {
+      display: none;
+    }
+    .form-item-field-address-0-address-address-line2 {
+      margin-bottom: 50px;
+      margin-top: -1em;
+    }
+  }
+
+  /* Checkbox */
+  .js-form-type-checkbox {
+    margin-bottom: 0;
+    margin-top: 0;
+    height: 40px;
+    label {
+      left: 30px;
+      top: -30px
+    }
+  }
+
+  /* Top image */
+  #edit-field-image-wrapper {
+    margin-bottom: 0;
+    .js-form-managed-file {
+      padding-top: 40px;
+    }
+    .js-form-type-managed-file > label {
+      position: absolute;
+      font-weight: bold;
+      padding: 0;
+    }
+    .js-form-item-field-image-0-alt {
+      display: none;
+    }
+    .js-form-item-field-image-0-title {
+      display: none;
+    }
+    .button {
+      border-radius: 25px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      max-width: 600px;
+      height: 35px;
+      padding: 0 20px 0 20px;
+      text-decoration: none;
+    }
+    .description {
+      display: none;
+    }
+    .img-fluid {
+      margin-right: 30px;
+    }
+    .file-size {
+      margin-right: 260px;
+    }
+  }
+
+  /* Gallery images */
+  #edit-field-gallery-images-wrapper {
+    //margin-top: -85px;
+    summary {
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .tabledrag-toggle-weight-wrapper {
+      display: none;
+    }
+    .img-fluid {
+      margin-right: 30px;
+    }
+    table {
+      width: 60%;
+      th {
+        display: none;
+      }
+    }
+    .edit-field-gallery-images-weight {
+      display: none;
+    }
+  }
+
+
+  /* Website */
+  .field--name-field-www {
+    .description {
+      padding-left: 2px;
+      margin-top: -20px;
+    }
+  }
+
+  /* Youtube */
+  #edit-field-youtube-video-wrapper {
+    .js-form-item-field-youtube-video-0-input {
+      margin-top: 1.5em;
+    }
+    .description {
+      padding-left: 2px;
+      margin-top: -20px;
+    }
+  }
+
+  /* Info about marketing package */
+  .no-marketing-package {
+    font-size: 18px;
+    padding: 20px;
+    background-color: beige;
+    margin-bottom: 30px;
+    display: inline-block;
+    width: 100%;
+  }
+  /* Agent info */
+
+  .agent-info {
+    margin-bottom: 30px;
+    display: inline-block;
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  /* Prices */
+  #edit-group-prices .js-form-item > label {
+    /* top: -30px; */
+  }
+  #edit-field-discount-description-0-value.error {
+    border: 3px solid red !important;
+  }
+
+  #edit-field-advantage-campsite-value--description {
+    margin-top: -30px;
+    padding-left: 30px;
+  }
+}
+
+/* Agent overview view. */
+.button--agent-edit {
+  background-color: #2D312E;
+  color: #FFF;
+  border-radius: 10px;
+  height: 26px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: inline-block;
+  border: 1px solid transparent;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.8;
+  font-size: 0.8rem;
+  a {
+    text-decoration: none;
+  }
+}

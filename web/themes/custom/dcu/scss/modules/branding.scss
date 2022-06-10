@@ -1,0 +1,253 @@
+.branding {
+  margin-bottom: $spacing;
+  // from extra.scss
+  &__link {
+    a {
+      text-decoration: underline;
+    }
+  }
+  // from extra.scss
+  &__pure_txt {
+    font-size: 20px;
+  }
+
+  // Modifiers
+  &--green {
+    color: get-font-color('branding_primary');
+  }
+
+  &--red {
+    color: get-font-color('branding_secondary');
+  }
+
+  &__main {
+    margin: 0 auto $spacing;
+    max-width: 1400px;
+
+    @include media-breakpoint-down('md') {
+      margin: 0 auto;
+    }
+  }
+
+  &__image-wrapper {
+    position: relative;
+  }
+
+  &__image {
+    width: 100%;
+
+    @include media-breakpoint-up('lg') {
+      width: 60%;
+    }
+
+    // Modifiers
+    .branding--left & {
+      @include media-breakpoint-up('lg') {
+        float: left;
+      }
+    }
+
+    .branding--right & {
+      @include media-breakpoint-up('lg') {
+        float: right;
+      }
+    }
+  }
+
+  &__heading-wrapper {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    overflow-y: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    @include media-breakpoint-up('lg') {
+      align-content: flex-start;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      padding-left: $spacing;
+      padding-right: $spacing;
+      padding-top: $spacing * 4;
+    }
+
+    // Modifiers
+    .branding--left & {
+      @include media-breakpoint-up('lg') {
+        justify-content: flex-end;
+      }
+    }
+
+    .branding--right & {
+      @include media-breakpoint-up('lg') {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &__heading {
+    cursor: default;
+    font-family: $font-family-secondary;
+    font-size: 50px;
+    font-weight: get-font-weight('base');
+
+    @include media-breakpoint-up('sm') {
+      font-size: 75px;
+    }
+
+    @include media-breakpoint-up('lg') {
+      flex: 1 0 100%;
+      font-size: 175px;
+      margin-bottom: 60px;
+      max-width: none;
+    }
+
+    // Modifiers
+    .branding--left & {
+      @include media-breakpoint-up('lg') {
+        text-align: right;
+      }
+    }
+
+    .branding--right & {
+      @include media-breakpoint-up('lg') {
+        text-align: left;
+      }
+    }
+  }
+
+  &__text {
+    color: get-font-color('base');
+    cursor: default;
+
+    @include media-breakpoint-down('md') {
+      font-size: get-font-size('base');
+    }
+
+    @include media-breakpoint-up('lg') {
+      flex: 1 0 100%;
+      font-size: 24px;
+      max-width: 50%;
+    }
+  }
+
+  &__mobile-content {
+    padding: $spacing * 0.5;
+  }
+}
+
+// from extra.scss
+
+.odd-even-list-lightgrey:nth-child(odd)  {
+  .row {
+    background-color: #f2f2f2;
+  }
+}
+.odd-even-list-lightgrey2:nth-child(odd)  {
+  background-color: #f2f2f2;
+}
+
+.odd-even-list-lightgrey3:nth-child(even)  {
+  background-color: #f2f2f2;
+}
+
+.dcu-content-type {
+  font-size: 11px;
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  text-transform: uppercase;
+}
+.red-uppercase {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #B11116;
+}
+.blue {
+  color: #16254C;
+}
+.s-txt {
+  font-size: 14px;
+}
+
+.hero--italic .hero__heading {
+  font-weight: 500;
+}
+
+.content-list {
+  .row-list {
+    border-bottom: 1px solid #D0D0D0;
+    margin-bottom: 30px;
+
+    .card-band__item-date {
+      margin-bottom: 30px;
+      margin-left: 15px;
+    }
+  }
+}
+
+/* Favorite heart Flag css from Anders START */
+// moved from extra.scss
+.heart-red {
+
+  .flag-favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    @include media-breakpoint-down('md') {
+      top: 15px;
+      right: 15px;
+    }
+    a.use-ajax {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 0.7em;
+      width: 25px;
+      height: 25px;
+      text-align: center;
+      color: red;
+      text-decoration: none;
+      &::before {
+        width: 25px;
+        height: 25px;
+      }
+    }
+  }
+
+  &.position-left {
+    .flag-favorite {
+      position: relative;
+      top: 0;
+      left: 20px;
+      display: inline-flex;
+
+      a.use-ajax {
+        position: relative;
+        top: 0;
+        left: -20px;
+      }
+    }
+  }
+
+  /* Red favorite */
+  .flag-favorite.action-unflag a.use-ajax::before {
+    content: url('data:image/svg+xml; utf8,<svg width="22px" height="22px" viewBox="0 0 22 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;"><g id="Path_67" transform="matrix(1,0,0,1,-1.5,-2.5)"><path d="M12.5,22.35L10.977,20.958C5.57,16.034 2,12.786 2,8.8C2,8.777 2,8.754 2,8.731C2,5.587 4.587,3 7.731,3C7.745,3 7.76,3 7.775,3C9.593,3.014 11.319,3.817 12.5,5.2C13.681,3.817 15.407,3.014 17.225,3C17.24,3 17.255,3 17.269,3C20.413,3 23,5.587 23,8.731C23,8.754 23,8.777 23,8.8C23,12.786 19.43,16.034 14.023,20.969L12.5,22.35Z" style="fill:red;fill-rule:nonzero;stroke:red;stroke-width:1px;"/></g></svg>');
+  }
+  .flag-favorite.action-flag a.use-ajax::before {
+    content: url('data:image/svg+xml; utf8, <svg width="22px" height="22px" viewBox="0 0 22 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;"><g id="Path_67" transform="matrix(1,0,0,1,-1.5,-2.5)"><path d="M12.5,22.35L10.977,20.958C5.57,16.034 2,12.786 2,8.8C2,8.777 2,8.754 2,8.731C2,5.587 4.587,3 7.731,3C7.745,3 7.76,3 7.775,3C9.593,3.014 11.319,3.817 12.5,5.2C13.681,3.817 15.407,3.014 17.225,3C17.24,3 17.255,3 17.269,3C20.413,3 23,5.587 23,8.731C23,8.754 23,8.777 23,8.8C23,12.786 19.43,16.034 14.023,20.969L12.5,22.35Z" style="fill:none;fill-rule:nonzero;stroke:red;stroke-width:1px;"/></g></svg>');
+  }
+}
+
+
+
+/* From Anders - END */
+
+// Banner styles
+.desktop , .mobile {
+  position: relative;
+  margin-bottom: 20px;
+}

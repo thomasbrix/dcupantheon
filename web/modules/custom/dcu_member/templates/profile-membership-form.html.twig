@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="title">
+      <h1>{{ form.header }}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="form-row ">
+  <div class="col-md-12">
+    {{ page.highlighted }}
+  </div>
+</div>
+
+<div class="row mb-5">
+  <div class="col-md-8">
+    <div class="form-row">
+      <div class="col-md-12">
+        {{ form|without('header', 'unsubscribe', 'cancelmembership') }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if not form.unsubscribed %}
+  <div class="row mb-3">
+    <div class="col-md-8">
+      <div class="form-row">
+        <div class="col-md-12">
+          {{ form.cancelmembership }}
+          <p>{{ 'If you cancel your membership, it will expire at the end of the year.'|t }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+
+<div class="row mb-5">
+  <div class="col-12">
+    <p>{{ 'Please contact us at medlemservice@dcu.dk if you want to close your profile at dcu.dk, and have all your data deleted.'|t }}</p>
+  </div>
+</div>

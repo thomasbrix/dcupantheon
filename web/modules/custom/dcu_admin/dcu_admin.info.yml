@@ -1,0 +1,6 @@
+name: 'DCU admin'
+type: module
+description: 'Admin functions for DCU'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'DCU'

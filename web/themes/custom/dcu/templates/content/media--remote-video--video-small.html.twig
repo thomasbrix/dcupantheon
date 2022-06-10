@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Theme override to display a media item.
+ *
+ * Available variables:
+ * - name: Name of the media.
+ * - content: Media content.
+ *
+ * @see template_preprocess_media()
+ */
+#}
+<article{{ attributes }}>
+  {{ title_suffix.contextual_links }}
+  {% if content %}
+    <div class="video__playlist-item mb-5">
+      <div class="video__playlist-item-player">
+        <div class="iframe-wrapper">
+          {{ content.thumbnail }}
+        </div>
+      </div>
+      <div class="video__playlist-item-content">
+        <h4 class="video__playlist-item-heading">Video</h4>
+        <span class="video__playlist-item-text">{{ content.name }}</span>
+      </div>
+    </div>
+  {% endif %}
+</article>
+
+

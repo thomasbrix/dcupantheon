@@ -1,0 +1,19 @@
+Hej {{ mail_data.name }}<br /><br />
+Velkommen som medlem i DCU. Vi er glade for at du har meldt dig ind, og vi håber du får glæde af medlemskabet.<br /><br />
+Dit medlemsnummer er: {{ mail_data.member_no }}<br /><br />
+Som medlem er der mange fordele du først får adgang til, når du logger ind på vores website. Dit brugernavn og kodeord skal du også bruge til at logge på vores app "DCU Fordele" http://app.dcu.dk<br /><br />
+Du skal derfor starte med at vælge et kodeord, så du kan logge ind på dcu.dk. Du opretter dit kodeord ved at klikke på linket herunder.<br />
+https://dcu.dk/user/password<br /><br />
+Når du bagefter logger ind, kan du bruge dit medlemsnummer eller din e-mailadresse som brugernavn.<br /><br />
+
+{{ mail_data.qrcode|raw }}<br /><br />
+Midlertidigt medlemskort – Gyldig til {{ mail_data.qrcode_expire_date }} - Scan QR kode for at validere at medlemskab er aktivt<br />
+Temporary membership card – Valid until {{ mail_data.qrcode_expire_date }} - Scan QR code to validate that membership is active<br />
+Temporäre Mitgliedskarte – Gültig bis {{ mail_data.qrcode_expire_date }} - Scannen Sie den QR-Code, um zu bestätigen, dass die Mitgliedschaft aktiv ist<br /><br />
+
+Med venlig hilsen<br />
+DCU - Dansk Camping Union<br />
+Korsdalsvej 132<br />
+2605 Brøndby<br />
+Email: info@dcu.dk<br />
+Telefon: 33 21 06 00<br />

@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * @file
+ * Contains dcu_api.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dcu_api_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the dcu_api module.
+    case 'help.page.dcu_api':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('DCU API facilitates external access to dcu data') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dcu_api_theme() {
+  return [
+    'dcu_api' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+
+/**
+ * Helper function. Returns image urls from field on node. If imagestyles is
+ * passed imagestyle is generated and url returned.
+ *
+ * @param $node
+ * @param $field_name
+ * @param array $image_styles
+ *
+ * @return array
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_api_get_node_media_url($node, $field_name, $image_styles = []) {
+  if (!$node->hasField($field_name)) {
+    return [];
+  }
+  $media = $node->get($field_name);
+  if ($media->getFieldDefinition()->getType() == 'image') {
+    $mediaEntity = !empty($media->first()->entity) ? $media->first()->entity : null;
+  }
+  else if ($media->getFieldDefinition()->getType() == 'entity_reference') {
+    $mediaEntity = !empty($media->entity) ? $media->entity->field_media_image->entity : null;
+  }
+  $mediaImageUrl = !empty($mediaEntity) ? $mediaEntity->getFileUri() : null;
+  if (empty($mediaImageUrl)) {
+    return [];
+  }
+  $images['image_url'] = file_create_url($mediaImageUrl);
+  foreach ($image_styles as $image_style) {
+    $style = \Drupal::entityTypeManager()->getStorage('image_style')->load($image_style);
+    $destination = $style->buildUri($mediaImageUrl);
+    if (!file_exists($destination)) {
+      $style->createDerivative($mediaImageUrl, $destination);
+    }
+    $images[$image_style] = $style->buildUrl($mediaImageUrl);
+  }
+  return $images;
+}

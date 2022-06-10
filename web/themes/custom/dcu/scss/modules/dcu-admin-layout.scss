@@ -1,0 +1,58 @@
+.masquerade-block {
+  padding: 10px 0 5px 0;
+  margin: 0;
+  background-color: #F2F2F2;
+  #masquerade-block-form .button {
+    padding: 10px 25px;
+  }
+  .js-form-item {
+    margin-bottom: 0;
+  }
+}
+
+section.member-search {
+  padding: 10px 0 5px 0;
+  margin: 0;
+  .js-form-item {
+    margin-bottom: 0;
+  }
+  input[type=text],
+  #edit-user-search-api-fulltext {
+    @include media-breakpoint-up('lg') {
+      //width: 500px;
+    }
+  }
+  label {
+    display: none;
+  }
+  @include media-breakpoint-up('lg') {
+    label {
+      display: block;
+      left: 20px;
+      font-size: 10px;
+    }
+  }
+  #edit-submit-dbsearch-users,
+  input[type=submit] {
+    padding: 10px 25px;
+    border: 1px solid transparent;
+  }
+  .create-new-member {
+    background-color: #16254C;
+    border: 1px solid transparent;
+    padding: 10px 25px;
+  }
+  .views-field-name a {
+    color: #B11116;
+    font-weight: bold;
+  }
+  a.button {
+    margin: 6px 0 !important;
+  }
+}
+.user_check_info {
+  background-color: #F2F2F2;;
+  padding: 30px;
+  margin-bottom: 30px;
+  font-size: 2.0rem;
+}

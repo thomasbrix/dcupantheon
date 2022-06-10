@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="title">
+      <h1>{{ form.header }}</h1>
+    </div>
+  </div>
+</div>
+<div class="form-row ">
+  <div class="col-md-12">
+    {{ page.highlighted }}
+  </div>
+</div>
+{% if form.spousename %}
+  <div class="form-row">
+    <div class="col-md-12">
+      <fieldset class="form-wrapper mb-0 p-0" id="edit-spouse">
+        <legend><span class="fieldset-legend">{{ 'Spouse / partner'|t }}</span></legend><div class="fieldset-wrapper"></div>
+      </fieldset>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10">
+      <div class="form-row ">
+        <div class="col-md-5">
+          {{ form.spousename }}
+        </div>
+        <div class="col-md-5">
+          {{ form.spousebirthday }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="form-row mt-5">
+  <div class="col-md-12">
+    <fieldset class="form-wrapper mb-0 p-0" id="edit-children">
+      <legend><span class="fieldset-legend">{{ 'Children'|t }}</span></legend><div class="fieldset-wrapper"></div>
+    </fieldset>
+  </div>
+</div>
+
+<div class="form-row">
+  {% for key,child in form.children %}
+    {% if '#' not in key %}
+      {% set namekey =  'name_' ~ key %}
+      {% set birthkey =  'birthday_' ~ key %}
+      {% set deletekey =  'delete_' ~ key %}
+
+      <div class="col-md-10 {{ child['#collapse'] }}" id="child-{{ key }}">
+        <div class="form-row ">
+          <div class="col-md-5">
+            {{ child[namekey] }}
+          </div>
+          <div class="col-md-5">
+            {{ child[birthkey] }}
+          </div>
+          <div class="col-md-2 mt-2">
+            {{ child[deletekey] }}
+          </div>
+        </div>
+      </div>
+
+    {% endif %}
+  {% endfor %}
+</div>
+
+<div class="form-row mb-4">
+  <div class="col-md-12">
+    <button class="btn btn-success" data-next-child="{{ form.nextchild['#value'] }}" id="add-child-btn">{{ 'Add child'|t }}</button>
+  </div>
+</div>
+
+<div class="form-row mt-5 mb-5">
+  <div class="col-md-12">
+    {{ form|without('header', 'spousename', 'spousebirthday', 'children') }}
+  </div>
+</div>

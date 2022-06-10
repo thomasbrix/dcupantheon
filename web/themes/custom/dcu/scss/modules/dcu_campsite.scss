@@ -1,0 +1,190 @@
+.dcu-campsite {
+
+
+  .hero {
+    margin-bottom: 0;
+    .hero__super-heading {
+      margin-bottom: 10px;
+    }
+    h1 {
+      //font-weight: normal;
+      max-width: none;
+      margin-bottom: 0;
+      word-break: break-word;
+      position: relative;
+      //left: -5px;
+      font-size: 24px;
+      @include media-breakpoint-up(sm) {
+        font-size: 3.9rem;
+        left: -5px;
+      }
+    }
+    .hero__ratings-wrapper {
+      margin-top: -5px;
+      @include media-breakpoint-up(sm) {
+        margin-top: -15px;
+      }
+      margin-bottom: 20px;
+    }
+
+    .heart-red .flag-favorite {
+      position: absolute;
+      top: -5px;
+      right: 10px;
+    }
+    .manchet {
+      border-left: 5px solid #16254C;
+      padding-left: 10px;
+      .txt {
+        font-size: 22px;
+        padding-top: 5px ;
+        margin: 0;
+      }
+    }
+  }
+
+
+  //Gallery
+  .gallery {
+    .henning {
+
+    }
+    @include media-breakpoint-down(sm) {
+      padding-top: 0;
+      padding-bottom: 0;
+      //margin: 0;
+    }
+
+    background-color: #F2F2F2;
+    .container{
+      @include media-breakpoint-down(sm) {
+        //padding: 0;
+        //margin: 0;
+        //padding-left: 0;
+        //padding-right: 0;
+      }
+    }
+
+    a {
+      @include media-breakpoint-up(sm) {
+      }
+      margin-bottom: 0;
+    }
+    .gallery-right {
+      a:nth-child(-n+2) {
+        margin-bottom: 20px;
+      }
+
+    }
+    .counter {
+      position: relative;
+      .desktop2 {
+        color: #000;
+        background-color: #F2F2F2;
+        position: absolute;
+        bottom: 30px;
+        @include media-breakpoint-up(sm) {
+        //  bottom: 15px;
+        }
+        right: 30px;
+        width: max-content;
+        padding: 3px 5px 0 5px;
+        //border-radius: 5px;
+      }
+    }
+  }
+
+  .dcu-narrow {
+    .container {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  //Footer
+  .dcu-footer {
+    h2.card-band__heading {
+      margin-bottom: 0;
+    }
+    background-color: #F2F2F2;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: normal;
+    @include media-breakpoint-up(sm) {
+      font-size: 2.0rem;
+      font-weight: normal;
+    }
+  }
+
+  .single-popup {
+    .card-body {
+      padding: 0;
+    }
+  }
+  .facilities {
+    background: none;
+  }
+  .dcu-modal-link {
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .sticky-booking-top {
+    .sticky-top {
+      top: 160px;
+      .sticky-booking-wrapper {
+        background-color: #F2F2F2;
+        padding: 30px;
+      }
+    }
+  }
+  .fixed-booking {
+    background-color: #F2F2F2;
+    //padding: 20px;
+    //padding: 5px 10px 5px 10px;
+    p {
+      margin: 0;
+    }
+  }
+
+  .dcu-location {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    .col-12 {
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+
+.dcu-spacing {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.google-review {
+  border-left: 5px solid #16254C;
+  padding-left: 10px;
+  .google-review-txt {
+    font-size: 18px;
+    @include media-breakpoint-up(sm) {
+      font-size: 22px;
+    }
+    padding-top: 5px ;
+    margin: 0;
+  }
+  .google-review-name-date {
+    font-style: italic;
+  }
+  .google-review-rating {}
+}
+
+
+
+

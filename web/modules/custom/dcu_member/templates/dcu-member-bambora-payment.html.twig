@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="title">
+        <h1>{{ 'Du sendes nu til vores betalingsvindue'|t }}</h1>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    paymentwindow = new PaymentWindow({
+      'merchantnumber': '{{ payment.merchantnumber }}',
+      'amount': '{{ payment.amount }}',
+      'currency': '{{ payment.currency }}',
+      'windowstate': '{{ payment.windowstate }}',
+      'accepturl': '{{ payment.accepturl }}',
+      'instantcapture': 1,
+      'language': '{{ payment.language_user }}',
+      'description': '{{ payment.ordertext }}',
+      'ownreceipt': '{{ payment.ownreceipt }}',
+      'subscription': '{{ payment.subscription }}',
+      'subscriptiontype': '{{ payment.subscriptiontype }}',
+    });
+    paymentwindow.open();
+  </script>
+</div>

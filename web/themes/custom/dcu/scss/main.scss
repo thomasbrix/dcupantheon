@@ -1,0 +1,65 @@
+// Path varible for assets - development
+// $path: "/assets/";
+// Path varible for assets - DCU
+$path: "/themes/custom/dcu/assets/";
+
+//* Libraries / Frameworks
+// ---------------------------------------------
+@import 'settings/colors';
+@import 'bootstrap/bootstrap.scss';
+
+// * Settings
+// ---------------------------------------------
+@import 'settings/layout';
+@import 'settings/typography';
+
+
+// * Utilities
+// ---------------------------------------------
+@import 'utilities/normalize';
+@import 'utilities/helpers';
+@import 'utilities/utilities';
+
+// * Setup
+// ---------------------------------------------
+@import 'setup/typography';
+@import 'setup/base';
+@import 'setup/extra';
+
+// * Modules
+// ---------------------------------------------
+@import 'modules/header';
+@import 'modules/navigation';
+@import 'modules/breadcrumbs';
+@import 'modules/footer';
+@import 'modules/input';
+@import 'modules/forms'; // Additional styling from Anders B.
+@import 'modules/forum'; // Added by Anders B.
+@import 'modules/gallery'; // Added by Anders B.
+@import 'modules/signup'; // Added by Anders B.
+@import 'modules/table';
+@import 'modules/content-block';
+@import 'modules/hero';
+@import 'modules/branding';
+@import 'modules/cta';
+@import 'modules/video';
+@import 'modules/card-band';
+@import 'modules/filter-options';
+@import 'modules/search-campingplads';
+@import 'modules/campingplads-card';
+@import 'modules/filter-options';
+@import 'modules/search-results';
+@import 'modules/facilities';
+@import 'modules/campingplads-map';
+@import 'modules/rating-stars.scss';
+@import 'modules/campsite-edit-form.scss';
+@import 'modules/edit-menu.scss';
+@import 'modules/campsites-nearby.scss';
+@import 'modules/become-member-page.scss';
+@import 'modules/dcu-admin-layout.scss';
+@import 'modules/dcu_campsite.scss';
+@import 'modules/search-solr-facets.scss';
+@import 'modules/dcu-accordion.scss';
+@import 'modules/dcu-prices.scss';
+
+

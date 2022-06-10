@@ -1,0 +1,258 @@
+//
+// Utility classes for colours
+//
+
+
+// Classes for sections
+// Sets background colour on both the element and its child elements
+
+.dcu-bg-grey-grey {
+	background-color: get-default-color('surface');
+
+	& [class*="__super-heading"] {
+		color: get-font-color('on_tertiary');
+	}
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('surface');
+	}
+}
+
+.dcu-bg-grey-white {
+	background-color: get-default-color('surface');
+
+	& [class*="__super-heading"] {
+		color: get-font-color('on_tertiary');
+	}
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('background');
+	}
+}
+
+.dcu-bg-white-grey {
+	background-color: get-default-color('background');
+
+	& [class*="__super-heading"] {
+		color: get-font-color('on_tertiary');
+	}
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('surface');
+	}
+}
+
+.dcu-bg-white-black {
+	background-color: get-default-color('background');
+	color: get-font-color('on_primary');
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('surface-dark');
+	}
+}
+
+.dcu-bg-white-blue {
+	background-color: get-default-color('background');
+	color: get-font-color('on_primary');
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('primary');
+	}
+}
+
+.dcu-bg-white-darkgreen {
+	background-color: get-default-color('background');
+	color: get-font-color('on_primary');
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('nonary');
+	}
+}
+
+.dcu-bg-white-green {
+	background-color: get-default-color('background');
+	color: get-font-color('on_primary');
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('quinary');
+	}
+}
+
+.dcu-bg-white-lightgrey {
+	background-color: get-default-color('background');
+
+	& [class*="__super-heading"] {
+		color: get-font-color('on_tertiary');
+	}
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('octonary');
+	}
+}
+
+.dcu-bg-white-orange {
+	background-color: get-default-color('background');
+	color: get-font-color('on_primary');
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('tertiary');
+	}
+}
+
+.dcu-bg-white-red {
+	background-color: get-default-color('background');
+	color: get-font-color('on_primary');
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('quaternary');
+	}
+}
+
+.dcu-bg-white-skin {
+	background-color: get-default-color('background');
+
+	& [class*="__super-heading"] {
+		color: get-font-color('on_tertiary');
+	}
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('senary');
+	}
+}
+
+.dcu-bg-white-straw {
+	background-color: get-default-color('background');
+
+	& [class*="__super-heading"] {
+		color: get-font-color('on_tertiary');
+	}
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('secondary');
+	}
+}
+
+.dcu-bg-white-yellow {
+	background-color: get-default-color('background');
+
+	& [class*="__super-heading"] {
+		color: get-font-color('on_tertiary');
+	}
+
+	& .card-band,
+	& [class*="__content"] {
+		background-color: get-default-color('septenary');
+	}
+}
+
+
+
+// Classes for individual elements
+
+.dcu-bg-black {
+	background-color: get-default-color('surface-dark');
+}
+
+.dcu-bg-blue {
+	background-color: get-default-color('primary');
+}
+
+.dcu-bg-darkgreen {
+	background-color: get-default-color('nonary');
+}
+
+.dcu-bg-green {
+	background-color: get-default-color('quinary');
+}
+
+.dcu-bg-grey {
+	background-color: get-default-color('surface');
+}
+
+.dcu-bg-lightgrey {
+	background-color: get-default-color('octonary');
+}
+
+.dcu-bg-orange {
+	background-color: get-default-color('tertiary');
+}
+
+.dcu-bg-red {
+	background-color: get-default-color('quaternary');
+}
+
+.dcu-bg-skin {
+	background-color: get-default-color('senary');
+}
+
+.dcu-bg-straw {
+	background-color: get-default-color('secondary');
+}
+
+.dcu-bg-yellow {
+	background-color: get-default-color('septenary');
+}
+
+
+
+// Classes for font colors
+
+.dcu-black {
+	color: get-default-color('surface-dark') !important;
+}
+
+.dcu-blue {
+	color: get-default-color('primary') !important;
+}
+
+.dcu-darkgreen {
+	color: get-default-color('nonary') !important;
+}
+
+.dcu-green {
+	color: get-default-color('quinary') !important;
+}
+
+.dcu-grey {
+	color: get-default-color('surface') !important;
+}
+
+.dcu-lightgrey {
+	color: get-default-color('octonary') !important;
+}
+
+.dcu-orange {
+	color: get-default-color('tertiary') !important;
+}
+
+.dcu-red {
+	color: get-default-color('quaternary') !important;
+}
+
+.dcu-skin {
+	color: get-default-color('senary') !important;
+}
+
+.dcu-straw {
+	color: get-default-color('secondary') !important;
+}
+
+.dcu-yellow {
+	color: get-default-color('septenary') !important;
+}
+
+.dcu-white {
+	color: get-font-color('on_primary') !important;
+}

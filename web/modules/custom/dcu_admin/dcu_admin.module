@@ -1,0 +1,158 @@
+<?php
+
+/**
+ * @file
+ * Contains dcu_admin.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperManager;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Render\BubbleableMetadata;
+
+/**
+ * Implements hook_help().
+ */
+function dcu_admin_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the dcu_admin module.
+    case 'help.page.dcu_admin':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Various admin functions for dcu admins') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dcu_admin_theme() {
+  return [
+    'dcu_admin' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+
+/**
+ * @param $variables
+ */
+function dcu_admin_preprocess_page(&$variables) {
+  $variables['#attached']['library'][] = 'dcu_admin/dcu_admin_css';
+}
+
+/**
+ * Implements hook_file_download().
+ */
+function dcu_admin_file_download($uri) {
+  if (StreamWrapperManager::getScheme($uri) == 'private') {
+    if (Drupal::currentUser()->isAnonymous()) {
+      return -1;
+    }
+    if (!\Drupal::currentUser()->hasPermission('access private files')) {
+      return -1;
+    }
+  }
+  return [
+    'Content-disposition' => 'attachment; filename="' . StreamWrapperManager::getTarget($uri) . '"',
+  ];
+}
+
+/**
+ * @return \Symfony\Component\HttpFoundation\RedirectResponse|void
+ */
+function dcu_admin_check_navision_redirect() {
+  $config = \Drupal::config('dcu_admin.sitesettings');
+  if ($config->get('block_access_to_user_data')) {
+    \Drupal::messenger()->addMessage(t($config->get('blocked_user_message')), 'error');
+    return new RedirectResponse(Url::fromRoute($config->get('blocked_redirect'))->toString());
+  }
+  return;
+}
+
+/**
+* implement hook_token_info()
+*/
+function dcu_admin_token_info() {
+  $types['dcu_tokens'] = [
+    'name' => t('DCU tokens'),
+    'description' => t('Define DCU custom tokens')
+  ];
+
+  //Token number of DCU campsites.
+  $tokens['number_of_dcu_campsites'] = [
+    'name' => t('Number of DCU campsites'),
+    'description' => t('Total count of DCU campsites')
+  ];
+
+  //Token prices.
+  $tokens['price_family'] = [
+    'name' => t('Price for family'),
+    'description' => t('Get price for family members from Nav')
+  ];
+  $tokens['price_person'] = [
+    'name' => t('Price for person'),
+    'description' => t('Get price for person members from Nav')
+  ];
+  $tokens['price_pensioner'] = [
+    'name' => t('Price for pensioner'),
+    'description' => t('Get price for pensioner members from Nav')
+  ];
+  $tokens['price_youth'] = [
+    'name' => t('Price for youth'),
+    'description' => t('Get price for youth members from Nav')
+  ];
+  $tokens['price_deal'] = [
+    'name' => t('Price for deal'),
+    'description' => t('Get price for deal members from Nav')
+  ];
+  return [
+    'types' => $types,
+    'tokens' => [
+      'dcu_tokens' => $tokens
+    ]
+  ];
+}
+
+/**
+* implement hook_token()
+*/
+function dcu_admin_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+  if ($type == 'dcu_tokens') {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'number_of_dcu_campsites':
+          $config = \Drupal::config('dcu_admin.sitesettings');
+          $text = $config->get('number_of_dcu_campsites');
+          $replacements[$original] = $text;
+          break;
+        case 'price_family':
+          $price = \Drupal::service('dcu_navision.client')->getMembershipPrice('FAMILIE');
+          $replacements[$original] = $price;
+          break;
+        case 'price_person':
+          $price = \Drupal::service('dcu_navision.client')->getMembershipPrice('PERSON');
+          $replacements[$original] = $price;
+          break;
+        case 'price_pensioner':
+          $price = \Drupal::service('dcu_navision.client')->getMembershipPrice('PENSIONIST');
+          $replacements[$original] = $price;
+          break;
+        case 'price_youth':
+          $price = \Drupal::service('dcu_navision.client')->getMembershipPrice('UNGDOM');
+          $replacements[$original] = $price;
+          break;
+        case 'price_deal':
+          $price = \Drupal::service('dcu_navision.client')->getMembershipPrice('DEAL');
+          $replacements[$original] = $price;
+          break;
+      }
+    }
+  }
+  return $replacements;
+}

@@ -1,0 +1,13 @@
+{
+    "name": "dcu_api",
+    "type": "drupal-module",
+    "description": "DCU API facilitates external access to dcu data",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/dcu_api",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/dcu_api",
+        "source": "http://cgit.drupalcode.org/dcu_api"
+    }
+}

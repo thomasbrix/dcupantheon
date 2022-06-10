@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Contains dcu_feed_import.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dcu_feed_import_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the dcu_feed_import module.
+    case 'help.page.dcu_feed_import':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Logic implemented for feed import to dcu') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+

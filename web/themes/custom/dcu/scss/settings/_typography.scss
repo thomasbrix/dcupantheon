@@ -1,0 +1,161 @@
+
+// ---- Font Families ---- \\
+$font-family-base:   		"Codec Pro", sans-serif;
+$font-family-secondary: 	"Ernest and Emily", serif;
+$font-family-icon:			"CampLogo";
+
+
+
+// ---- Font sizes ---- \\
+$font-sizes: (
+	base:			18px,
+	smaller:		16px,
+
+	// Above normal scale (anything absurdly big) based on SI prefixes
+	peta:			90px,
+	tera:			80px,
+	giga:			70px,
+	mega:			46px,
+
+	// Normal scale (h1-h6)
+	h1:				34px,
+	h2:				24px,
+	h3:				20px,
+	h4:				18px,
+	h5:				17px,
+	h6:				16px,
+
+
+	// Below normal scale - based on SI prefixes
+	milli:     		14px,
+	micro:     		13px,
+	nano:      		12px,
+	pico:      		11px,
+	femto:     		10px,
+
+
+	// Special sizes
+	lead:			20px,
+	small:			16px,
+	blockquote:		30px,
+	label:			21px,
+	select:			15px,
+	section:		22px,
+	super-heading:	16px,
+	sub-heading:	16px,
+	pre-heading:	16px,
+	post-heading:	16px,
+	icon-font:		34px
+);
+
+
+
+// ---- Font Weights ---- \\
+$font-weights: (
+	base:		400,
+
+	light:		200,
+	normal:		400,
+	semibold:	600,
+	bold:		700,
+	extrabold:	800,
+	black:		900
+);
+
+
+
+//---- Line Heights ---- \\
+$line-heights: (
+	// Typically line-height of paragraphs
+	base:			1.4,
+
+	
+	heading:		1.1,
+	lead:			1.2,
+);
+
+
+
+
+// ---- Placeholder selectors ---- \\
+%limit-width {
+	max-width: $max-paragraph-width;
+}
+
+%flush-top {
+	margin-top: 0;
+}
+
+%word-space-small {
+	word-spacing: -0.1em;
+}
+
+
+
+
+// ---- Functions ---- \\
+
+/**
+* Will return the given font from map or display warning
+*/
+@function get-font-size($size-name) {
+	@if not map-has-key($font-sizes, $size-name) {
+		@warn "no font by the name: `#{$size-name}` in map $font-sizes";
+	}
+
+	@return map-get($font-sizes, $size-name);
+}
+
+
+/**
+* Will return the given font-weight from map or display warning
+*/
+@function get-font-weight($font-weight) {
+	@if not map-has-key($font-weights, $font-weight) {
+		@warn "no font weight by the name: `#{$font-weight}` in map $font-weights";
+	}
+
+	@return map-get($font-weights, $font-weight);
+}
+
+
+/**
+* Will return the given letter spacing from map or display warning
+*/
+@function get-letter-spacing($letter-spacing) {
+	@if not map-has-key($letter-spacings, $letter-spacing) {
+		@warn "no font weight by the name: `#{$letter-spacing}` in map $letter-spacings";
+	}
+
+	@return map-get($letter-spacings, $letter-spacing);
+}
+
+/**
+* Will return the given letter spacing from map or display warning
+*/
+@function get-line-height($line-height) {
+	@if not map-has-key($line-heights, $line-height) {
+		@warn "no font weight by the name: `#{$line-height}` in map $line-heights";
+	}
+
+	@return map-get($line-heights, $line-height);
+}
+
+
+// ---- Mixins ---- \\
+
+/**
+* Will scale font based on viewport width. 
+* Font will never become smaller than the given minimum or bigger than the maximum.
+*
+* &: paramaters where a value without a unit is needed are diveded by one px to remove unit.
+*
+* @param $min-font-size
+* @param $max-font-size
+* @param $min-view-width
+* @param $max-view-width
+*/
+@mixin scalable-font($min-font-size, $max-font-size, $min-view-width: 320px, $max-view-width: 1920px) {
+	font-size: $min-font-size + ($max-font-size - $min-font-size)/2; // Fallback
+	font-size: calc(#{$min-font-size} + (#{$max-font-size / 1px} - #{$min-font-size / 1px}) * (100vw - #{$min-view-width}) / (#{$max-view-width / 1px} - #{$min-view-width / 1px}));
+}

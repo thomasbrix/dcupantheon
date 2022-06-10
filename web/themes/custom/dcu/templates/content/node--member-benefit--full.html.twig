@@ -1,0 +1,85 @@
+<article{{ attributes }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% include '@dcu/content/incl-hero/default-bg-white-blue.html.twig' %}
+
+  <section class="container">
+    <div class="row">
+      <div class="col-md-3 col-12">
+        <div class="">
+
+          {% if content.field_company_logo|render is not empty or content.field_benefit_company_name|render is not empty or content.field_company_address|render is not empty %}
+            <div class="red-uppercase pb-3">
+              {{ 'Address'|trans }}
+            </div>
+          {% endif %}
+
+          {{ content.field_company_logo }}
+
+          {% if content.field_company_logo|render is not empty or content.field_benefit_company_name|render is not empty or content.field_company_address|render is not empty %}
+            <div class="pb-3 s-txt blue">
+              {{ content.field_benefit_company_name }}
+              {{ content.field_company_address }}
+            </div>
+          {% endif %}
+
+          {% if content.field_benefit_price|render is not empty %}
+            <div class="pb-5">
+              <div class="red-uppercase">
+                {{ 'Info'|trans }}
+              </div>
+              <div class="s-txt blue">
+                {{ content.field_benefit_price }}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="d-none d-md-block" style="position: relative">
+          <!-- Banner code start -->
+          <div class="d-sm-none d-lg-block desktop emediate-26" >
+            <div id="div-gpt-ad-1577914416819-0" style="height:250px; width:300px;">
+              <script>
+                googletag.cmd.push(function() { googletag.display("div-gpt-ad-1577914416819-0"); });
+              </script>
+            </div>
+          </div>
+          <div class="d-sm-none d-lg-block desktop emediate-27" >
+            <div id="div-gpt-ad-1577914511664-0" style="height:250px; width:300px;">
+              <script>
+                googletag.cmd.push(function() { googletag.display("div-gpt-ad-1577914511664-0"); });
+              </script>
+            </div>
+          </div>
+          <div class="d-sm-none d-lg-block desktop emediate-28">
+            <div id='div-gpt-ad-1577914557062-0' style="height:250px; width:300px;">
+              <script>
+                googletag.cmd.push(function() { googletag.display('div-gpt-ad-1577914557062-0'); });
+              </script>
+            </div>
+          </div>
+          <div class="d-sm-block d-md-none mobile" id='div-gpt-ad-1577915444368-0' style='height:180px; width:320px;margin-right: auto;
+      margin-left: auto;'>
+            <span>Annonce</span>
+            <script>
+              googletag.cmd.push(function() { googletag.display('div-gpt-ad-1577915444368-0'); });
+            </script>
+          </div>
+          <!-- Banner code end -->
+        </div>
+      </div>
+      <div class="col-12 col-md-9">
+        {% include '@dcu/content/include/default-locked-content.html.twig' %}
+      </div>
+    </div>
+  </section>
+
+  {{ content.field_content }}
+  {{ content.field_additional_content }}
+
+  <section>
+    <div class="container">
+      {{ drupal_block('views_block:campsites_nearby-nearby_campsites') }}
+    </div>
+  </section>
+</article>

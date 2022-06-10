@@ -1,0 +1,333 @@
+$ad-height: 180px;
+.banner-container {
+	display: flex;
+	justify-content: center;
+	height: $ad-height + ($spacing * 0.75) * 2;
+	padding: $spacing * 0.75;
+	text-align: center;
+}
+
+// This class indicates the blue primary DCU frontpage
+.header {
+	position: absolute; // IE11 fallback
+	position: sticky;
+	width: 100%;
+	z-index: 1025;//Need to be high cause Googlemap is 1020.
+	margin-bottom: $spacing * 1;
+
+	&.is-fixed {
+		position: fixed; // IE11 fallback
+		position: sticky;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+
+	// Remove default underline
+	& a {
+		text-decoration: none;
+	}
+	// Top group
+	&__top {
+		//height: get-size('header-top-desktop'); STUB
+		//padding: $spacing/4 0; STUB
+
+		background: get-default-color('surface');
+		color: get-font-color('on_surface');
+
+		// Breakpoints
+		@include media-breakpoint-down(md) {
+			height: get-size('header-top-device');
+		}
+	}
+
+	&__top-inner {
+		@extend %container-styling;
+		display: flex;
+		justify-content: flex-end;
+		//padding-left: get-size('logo-size-desktop') + $spacing * 2; // Make room for logo
+    //padding-right: 30px;
+
+		@include media-breakpoint-down(md) {
+			padding-right: 10px;//$spacing * 0.5; // Room for user navigation
+      padding-left: 100px; // Make room for logo
+      justify-content: flex-end;
+      .header__about-us-navigation {
+        //padding-right: 30px; STUB
+        margin-right: 30px;
+      }
+      .header__user-navigation {
+        //margin-top: 5px; STUB
+        padding-right: 1px;
+      }
+		}
+    //@include media-breakpoint-down(md) {
+    //  padding-right: 9px; // make room for logo
+    //}
+	}
+
+	// Main group
+	&__main {
+
+		background: get-default-color('primary');
+		color: get-font-color('on_primary');
+	}
+
+	&__main-inner {
+		display: flex;
+		@extend %container-styling;
+		overflow: visible;
+		position: relative;
+		padding-left: get-size('logo-size-desktop') + $spacing * 2; // make room for logo
+
+		// Breakpoints
+		@include media-breakpoint-down(md) {
+			// display: block;
+			justify-content: flex-end;
+			//height: $spacing * 2.5;
+      height: $spacing * 2;
+			padding: $spacing/2 $spacing/2 $spacing/2 0;
+		}
+
+		@include media-breakpoint-up(md) {
+			padding-left: get-size('logo-size-desktop') + $spacing * 1.5; // make room for logo
+		}
+	}
+	&__logo {
+		position: absolute;
+		top: 0;
+    left: 15px;
+    @include media-breakpoint-up(md) {
+      top: -20px;
+      left: $spacing;
+    }
+
+
+		width: get-size('logo-size-desktop');
+		height: get-size('logo-size-desktop');
+		transform: translateY(-25%);
+
+		// Breakpoints
+		@include media-breakpoint-down('md') {
+			width: get-size('logo-size-device');
+			height: get-size('logo-size-device');
+		}
+
+		// Small logo for the camping page
+		.header__top-inner.--camping & {
+			@include media-breakpoint-down('sm') {
+				height: get-size('logo-size-mobile');
+				top: 13px;
+				width: get-size('logo-size-mobile');
+			}
+		}
+	}
+
+	&__dcu-link {
+		flex: 1 1 100%;
+		font-size: get-font-size('milli');
+		padding: 1px;
+		text-decoration: underline;
+	}
+
+	&__nav-toggle {
+		float: right;
+		height: $spacing;
+		width: $spacing;
+
+		background: transparent;
+		border: 0;
+		background-image: url($path + 'icons/menu.svg');
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+
+		// Breakpoints
+		@include media-breakpoint-up(lg) {
+			display: none;
+		}
+		// States
+		&.is-toggled {
+			background-image: url($path + 'icons/close.svg');
+		}
+	}
+
+	// About DCU link
+	&__about-dcu {
+		font-size: get-font-size('base');
+		font-weight: get-font-weight('base');
+		margin-right: $spacing;
+		padding: $spacing / 5;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	//- Search wrapper
+	&__search {
+		margin-right: $spacing;
+
+		@include media-breakpoint-down(sm) {
+			margin-right: 0;
+		}
+
+		.views-exposed-form {
+			position: relative;
+		}
+
+		.form-submit {
+			margin: 0;
+			background: get-default-color('background');
+			background-image: url($path + 'icons/search-large.svg');
+			background-position: top 8px right 7px;
+			background-repeat: no-repeat;
+			height: 30px;
+			width: 42px;
+			border: 0;
+			position: absolute;
+			right: 5px;
+			z-index: 50;
+			top: 1px;
+		}
+	}
+
+	//- Search input
+	&__search-input {
+		border: none;
+		border-radius: $spacing;
+		padding: 7px 7px 7px 15px;
+
+		//- Placeholder fix for Firefox
+		&::placeholder {
+			color: get-font-color('base');
+			opacity: 1;
+		}
+
+		@include media-breakpoint-down(sm) {
+			background-position: top 11px right 19px;
+			padding: 10px 7px 10px 15px;
+			width: 100%;
+		}
+
+		@include media-breakpoint-up(md) {
+			display: inline-block;
+			margin: 0 auto;
+		}
+	}
+
+	&__secondary-navigation {
+		@include media-breakpoint-down('sm') {
+			flex: 0 0 auto;
+		}
+	}
+}
+
+// Header for signup page and others.
+.header.header-signup-page {
+  .header__main-inner {
+    // Breakpoints
+    @include media-breakpoint-down(md) {
+      height: $spacing * 2.5;
+    }
+  }
+
+  .header__logo {
+    top: 22px;
+  }
+  .blue_menu_bar {
+    height: 84px;
+  }
+}
+
+// About us menu
+.about-us {
+	position: relative;
+
+
+	@include media-breakpoint-down(sm) {
+		min-width: 65px;
+	}
+
+	&__label {
+		align-items: center;
+		cursor: pointer;
+		display: flex;
+		font-size: get-font-size('smaller');
+		//height: 36px; STUB
+		white-space: nowrap;
+
+		@include media-breakpoint-only(md) {
+			height: 26px;
+			font-size: get-font-size('milli');
+			padding-top: 6px;
+		}
+
+		@include media-breakpoint-down(sm) {
+			font-size: get-font-size('milli');
+			//text-decoration: underline;
+			//height: 20px; STUB
+			//padding-top: 10px; STUB
+		}
+	}
+
+	&__chevron {
+		margin-left: 7px;
+		margin-right: 21px;
+
+		@include media-breakpoint-down(sm) {
+      margin-left: 7px;
+      margin-right: 0;
+		}
+
+		.is-toggled & {
+			transform: rotate(180deg);
+		}
+	}
+}
+
+
+// User navigation menu
+.user-navigation {
+	position: relative;
+
+	&__user {
+		align-items: center;
+		cursor: pointer;
+		//display: flex; Stub
+		//font-size: get-font-size('base');
+    font-size: 16px;
+
+		@include media-breakpoint-down(sm) {
+			font-size: get-font-size('milli');
+			//text-decoration: underline;
+		}
+	}
+
+	&__chevron {
+		margin-left: 7px;
+		margin-right: 21px;
+
+		@include media-breakpoint-down(sm) {
+      margin-left: 7px;
+      margin-right: 0;
+		}
+
+		.is-toggled & {
+			transform: rotate(180deg);
+		}
+	}
+
+	&__profile-image {
+		width: 36px;
+
+		@include media-breakpoint-down('md') {
+			width: 26px;
+		}
+
+		@include media-breakpoint-down(sm) {
+			display: none;
+		}
+	}
+}

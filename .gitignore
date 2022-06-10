@@ -100,3 +100,16 @@
 
 # Ignore .env files as they are personal
 #/.env
+
+# Other files that need to be ignored.
+*DS_Store*
+docroot/
+
+**/scss/**/*.map
+**/.scss-cache/**/*.scssc
+web/themes/custom/dcu/scss/.sass-cache/*
+web/themes/custom/dcu/scss/bootstrap/.sass-cache/*
+web/themes/custom/dcu/scss/bootstrap/bootstrap-reboot.css
+web/themes/custom/dcu/scss/bootstrap/bootstrap.css
+web/themes/custom/dcu/scss/bootstrap/bootstrap-grid.css
+web/themes/custom/dcu/scss/modules/.sass-cache/

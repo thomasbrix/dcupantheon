@@ -1,0 +1,177 @@
+<?php
+
+/**
+ * @file
+ * Contains dcu_navision.module.
+ */
+
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+
+/**
+ * Implements hook_help().
+ */
+function dcu_navision_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the dcu_navision module.
+    case 'help.page.dcu_navision':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('DCU Navision integration') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dcu_navision_theme() {
+  return [
+    'dcu_navision' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_cron().
+ */
+function dcu_navision_cron() {
+  $cron_changed_members = \Drupal::state()->get('dcu_navision_changed_members_cron_success_sync', 1615053917);
+  $today = time();
+  $time_to_add = 60 * 60;
+
+  //Saved here - just for test.
+  //$cron_changed_members = $cron_changed_members - 1000000;
+
+  //Changed members.
+  if (($cron_changed_members + $time_to_add) < $today) {
+    try {
+      //Date to parse to Nav. Syntax: .. means from to *.
+      $from_date = date('Y-m-d', $cron_changed_members);
+      $params = ['type' => 'changeddate', 'from' => $from_date];
+      $changed_members = \Drupal::service('dcu_navision.client')->getActiveByDate($params);
+
+      //@todo Handle timeout....
+      if (!$changed_members) {
+        \Drupal::logger('dcu_navision_cron')->error('Nav timed out..');
+        $changed_members = \Drupal::service('dcu_navision.client')->getActiveByDate($params);
+      }
+
+      dcu_navision_sync_changed_members($changed_members);
+      \Drupal::state()->set('dcu_navision_changed_members_cron_success_sync', $today);
+      \Drupal::logger('dcu_navision_cron')->notice('Nav changed members: @changed_members_count', ['@changed_members_count' => count($changed_members)]);
+    }
+    catch (exception $e) {
+      \Drupal::logger('dcu_navision_cron')->error('Nav changed members failed. Navision error: @error', ['@error' => $e->getMessage()]);
+    }
+  }
+}
+
+/**
+ * @param $changed_members
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_navision_sync_changed_members($changed_members) {
+  foreach ($changed_members as $member) {
+    $email = strtolower(str_replace(' ', '', $member->email));
+
+    //Update user.
+    if (!empty(dcu_member_load_drupal_user_from_memberid($member->memberno))) {
+      if (dcu_member_sync_drupal_user_from_nav($member)) {
+        \Drupal::logger('dcu_navision_cron')->notice('Sync Update/memberno - Navision updated user: @member_id<br>', ['@member_id' => $member->memberno]);
+      }
+      else {
+        \Drupal::logger('dcu_navision_cron')->error('Sync - Navision update user failed: @member_id<br>', ['@member_id' => $member->memberno]);
+      }
+    }
+    if (!empty(user_load_by_mail($email))) {
+      if (dcu_member_sync_drupal_user_from_nav($member)) {
+        \Drupal::logger('dcu_navision_cron')->notice('Sync Update/email - Navision updated user: @member_id<br>', ['@member_id' => $member->memberno]);
+      }
+      else {
+        \Drupal::logger('dcu_navision_cron')->error('Sync - Navision update user failed: @member_id<br>', ['@member_id' => $member->memberno]);
+      }
+    }
+
+    //Create user.
+    if (empty(dcu_member_load_drupal_user_from_memberid($member->memberno))) {
+      if (dcu_navision_sync_new_members($member)) {
+        \Drupal::logger('dcu_navision_cron')->notice('Sync Create/memberno - Navision created user: @member_id<br>', ['@member_id' => $member->memberno]);
+      }
+      else {
+        \Drupal::logger('dcu_navision_cron')->error('Sync - Navision created user failed: @member_id<br>', ['@member_id' => $member->memberno]);
+      }
+    }
+    if (empty(user_load_by_mail($email))) {
+      if (dcu_navision_sync_new_members($member)) {
+        \Drupal::logger('dcu_navision_cron')->notice('Sync Create/email - Navision created user: @member_id<br>', ['@member_id' => $member->memberno]);
+      }
+      else {
+        \Drupal::logger('dcu_navision_cron')->error('Sync - Navision created user failed: @member_id<br>', ['@member_id' => $member->memberno]);
+      }
+    }
+  }
+}
+
+/**
+ * @param $new_member
+ */
+function dcu_navision_sync_new_members($new_member) {
+  $password = base64_encode(openssl_random_pseudo_bytes(10));
+  \Drupal::logger('dcu_navision_sync_new_members')->notice('@data', ['@data' => Json::encode($new_member)]);
+  if (!empty(dcu_navision_create_user_from_nav_data($new_member, $password))) {
+    //Generate QRCode.
+    $qrcode = '<img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chld=L%7C0&chl=https%3a%2f%2fdcu.dk%2fuser-check%2f/' . $new_member->memberno . '">';
+    $qrcode_expire_date = date("d-m-Y", strtotime('+60 day'));
+    $email = strtolower(str_replace(' ', '', $new_member->email));
+
+    //Send info mail to new user.
+    $mail_params = [
+      'to' => $email,
+      'subject' => t('We have created a user account on dcu.dk'),
+      'name' => $new_member->firstname,
+      'member_no' => $new_member->memberno,
+      'language' => 'da',
+      'qrcode' => $qrcode,
+      'qrcode_expire_date' => $qrcode_expire_date
+    ];
+    dcu_member_send_mail('welcome_from_nav', $mail_params);
+    return true;
+  }
+  else {
+    //\Drupal::logger('dcu_navision_cron')->error('Create member from Navision data failed: @member_id', ['@member_id' => $new_member->memberno]);
+    return false;
+  }
+}
+
+/**
+ * Prepare memberdata before passing data from nav to create drupal user.
+ * @param $memberdata
+ * @param $password
+ * @return bool|stdClass
+ */
+function dcu_navision_create_user_from_nav_data($memberdata, $password) {
+  $user_data = [];
+  $user_data['email'] = strtolower(str_replace(' ', '', $memberdata->email));
+  $user_data['password'] = $password;
+  $user_data['member_type'] = $memberdata->membertype;
+  $user_data['firstname'] = $memberdata->firstname;
+  $user_data['lastname'] = $memberdata->lastname;
+  $user_data['birthdate'] = date("d-m-Y", strtotime($memberdata->birthday));
+  $user_data['mobile'] = isset($memberdata->phoneno) ? $memberdata->phoneno : '';
+  $user_data['street'] = $memberdata->address;
+  $user_data['zipcode'] = $memberdata->postalcode;
+  $user_data['city'] = $memberdata->city;
+  $user_data['country'] = $memberdata->country;
+  $user_data['memberno'] = $memberdata->memberno;
+  $user_data['member_status'] = $memberdata->memberstatus;
+  $user_data['newsletter'] = $memberdata->newsletter;
+  $user_data['comment'] = isset($memberdata->comment) ? $memberdata->comment : '';
+  return dcu_member_create_dcu_member($user_data);
+}

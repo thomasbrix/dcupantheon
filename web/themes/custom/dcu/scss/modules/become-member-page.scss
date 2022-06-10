@@ -1,0 +1,126 @@
+/* Moved here from "Bliv medlem af DCU" -> body field.*/
+.become-member-page-header {
+  a {
+    text-decoration: none;
+  }
+}
+.become-member-page {
+
+  :root {
+    --dcu-green: #318734;
+  }
+
+  .bi {width: 30px; height: 30px;}
+
+  .fordele-description2 {
+    font-size: 13px;
+    line-height: 1.15;
+    padding-top: 10px;
+    margin-bottom: 20px;
+  }
+
+
+  .fordele-third--header {
+    background-color: #f1f3f9;
+    line-height: 1;
+    text-align: center;
+
+  }
+
+  .fordele-third--header h3, .fordele-third--header p {
+    margin: 10px;
+  }
+
+
+  .fordele-third--header strong {
+    font-weight: 400;
+    font-size: 37px;
+    color: #19356f;
+  }
+
+  .fordel-list {
+    list-style-type: none;
+    width: 100%;
+    padding: 0;
+  }
+
+  .fordel-list__header {
+    font-size: 20px !important;
+    color: #000;
+    vertical-align: bottom;
+  }
+
+
+  table.fordel-table {
+    width: 100%;
+    border-spacing: 10px;
+    border-collapse: separate;
+  }
+
+  .renew {
+    margin-top: 10px;
+    display: block;
+  }
+
+  .mobileonly {display: none;}
+
+
+  @media screen and (min-width:601px) and (max-width:900px) {
+    table.fordel-table {
+      width: 100%;
+      border-spacing: 3px;
+      border-collapse: separate;
+    }
+
+    .site-header .main-menu-wrapper > ul > li {
+      display: inline-block;
+      margin-right: 17px;
+      position: relative;
+    }
+
+  }
+
+  @media screen and (max-width: 600px) {
+    table.fordel-table {display: none}
+    .mobileonly {display: block; margin:10px auto; width:100%; padding: 10px;}
+    body.node-type-landingpage .content-main .inner > .field-title-field {width: 100%;}
+  }
+
+  tr {
+    border-bottom: 1px solid #000;
+  }
+
+  td.bluebg {
+    background-color: #f1f3f9;
+    text-align: center;
+    vertical-align: middle;
+    width: 12.5%;
+    height: 40px;
+    font-size: 16px;
+    color: #000;
+    padding: 5px;
+  }
+
+  table.fordel-table tr td:first-child {
+    width: 50%;
+    background-color: unset;
+    font-size: smaller;
+  }
+
+  .approved {
+    justify-content: center;
+  }
+
+  .fordel-table .button,
+  .fordel-table .renew {
+    font-size: 16px;
+    width: 100%;
+    margin: 10px 0;
+  }
+
+
+  .fordele-last {
+    font-size: smaller;
+  }
+
+}

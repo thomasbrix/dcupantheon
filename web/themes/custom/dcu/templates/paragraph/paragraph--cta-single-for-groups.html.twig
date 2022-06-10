@@ -1,0 +1,48 @@
+{% set paragraph_parent = paragraph.getParentEntity() %}
+{% set type = paragraph_parent.field_cta_type.0.value %}
+
+{% block paragraph %}
+{% block content %}
+
+{% if type == 1 %}
+  <div class="content-block col-12 col-xl-6 --shifted dcu-bg-white-grey">
+    <div class="content-block__media-wrapper">
+      <div class="content-block__media">
+        <div class="content-block__image">
+          {{ content.field_cta_image }}
+        </div>
+      </div>
+    </div>
+    <div class="content-block__content">
+      {% if content.field_trumpet|render is not empty %}
+        <h3 class="content-block__super-heading">{{ content.field_trumpet }}</h3>
+      {% endif %}
+      <h2 class="content-block__heading">{{ content.field_header }}</h2>
+      <span class="content-block__text">{{ content.field_body }}</span>
+      <a href="{{ content.field_cta_button[0]['#url'] }}" class="btn btn-primary no-underline">{{ content.field_cta_button[0]['#title']|render }}</a>
+    </div>
+  </div>
+{% endif %}
+
+{% if type == 2 %}
+  <div class="col-12 col-md-6 col-lg-3 mb-3 mb-md-4">
+    <div class="card card-band border-0">
+      <div class="card-band__item-image-wrapper">
+        {{ content.field_cta_image }}
+      </div>
+      <div class="card-body">
+        {% if content.field_trumpet|render is not empty %}
+          <h3 class="content-block__super-heading">{{ content.field_trumpet }}</h3>
+        {% endif %}
+        <h5 class="card-title card-band__item-heading">{{ content.field_header }}</h5>
+        <span class="card-text">{{ content.field_body }}</span>
+        <a href="{{ content.field_cta_button[0]['#url'] }}" class="btn btn-primary no-underline">{{ content.field_cta_button[0]['#title']|render }}</a>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}
+{% endblock paragraph %}
+
+

@@ -1,0 +1,302 @@
+
+<div class="container user-pages">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="title">
+        <h1>{{ 'My profile'|t }}</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      {{ page.highlighted }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div id="my-profile-messages--wrapper">
+        {% if profile.membership.retirement_valid_message %}
+          <div class="profile-message--wrapper important">
+            <p>{{ 'Please validate your early retirement by sending documentation to DCU. Please go to our <a href="/form/file-upload">upload page here</a>'|t }}</p>
+          </div>
+        {% endif %}
+        {% if profile.membership.showbalance %}
+          <div class="profile-message--wrapper important">
+            <p>
+              {% trans %}
+                You have a balance of {{ profile.membership.balance }} kr.
+              {% endtrans %}
+              <br/><br/><a href="/signup/payment/" class="btn btn-primary no-underline">{{ 'Pay here'|t }}</a>
+            </p>
+          </div>
+        {% endif %}
+        {% if profile.fix_mail %}
+          <div class="profile-message--wrapper important">
+            <p>{{ 'Vi har ikke din e-mail-adresse, og den er vigtig, for at vi kan skrive til dig.<br>Vi beder dig derfor skrive din e-mail adresse.<br>På forhånd tak.' |t }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    {% if profile.membership.unsubscribed %}
+      <div class="col-md-12">
+        <div class="profile-message--wrapper important">
+          <p>{{ profile.membership.unsubscribed.message }}</p>
+          <p>{{ profile.membership.unsubscribed.resubscribelink }}</p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+
+  <div class="row border-top profiletab">
+    <div class="col-md-2">
+      <span class="text-secondary">{{ 'Login'|t }}</span>
+    </div>
+    <div class="col-md-7">
+      <div class="table-responsive profiledata">
+        <table class="table table-sm table-borderless">
+          <tbody>
+          <tr>
+            <td class="profileproperty">{{ 'Email'|t }}:</td>
+            <td class="profilevalue">{{ profile.login.mail }}</td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Password'|t }}:</td>
+            <td class="profilevalue">*******</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-3">
+      {% for link in profile.login.links %}
+        {{ link }}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="row border-top profiletab">
+    <div class="col-md-2">
+      <span class="text-secondary">{{ 'Profile'|t }}</span>
+    </div>
+    <div class="col-md-7">
+      <div class="table-responsive profiledata">
+        <table class="table table-sm table-borderless">
+          <tbody>
+          <tr>
+            <td class="profileproperty">{{ 'Membernumber'|t }}:</td>
+            <td class="profilevalue">{{ profile.profile.memberno }}</td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Name'|t }}:</td>
+            <td class="profilevalue">{{ profile.profile.firstname }} {{ profile.profile.lastname }}</td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Birthday'|t }}:</td>
+            <td class="profilevalue">{{ profile.profile.birthday }}</td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Cellphone'|t }}:</td>
+            <td class="profilevalue">{{ profile.profile.cellphone }}</td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Address'|t }}:</td>
+            <td class="profilevalue">{{ profile.profile.address|raw }}</td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Preferred language'|t }}:</td>
+            <td class="profilevalue">{{ profile.profile.preferred_language|raw }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-3">
+      {% for link in profile.profile.links %}
+        {{ link }}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="row border-top profiletab">
+
+    {% if profile.membership.unsubscribed %}
+      <div class="col-md-12">
+        <div class="profile-message--wrapper important">
+          <p>{{ profile.membership.unsubscribed.message }}</p>
+          <p>{{ profile.membership.unsubscribed.resubscribelink }}</p>
+        </div>
+      </div>
+    {% endif %}
+
+
+    <div class="col-md-2">
+      <span class="text-secondary">{{ 'Membership'|t }}</span>
+    </div>
+    <div class="col-md-7">
+      <div class="table-responsive profiledata">
+        <table class="table table-sm table-borderless">
+          <tbody>
+          <tr>
+            <td class="profileproperty">{{ 'Membertype'|t }}:</td>
+            <td class="profilevalue">{{ profile.membership.membertype }}</td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Created'|t }}:</td>
+            <td class="profilevalue">{{ profile.membership.membersince }}</td>
+          </tr>
+          {% if profile.membership.bsactive %}
+            <tr>
+              <td class="profileproperty">{{ 'Betalingsservice'|t }}:</td>
+              <td class="profilevalue">{{ 'Ja'|t }}</td>
+            </tr>
+          {% endif %}
+          {% if profile.membership.lastpaymentdate %}
+            <tr>
+              <td class="profileproperty">{{ 'Last payment'|t }}:</td>
+              <td class="profilevalue">{{ profile.membership.lastpaymentdate }}</td>
+            </tr>
+          {% endif %}
+          {% if profile.membership.showmag and profile.membership.magazineletter %}
+            <tr>
+              <td class="profileproperty">{{ 'Dcu magazine'|t }}:</td>
+              <td class="profilevalue">{{ profile.membership.magazineto }}</td>
+            </tr>
+          {% endif %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-3">
+      {% for link in profile.membership.links %}
+        {{ link }}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="row border-top profiletab">
+    <div class="col-md-2">
+      <span class="text-secondary">{{ 'Family'|t }}</span>
+    </div>
+    <div class="col-md-7">
+      <div class="table-responsive profiledata">
+        <table class="table table-sm table-borderless">
+          <tbody>
+          {% if profile.relatives.spouse %}
+            <tr>
+              <td class="profileproperty">{{ 'Partner'|t }}:</td>
+              <td class="profilevalue">{{ profile.relatives.spouse.relname }} </td>
+            </tr>
+            <tr>
+              <td class="profileproperty">{{ 'Fødselsdag'|t }}:</td>
+              <td class="profilevalue">{{ profile.relatives.spouse.relbirthday }}</td>
+            </tr>
+          {% endif %}
+          {% if profile.relatives.children %}
+            {% for child in profile.relatives.children %}
+              <tr>
+                <td class="profileproperty">{{ 'Child'|t }}:</td>
+                <td class="profilevalue">{{ child.relname }} </td>
+              </tr>
+              <tr>
+                <td class="profileproperty">{{ 'Fødselsdag'|t }}:</td>
+                <td class="profilevalue">{{ child.relbirthday }}</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-3">
+      {% for link in profile.relatives.links %}
+        {{ link }}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="row border-top profiletab">
+    <div class="col-md-2">
+      <span class="text-secondary">{{ 'Notifications'|t }}</span>
+    </div>
+    <div class="col-md-7">
+      <div class="table-responsive profiledata">
+        <table class="table table-sm table-borderless">
+          <tbody>
+          <tr>
+            <td class="profileproperty">{{ 'DCU newsletter'|t }}:</td>
+            <td class="profilevalue">{{ profile.notifications.newsletter }} </td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Consent'|t }}:</td>
+            <td class="profilevalue">{{ profile.notifications.contact_consent }} </td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Receive email when someone comments on your forum posts'|t }}:</td>
+            <td class="profilevalue">{{ profile.notifications.comments1 }}</td>
+          </tr>
+          <tr>
+            <td class="profileproperty">{{ 'Receive email when someone comments on your comments'|t }}:</td>
+            <td class="profilevalue">{{ profile.notifications.comments2 }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-3">
+      {% for link in profile.notifications.links %}
+        {{ link }}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if profile.memberservice is not empty %}
+    <div class="row border-top profiletab">
+      <div class="col-md-2">
+        <span class="text-secondary"><strong>{{ 'Member service'|t }}</strong></span>
+      </div>
+      <div class="col-md-7">
+        <div class="table-responsive profiledata">
+          <table class="table table-sm table-borderless">
+            <tbody>
+              <tr>
+                <td>
+                  {% if profile.memberservice.vip is not empty %}
+                    <div class="mb-3">
+                      <strong>{{ 'Membertype:'|t }}</strong> {{ profile.memberservice.vip }}
+                    </div>
+                  {% endif %}
+                  <div class="mb-3">
+                    <strong>{{ 'Receive magazine:'|t }}</strong> {{ profile.memberservice.magazineletter }}
+                  </div>
+                  {% if profile.memberservice.citizenship_confirmed is not empty %}
+                    <div class="mb-3">
+                      <strong>{{ 'Citizenship:'|t }}</strong> {{ profile.memberservice.citizenship_confirmed }}
+                    </div>
+                  {% endif %}
+
+                  {% if profile.memberservice.comments is not empty %}
+                    <div class="mb-5">
+                      <div><strong>{{ 'Remarks'|t }}</strong></div>
+                      {{ profile.memberservice.comments|nl2br }}
+                    </div>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-3">
+        {% for link in profile.memberservice.links %}
+          {{ link }}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>

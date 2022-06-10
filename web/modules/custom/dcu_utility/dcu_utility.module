@@ -1,0 +1,741 @@
+<?php
+
+/**
+ * @file
+ * Contains dcu_utility.module.
+ */
+const DCU_UTILITY_MAILCHIMP_LIST = '0ba91e0d24';
+
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\user\Entity\User;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dcu_utility_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the dcu_utility module.
+    case 'help.page.dcu_utility':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Various utilitys specific for the dcu website') . '</p>';
+      return $output;
+    default:
+  }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ */
+function dcu_utility_cron() {
+  // Add all campsites to queue for updating data from google place api.
+  $last_run = \Drupal::state()->get('dcu_utility.cron_googleplace_last_run', 0);
+  $since_last = time() - $last_run;
+  // Only queue items for update once a week.
+  if ($since_last > 604800) {
+    \Drupal::messenger()->addMessage('DCU utility cron queueing campsites for google place data import', 'status');
+    $query = \Drupal::entityQuery('node')
+      ->condition('type', ['dcu_campsite', 'campsites'], 'in')
+      ->exists('field_google_place_id');
+    $result = $query->execute();
+    $queue = \Drupal::queue('dcu_utility_google_place_import');
+    foreach ($result as $nid) {
+      $item = (object) ['nid' => $nid];
+      $queue->createItem($item);
+    }
+    \Drupal::state()->set('dcu_utility.cron_googleplace_last_run', time());
+  }
+}
+
+
+
+/**
+ * Implements hook_node_access().
+ */
+function dcu_utility_node_access(NodeInterface $node, $op, $account) {
+  $type = $node->bundle();
+  // Allow district editors to edit articles, activites and district from own district.
+  if ($type == 'article' || $type == 'activity' || $type == 'district') {
+    if ($op == 'update') {
+      if (in_array('district_editor', $account->getRoles())) {
+        $account = User::load(\Drupal::currentUser()->id());
+        $user_district = $account->get('field_district')->getString();
+        $node_district = $node->get('field_district')->getString();
+        $access_result = AccessResult::allowedIf($user_district === $node_district)
+          ->cachePerUser();
+        $access_result->addCacheableDependency($node);
+        $access_result->addCacheableDependency($account);
+        return $access_result;
+      }
+    }
+  }
+  // Allow agent to edit campsites where region/county match.
+  if ($type == 'campsites') {
+    if ($op == 'update') {
+      if (in_array('agent', $account->getRoles())) {
+        $account = User::load(\Drupal::currentUser()->id());
+        $user_countries = $account->get('field_country_agents')->getString();
+        $user_contries_array = explode(', ', $user_countries);
+
+        $node_countries = explode(',', $node->get('field_country_region')->getString());
+        $result = array_intersect($node_countries, $user_contries_array);
+        $access_result = AccessResult::allowedIf(!empty($result))->cachePerUser();
+        $access_result->addCacheableDependency($node);
+        $access_result->addCacheableDependency($account);
+        return $access_result;
+      }
+    }
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * @param $variables
+ * @throws Exception
+ */
+function dcu_utility_preprocess_node(&$variables) {
+  $node = $variables['node'];
+
+  if ($node->getType() == 'activity') {
+    if (!$node->get('field_registration_form')->isEmpty()) {
+      $registrationForm = $node->get('field_registration_form')->first();
+      $variables['formRenderCond'] = dcu_utility_node_form_render_conditions($registrationForm, $node, $variables);
+      $variables['show_webform'] = 1;
+    }
+    else {
+      $variables['show_webform'] = 0;
+    }
+  }
+}
+
+/**
+ * @param $registrationForm
+ * @param $node
+ * @param $variables
+ * @return array
+ * @throws Exception
+ */
+function dcu_utility_node_form_render_conditions($registrationForm, $node, &$variables) {
+  $status = $registrationForm->get('status')->getValue();
+  $formShow = ($status != 'closed');
+  $scheduleOpen = '';
+  $scheduleClose = '';
+  $message = FALSE;
+  $max_info = FALSE;
+
+  /* Maximum paticipants is set. */
+  if (!$node->get('field_max_number_of_participants')->isEmpty()) {
+    $ticket_max = $node->get('field_max_number_of_participants')->first()->value;
+
+    $webform_id = $registrationForm->get('target_id')->getValue();
+    $webform = \Drupal\webform\Entity\Webform::load($webform_id);
+
+    $tickets_sold = dcu_utility_sold_tickets($webform, $node->id());
+
+    if ($ticket_max <= $tickets_sold) {
+      $tickets_waitlist_max = 0;
+      if (!$node->get('field_max_participants_waitlist')->isEmpty()) {
+        $tickets_waitlist_max = $node->get('field_max_participants_waitlist')
+          ->first()->value;
+      }
+      if (($ticket_max + $tickets_waitlist_max) <= $tickets_sold) {
+        $max_info = t('Sorry - but sold out');
+      }
+      else {
+        $max_info = t('Sorry - sold out. You can submit to the waitlist. We will contact you in case there is an opening for tickets.');
+      }
+    }
+    else {
+      $rest = $ticket_max - $tickets_sold;
+      $max_info = t('Number of tickets @ticket_max. Number of available tickets @rest', array('@ticket_max' => $ticket_max, '@rest' => $rest));
+    }
+  }
+
+  if ($status == 'scheduled') {
+    $now = new Datetime();
+    if (!empty($open = $registrationForm->get('open')->getValue())) {
+      $scheduleOpen = new DateTime($open);
+      if ($now < $scheduleOpen) {
+        $formShow = FALSE;
+        $message = t('Tilmeldingen åbnes @date', [
+          '@date' => \Drupal::service('date.formatter')
+            ->format($scheduleOpen->getTimestamp(), 'short'),
+        ]);
+      }
+    }
+    if (!empty($close = $registrationForm->get('close')->getValue())) {
+      $scheduleClose = new DateTime($open);
+      if ($now > $scheduleClose) {
+        $formShow = FALSE;
+      }
+    }
+  }
+  return [
+    'opens' => $scheduleOpen,
+    'closes' => $scheduleClose,
+    'status' => $status,
+    'show' => $formShow,
+    'message' => $message,
+    'max_info' => $max_info
+  ];
+}
+
+/**
+ * @param $webform
+ * @param $nid
+ * @return int|mixed
+ */
+function dcu_utility_sold_tickets($webform, $nid) {
+  $sum = 0;
+  if (empty($webform)) {
+    return;
+  }
+  if ($webform->hasSubmissions()) {
+    $database = \Drupal::database();
+    $query = $database->query("select sid from webform_submission where entity_id = :nid", array(':nid' => $nid));
+    $result = $query->fetchAll();
+    $submission_data = [];
+    if ($result) {
+      foreach ($result as $item) {
+        $submission = \Drupal\webform\Entity\WebformSubmission::load($item->sid);
+        $submission_data[] = $submission->getData();
+      }
+    }
+    //Loop over submissions and count values for tickets.
+    if ($submission_data) {
+      foreach ($submission_data as $user_data) {
+        $sum = $sum + $user_data['tickets'];
+      }
+    }
+    return $sum;
+  }
+}
+
+/**
+ * Helper function - return age.
+ * @param $birthdate
+ *
+ * @return int
+ */
+function dcu_utility_calculate_age($birthdate) {
+  try {
+    $date = new DateTime($birthdate);
+  } catch (Exception $e) {
+    return FALSE;
+  }
+  $now = new DateTime();
+  $interval = $now->diff($date);
+  return $interval->y;
+}
+
+/**
+ * When login from a node - do a redirect to the page the user came from.
+ * @param $account
+ */
+function dcu_utility_user_login($account) {
+  //FIX - docs: https://www.drupal.org/project/redirect_after_login/issues/3214949
+  //#13
+
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $current_path);
+  if (isset($path_args[1]) && $path_args[1] == 'node') {
+    $response = new RedirectResponse($current_path);
+    $request = \Drupal::request();
+    // Save the session so things like messages get saved.
+    $request->getSession()->save();
+    $response->prepare($request);
+    // Make sure to trigger kernel events.
+    \Drupal::service('kernel')->terminate($request, $response);
+    $response->send();
+    return;
+  }
+
+  if ($account->hasRole('other_campsite_owner')) {
+    //Get siteowners nid and redirect to the site or overview page.
+    dcu_utility_campsite_owner_redirects($account->get('uid')->value);
+    return;
+  }
+
+  if ($account->hasRole('agent')) {
+    $redirect_path = '/agent-overviews';
+    $response = new RedirectResponse($redirect_path);
+    $request = \Drupal::request();
+    // Save the session so things like messages get saved.
+    $request->getSession()->save();
+    $response->prepare($request);
+    // Make sure to trigger kernel events.
+    \Drupal::service('kernel')->terminate($request, $response);
+    $response->send();
+    return;
+  }
+  return;
+}
+
+/**
+ * @param null $uid
+ */
+function dcu_utility_campsite_owner_redirects($uid = NULL) {
+  if (!empty($uid)) {
+    $database = \Drupal::database();
+    $result = $database->query("select nid from {node_field_data} where uid=:uid", array(":uid" => $uid))->fetchAll();
+
+    if (!empty($result) && count($result) == 1) {
+      foreach($result as $campsite_nid) {
+        $nid = $campsite_nid->nid;
+      }
+      $redirect_path = '/node/' . $nid;
+      $response = new RedirectResponse($redirect_path);
+      $request = \Drupal::request();
+      // Save the session so things like messages get saved.
+      $request->getSession()->save();
+      $response->prepare($request);
+      // Make sure to trigger kernel events.
+      \Drupal::service('kernel')->terminate($request, $response);
+      $response->send();
+    }
+    else if (!empty($result) && count($result) > 1) {
+      $redirect_path = '/campsiteownersites';
+      $response = new RedirectResponse($redirect_path);
+      $request = \Drupal::request();
+      // Save the session so things like messages get saved.
+      $request->getSession()->save();
+      $response->prepare($request);
+      // Make sure to trigger kernel events.
+      \Drupal::service('kernel')->terminate($request, $response);
+      $response->send();
+    }
+    else {
+      $response = new RedirectResponse('/');
+      $request = \Drupal::request();
+      // Save the session so things like messages get saved.
+      $request->getSession()->save();
+      $response->prepare($request);
+      // Make sure to trigger kernel events.
+      \Drupal::service('kernel')->terminate($request, $response);
+      $response->send();
+
+      \Drupal::messenger()->addMessage(t('We did not find your site. Please contact DCU.dk'), 'error');
+    }
+  }
+}
+
+/**
+ * Mailchimp - check if subscribed or not.
+ * Return: true/false.
+ * Test: drush eval "dcu_utility_mc_subscribed_or_not()"
+ */
+function dcu_utility_mc_subscribed_or_not() {
+  $list = mailchimp_get_list('0ba91e0d24');
+  $email = 'holger@holgerraindrop.dk';
+  $status = mailchimp_is_subscribed($list->id, $email, TRUE);
+  print 'Status: ' . $status . PHP_EOL;
+}
+
+/**
+ * Mailchimp - subscribe.
+ * Test: drush eval "dcu_utility_mc_subscribe()"
+ */
+function dcu_utility_mc_subscribe() {
+  $list = mailchimp_get_list(DCU_UTILITY_MAILCHIMP_LIST);
+  $email = 'signup@sweetlemon.dk';
+  $merge_vars = [
+    'EMAIL' => $email,
+    'FNAME' => 'Peter',
+    'LNAME' => 'Stub',
+    'STAMKORT' => '999999',
+    'MTYPE' => 'Fam',
+    'MEMBER' => 1,
+    'MEMBERID' => '999999',
+    'MEMSTATUS' => 'AKTIV',
+    'TOUCHED' => 2
+  ];
+  mailchimp_subscribe($list->id, $email, $merge_vars);
+}
+
+/**
+ * Mailchimp - unsubscribe
+ * Return: true/false
+ * Test: drush eval "dcu_utility_mc_unsubsribe()"
+ */
+function dcu_utility_mc_unsubsribe() {
+  $list = mailchimp_get_list('0ba91e0d24');
+  $email = 'holger@holgerraindrop.dk';
+  $status = mailchimp_unsubscribe($list->id, $email);
+  print 'Status på subcribe:' . $status . PHP_EOL;
+}
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_utility_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  //Remove preview from comment form.
+  if ($form_id == 'comment_comment_forum_form') {
+    $form["actions"]["preview"]['#access'] = false;
+  }
+  if ($form_id == 'node_forum_edit_form') {
+    $form["actions"]["preview"]['#access'] = false;
+    $form["revision"]['#access'] = false;
+  }
+  if ($form_id == 'node_activity_edit_form') {
+    // Add link to duplicate current chosen webform from node activity edit form.
+    $entity = $form_state->getFormObject()->getEntity();
+    $selectedFormMachineName = 'master';
+    $selectedFormName = 'Master';
+    $webformCategory = dcu_utility_get_webform_user_district_category();
+    if (!$entity->get('field_registration_form')->isEmpty()) {
+      if ($registrationFormReference = $entity->get('field_registration_form')->first()) {
+        $selectedFormMachineName = $registrationFormReference->get('target_id')->getString();
+      }
+      if ($selectedWebform = \Drupal::entityTypeManager()->getStorage('webform')->load($selectedFormMachineName)) {
+        $selectedFormName = $selectedWebform->label();
+      }
+    }
+    $ducplicateLinkText = t('Opret ny form som kopi af: ') . $selectedFormName;
+    $copyLink = Link::fromTextAndUrl($ducplicateLinkText, Url::fromRoute('entity.webform.duplicate_form',
+      ['webform' => $selectedFormMachineName],
+      [
+        'query' => ['category' => $webformCategory],
+        'attributes' => ['target' => '_new'],
+      ]
+    ));
+    $str = $copyLink->toString();
+    $str .= ' ( ' . t('Gendindlæs denne side efter oprettelsen') . ' )';
+    $form['field_registration_form']['widget'][0]['target_id']['#description'] = $str;
+  }
+  if ($form_id == 'webform_duplicate_form') {
+    // Query param set in form alter node_activity_edit_form, to set default webform cateogy from duplicate form.
+    if (!empty($category = \Drupal::request()->query->get('category'))) {
+      $form['category']['#default_value'] = $category;
+      //$form['category']['#attributes']['disabled'] = TRUE;
+    }
+  }
+
+  //Alter campsite edit form for campsite owners.
+  //Only for "OTHER campsite owner" role.
+  if ($form_id == 'node_campsites_edit_form') {
+    $currentUser = User::load(\Drupal::currentUser()->id());
+    if ($currentUser->hasRole('other_campsite_owner')) {
+      //Hide fields.
+      $form['revision_information']['#access'] = false;
+      unset($form["field_gallery_images"]["widget"]["#file_upload_description"]);
+      unset($form["field_youtube_video"]["widget"][0]["video_id"]);
+      unset($form["field_gallery_images"]["widget"][0]["_weight"]);
+
+      //if checked - disable fields and move to bottom of form.
+      if ($form["field_advantage_campsite"]["widget"]["value"]["#default_value"] == true) {
+        unset($form["#fieldgroups"]["group_advantage_info"]->format_settings["classes"]);
+        $form["field_advantage_campsite"]["#disabled"] = true;
+        $form["field_discount_description"]["#disabled"] = true;
+        $config = \Drupal::config('dcu_admin.sitesettings');
+        $sertvice_email = $config->get('campsite_admin_email');
+        $form["field_advantage_campsite"]["widget"]["value"]["#description"] = t('You are a benefit campsite and offers special discount. If you want to change this - please contact
+        DCU on email: ') . $sertvice_email;
+
+        //after_build is needed to change weight of fields.
+        $form['#after_build'][] = 'dcu_utility_campsite_fields_weight_change';
+
+      }
+      else {
+        //Add info about being a benefit campsite and checkbox.
+        if ($form["field_address"]["widget"][0]["address"]["#default_value"]["country_code"] != 'DK' && $form["field_advantage_campsite"]["widget"]["value"]["#default_value"] == false) {
+          $benefit_info = '<div class="advantage-info">' . '<h2>' . t('Become a DCU benefits campsite') . '</h2>' .
+            t("As a benefit campsite in DCU, you must offer a discount for the DCU members. You choose the discount and in which period the discount is available.<br /><br />
+            As a benefit campsite, DCU offers:<br />
+            -	Free online profiling at www.DCU.dk under 'Campsites'.<br />
+            -	Online profiling in the form of name, address, e-mail, link to website and photos and video.<br />
+            -	Profiling in the Camping Book / Benefit Book, which comes out in January in 40.000 copies.<br /><br />
+            We would greatly appreciate it if you chose to give a discount to DCU members.<br /><br />
+            We wish you a continued good season") .
+            '</div>';
+        }
+        else {
+          $benefit_info = '<div class="advantage-info">' . '<h2>' . t('Become a DCU benefits campsite DK') . '</h2>' . t('Info to come DK') . '</div>';
+        }
+        $form['group_advantage_info'] = [
+          '#markup' => $benefit_info,
+          '#group' => 'group_advantage_info',
+          '#weight' => 35,
+        ];
+        //Extra validate handler.
+        $form['#validate'][] = 'dcu_utility_campsites_edit_extra_form_validate';
+        //Extra submit handler.
+        foreach (array_keys($form['actions']) as $action) {
+          if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+            $form['actions'][$action]['#submit'][] = 'dcu_utility_campsites_edit_extra_form_submit';
+          }
+        }
+      }
+
+      //Marketing package check. Do not show video if no package.
+      //Inform siteowner about this.
+      if (is_null($form["field_marketing_products"]["widget"]["#default_value"])) {
+        $info = '<div class="no-marketing-package">' . t('You do not have our marketing package and therefore your video will not be shown.<br />Please contact your agent. See agent info below.') . '</div>';
+        $form['group_gallery']['siteowner_info'] = [
+          '#markup' => $info,
+          '#group' => 'group_gallery',
+          '#weight' => 133
+        ];
+
+        //Get tid for country on campsite - country/region.
+        $country_tids = $form["field_country_region"]["widget"]["#default_value"];
+        if (!empty($country_tids)) {
+          //Taken for granted that all campsites is marked with a country. Not only a city.
+          sort($country_tids); //Sort asc.
+          $country_tid = $country_tids[array_key_first($country_tids)]; //Get last element = parent
+          $country_tid = $country_tid["target_id"];
+
+          //Go get agent info.
+          if ($country_tid) {
+            dcu_utility_get_agent_info_for_siteowner($country_tid, $form);
+          }
+        }
+      }
+    }
+
+    if ($currentUser->hasRole('agent')) {
+      //Hide fields.
+      $form['revision_information']['#access'] = false;
+    }
+  }
+}
+
+/**
+ * Its not possible to change weight in form alter.
+ * Need to be done in #after_build
+ * @param $form
+ * @param $form_state
+ *
+ * @return array
+ */
+function dcu_utility_campsite_fields_weight_change($form, &$form_state) {
+  $form['group_advantage_info']['#weight'] = 125;
+  $form["field_advantage_campsite"]["#weight"] = 126;
+  $form["field_discount_description"]["#weight"] = 127;
+  return $form;
+}
+
+function dcu_utility_campsites_edit_extra_form_validate(array &$form, FormStateInterface $form_state) {
+  if ($form_state->getValue('field_advantage_campsite')['value'] && !$form_state->getValue('field_discount_description')[0]['value']) {
+    $form_state->setErrorByName('field_discount_description', t('Please write about your discounts for DCU members'));
+  }
+}
+
+function dcu_utility_campsites_edit_extra_form_submit(array $form, FormStateInterface $form_state) {
+  if ($form_state->getValue('field_advantage_campsite')['value']) {
+    if ($form_state->getValue('field_address')[0]['address']['country_code'] != 'DK') {
+
+      //Get mail from DCU admin settings.
+      $config = \Drupal::config('dcu_admin.sitesettings');
+      if ($config->get('service_mails')) {
+        $to = $config->get('service_mails');
+      }
+      else {
+        $to = 'stub@raindrop.dk';
+      }
+      $data = 'Campsite name: ' . $form_state->getValue("title")[0]["value"] . '<br /><br />';
+      $data .= 'Discount text: ' . $form_state->getValue('field_discount_description')[0]['value'] . '<br /><br />';
+      $data .= '<a href="https://dcu.dk/node/' . $form_state->getValue("nid") . '">Link to site</a><br /><br />';
+      $data .= '<strong>Please check the discount text and translate it to danish</strong>';
+
+      //Send service mail about this change.
+      $mail_params = [
+        'to' => $to,
+        'subject' => t('A campsite owner has said yes to being a benefit site'),
+        'data' => $data,
+        'language' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
+      ];
+      dcu_member_send_mail('service_mail', $mail_params);
+    }
+  }
+}
+
+/**
+ * @param $tid
+ * @param $form
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function dcu_utility_get_agent_info_for_siteowner($tid, &$form) {
+  $uid = \Drupal::database()->query("select ua.entity_id
+    from
+    user__field_country_agents ua,
+    user__roles ur
+    where
+    ua.field_country_agents_target_id = :tid
+    and ua.entity_id = ur.entity_id
+    and ur.roles_target_id = 'primary_agent'", array('tid' => $tid))->fetchField();
+
+  if ($uid) {
+    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
+    $agent_country_name = $term->getName();
+
+    //Load agent user.
+    $agent_account = User::load($uid);
+
+    //Build agent info.
+    $agent_info =
+      '<div class="agent-info">' .
+      '<h2>' . t('Agent for ') . t($agent_country_name) . '</h2>' .
+      '<p>' . $agent_account->get('field_first_name')->getString() . '</p>' .
+      '<p>' . $agent_account->get('field_last_name')->getString() . '</p>' .
+      '<p>' . $agent_account->get('field_address')->getString() . '</p>' .
+      '<p>' . $agent_account->get('field_zip')->getString() . ' ' . $agent_account->get('field_city')->getString() . '</p>' .
+      '<p>Phone: ' . $agent_account->get('field_mobile_phone')->getString() . '</p>' .
+      '<p>Email: ' . $agent_account->get('mail')->getString() . '</p>' .
+      '</div>';
+
+    //Agent info markup.
+    $form['group_gallery']['agent_info'] = [
+      '#markup' => $agent_info,
+      '#group' => 'group_gallery',
+      '#weight' => 134
+    ];
+  }
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function dcu_utility_theme() {
+  return [
+    'google_place_review' => [
+      'variables' => [
+        'content' => NULL
+      ],
+      'render element' => 'children',
+    ],
+    'google_place_latest_reviews' => [
+      'variables' => [
+        'content' => NULL
+      ],
+      'render element' => 'children',
+    ],
+    'forum_topic_list' => [
+      'variables' => [
+        'content' => NULL
+      ],
+      'render element' => 'children',
+    ],
+    'related_articles' => [
+      'variables' => [
+        'content' => NULL
+      ],
+      'render element' => 'children',
+    ],
+  ];
+}
+
+/**
+ * Alter options for form select field
+ *
+ * @param array $options
+ * @param array $context
+ *
+ * @return void
+ */
+function dcu_utility_options_list_alter(array &$options, array $context) {
+  if ($context["fieldDefinition"] instanceof Drupal\field\Entity\FieldConfig && $context["fieldDefinition"]->id() == 'node.activity.field_registration_form') {
+    // Alter options of field registration form to only show district category forms for editor.
+    $account = User::load(\Drupal::currentUser()->id());
+    if ($account->hasRole('district_editor')) {
+      $entity = $context['entity'];
+      $districtWebforms = [];
+      $webformCategory = dcu_utility_get_webform_user_district_category();
+      if (!$entity->get('field_registration_form')->isEmpty()) {
+        $registrationForm = $entity->get('field_registration_form')->first();
+        $selectedFormMachineName = $registrationForm->get('target_id')->getString();
+        // If selected form is not in users district forms. Add it outside district in array.
+        if (empty($options[$webformCategory][$selectedFormMachineName])) {
+          if ($selectedWebform = \Drupal::entityTypeManager()->getStorage('webform')->load($selectedFormMachineName)) {
+            $selectedFormName = $selectedWebform->label();
+            $districtWebforms[$selectedFormMachineName] = $selectedFormName;
+          }
+
+          //$selectedFormName = dcu_utility_recursive_array_search($selectedFormMachineName, $options, TRUE);
+
+        }
+      }
+      if (!empty($webformCategory)) {
+        $districtWebforms[$webformCategory] = $options[$webformCategory];
+      }
+      $options = $districtWebforms;
+    }
+  }
+}
+
+/**
+ * Helper function to Search multidimensional array.
+ * Returns row with match or FALSE if not found
+ * @param $needle
+ * @param $haystack
+ *
+ * @return false|mixed
+ */
+function dcu_utility_recursive_array_search($needle, $haystack, $keysearch = FALSE) {
+  foreach ($haystack as $key => $value) {
+    if (is_array($value)) {
+      if ($found = dcu_utility_recursive_array_search($needle, $value, $keysearch)) {
+        return $found;
+      }
+    }
+    $search = $keysearch ? $key : $value;
+    if ($needle === $search) {
+      return $haystack[$key];
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Helper function to get webform category based on users district
+ * Returns category or false if user has no district
+ */
+function dcu_utility_get_webform_user_district_category() {
+  $webformCategory = FALSE;
+  $account = User::load(\Drupal::currentUser()->id());
+  if ($account->hasField('field_district')) {
+    if (!empty($district = $account->get('field_district')->entity)) {
+      $webformCategory = trim(substr($district->label(), 0, strpos($district->label(), '-')));
+    }
+  }
+  return $webformCategory;
+}
+
+/**
+ * @param $params
+ */
+function dcu_utility_send_alert_mail($params) {
+  //Get email from DCU admin settings.
+  $config = \Drupal::config('dcu_admin.sitesettings');
+  if ($config->get('alert_mails')) {
+    $to = $config->get('alert_mails');
+  }
+  else {
+    $to = 'stub@raindrop.dk';
+  }
+
+  //Send alert mail about this problem.
+  $mail_params = [
+    'to' => $to,
+    'subject' => t('Houston - we have a problem - see below'),
+    'data' => $params['body'],
+    'language' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
+  ];
+  dcu_member_send_mail('alert_mail', $mail_params);
+
+}

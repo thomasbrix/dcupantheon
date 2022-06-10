@@ -1,0 +1,118 @@
+{#
+/**
+ * @file
+ * Theme override to display a menu.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link url, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ *   - is_expanded: TRUE if the link has visible children within the current
+ *     menu tree.
+ *   - is_collapsed: TRUE if the link has children within the current menu tree
+ *     that are not currently visible.
+ *   - in_active_trail: TRUE if the link is in the active trail.
+ */
+#}
+{% import _self as menus %}
+{#
+We call a macro which calls itself to render the full tree.
+@see https://twig.symfony.com/doc/1.x/tags/macro.html
+#}
+
+{{ menus.menu_links(items, attributes, 0, menu_name) }}
+
+{% macro menu_links(items, attributes, menu_level, menu_name) %}
+  {% import _self as menus %}
+
+  {% if items %}
+    {% if menu_level == 0 %}
+{#<ul class="navigation__main align-items-center h-md-100">#}
+<ul class="navigation__main">
+  {% endif %}
+
+  {% if menu_level == 1 %}
+  <ul class="navigation__submenu">
+    {% endif %}
+
+    {% if menu_level == 2 %}
+    <ul class="navigation__submenu-inner">
+      {% endif %}
+
+      {% for item in items %}
+
+        {% if menu_level == 2 %}
+          {% set item_classes = [
+            'navigation__item',
+            item.is_expanded ? 'navigation__item--expanded',
+            item.is_collapsed ? 'navigation__item--collapsed',
+            item.in_active_trail ? 'navigation__item--active-trail'
+          ] %}
+          {% set link_classes = [
+            'navigation__item-label',
+            'navigation__link'
+          ] %}
+        {% elseif menu_level == 1 %}
+          {% set item_classes = [
+            'navigation__item',
+            item.is_expanded ? 'navigation__item--expanded',
+            item.is_collapsed ? 'navigation__item--collapsed',
+            item.in_active_trail ? 'navigation__item--active-trail',
+            'js-nav-group'
+          ] %}
+          {% set link_classes = [
+            menu_level == 1 ? 'navigation__item-label',
+            'navigation__link',
+            'js-toggle-nav-group'
+          ] %}
+        {% else %}
+
+          {% set item_classes = [
+            'navigation__item',
+            item.is_expanded ? 'navigation__item--expanded',
+            item.is_collapsed ? 'navigation__item--collapsed',
+            item.in_active_trail ? 'navigation__item--active-trail',
+            item.below ? 'js-submenu',
+            menu_level == 1 ? 'js-submenu'
+          ] %}
+
+          {% set link_classes = [
+            menu_level == 0 ? 'navigation__item-label',
+            'navigation__link',
+            item.url.getRouteName() == '<nolink>' ? '--has-chevron',
+            item.url.getRouteName() == '<nolink>' ? 'js-toggle-submenu'
+          ] %}
+
+        {% endif %}
+
+        <li{{ item.attributes.addClass(item_classes) }}>
+
+          {% if item.url.isExternal() %}
+            {{ link( item.title, item.url, item.attributes.addClass(link_classes).removeClass(item_classes) ) }}
+          {% else %}
+            {% if item.url.getRouteName() == '<nolink>' %}
+              {% set tmp = item.title~'<img class="navigation__chevron" src="/themes/custom/dcu/assets/icons/chevron-down-white.svg">' %}
+              {% set link_text %}{{ tmp|raw }}
+              {% endset %}
+              {{ link( link_text, item.url, item.attributes.addClass(link_classes).removeClass(item_classes) ) }}
+            {% else %}
+              {{ link( item.title, item.url, item.attributes.addClass(link_classes).removeClass(item_classes) ) }}
+            {% endif %}
+          {% endif %}
+
+
+          {% if item.below %}
+            {{ menus.menu_links(item.below, attributes, menu_level + 1, menu_name) }}
+          {% endif %}
+        </li>
+
+      {% endfor %}
+
+    </ul>
+
+    {% endif %}
+    {% endmacro %}

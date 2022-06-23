@@ -235,14 +235,3 @@ workflows:
           requires:
             - deploy_to_pantheon
             - visual_regression_test
-
-  scheduled_update_check:
-    triggers:
-       - schedule:
-           cron: "0 0 * * *"
-           filters:
-             branches:
-              only:
-                - master
-    jobs:
-      - composer_lock_updater
